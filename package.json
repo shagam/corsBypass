@@ -1,0 +1,22 @@
+{
+  "name": "corsbypass",
+  "version": "1.0.0",
+  "description": "backend to bypass cors",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shagam/corsBypass.git"
+  },
+  "author": "Eli Shagam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shagam/corsBypass/issues"
+  },
+  "homepage": "https://github.com/shagam/corsBypass#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
