@@ -31,17 +31,17 @@ app.get('/', (req, res) => {
   console.log ("entry")
   const dat = corsBypass (req, res)
   // console.log (dat.length)
-  res.send("hello " + req.query.stock)
+  res.send(dat)
 })
 
 const corsBypass = async (req, res) => {
   console.log ("axios")
-  //const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
-  const url = "https://www.stocksplithistory.com/?symbol=AMZN";
+  const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
+  // const url = "https://www.stocksplithistory.com/?symbol=AMZN";
   const dat = await axios.get (url);
-  console.log ('axios exit ' + dat.data)
+  console.log ('axios exit ', url)
   return dat.data;
-  // return res.status(200).json(dat)
+  // return res.status(200).json(dat.data)
 }
 
 module.exports = {
@@ -52,7 +52,7 @@ app.get('/splits', (req, res) => {
   res.send(req.query.stock, req.url)
   const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
   const options = {
-    "methosd": "GET",
+    "method": "GET",
   };
 
 
