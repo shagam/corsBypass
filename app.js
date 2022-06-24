@@ -6,6 +6,8 @@ const express = require('express')
 
 const axios = require('axios')
 const cors = require ("cors")
+const proxy = require ("http-proxy-middleware")
+
 // const fetch = require ("node-fetch")
 
 const app = express()
@@ -23,12 +25,16 @@ app.options('*', cors())
 
 app.use (
   cors({
-    origin: "http://localhost:5000",
+    origin: "http://localhost:3000",
     methods: ["PUT","GET"],
     credetials: true,
     optionsSuccessStatus: 200,
   })
 )
+
+// app.use('/api',
+// proxy ({target: })
+// )
 
 
 app.get('/splits', (req, res) => {
