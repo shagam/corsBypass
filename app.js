@@ -1,5 +1,6 @@
 "use strict";
 // http://localhost:5000/splits?stock=APPL
+// https://www.stocksplithistory.com/?symbol=APPL
 
 const express = require('express')
 
@@ -18,14 +19,16 @@ app.listen(port, (err) => {
   }
 })
 
+app.options('*', cors()) 
 
-// app.use (
-//   cors({
-//     origin: "http://localhost:5000",
-//     methods: ["PUT","GET"],
-//     credetials: true,
-//   })
-// )
+app.use (
+  cors({
+    origin: "http://localhost:5000",
+    methods: ["PUT","GET"],
+    credetials: true,
+    optionsSuccessStatus: 200,
+  })
+)
 
 
 app.get('/splits', (req, res) => {
@@ -36,8 +39,9 @@ app.get('/splits', (req, res) => {
   };
   axios.get (url)
   .then ((result) => {
-    console.log (result.data)
-    res.send (result.data)
+    console.log (result.data.length, url)
+    // res.send (result.data)
+    res.send (result.data.length + " " + url)
   })
   .catch ((err) => {
     console.log(err)
