@@ -47,6 +47,16 @@ app.get('/splits', (req, res) => {
   .then ((result) => {
     console.log (result.data.length, url)
     // res.send (result.data)
+
+    var pattern = "/#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)/g";
+    pattern = "/CCCCCC/g"
+    const regex1 = RegExp (pattern, 'g');
+
+
+    // const text = result.data;
+    const found = regex1.exec (pattern);
+    console.log ('found ' + found)
+
     res.send (result.data.length + " " + url)
   })
   .catch ((err) => {
@@ -57,7 +67,7 @@ app.get('/splits', (req, res) => {
 
   // // Pattern pattern = Pattern.compile("#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)");
 
-//         const pattern = "/#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)/g";
+
 //         }
 //   )
 
