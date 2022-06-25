@@ -40,8 +40,8 @@ app.use (
 
 app.get('/splits', (req, res) => {
   
-  const iCalContent = "summery=blablabla"
-  var rx = /summery=(.*)/g;
+  const iCalContent = " Summery=blablabla summery=bla"
+  var rx = /summery=(\w*)/i;
   var arr = rx.exec(iCalContent);
   console.log ('substring2 ',arr);
 
@@ -49,7 +49,28 @@ app.get('/splits', (req, res) => {
 const input = '[2021-05-29] Version 2.24.9  13.13.14';
 const regex = /(\d+)\.(\d+)\.(\d+)/g;
 let x = regex.exec(input);
-console.log('substring3 ', x)
+console.log('test4', 'substring3 ', x)
+
+var regEx = new RegExp('([0-9]+ (cat|fish))','g');
+var sampleString1="1 cat and 2 fish";
+var result = sampleString1.match(regEx);
+console.log('test5', JSON.stringify(result));
+// ["1 cat","2 fish"]
+
+console.log('test6')
+var reg = new RegExp('[0-9]+ (cat|fish)','g'), sampleString="1 cat and 2 fish";
+while ((result = reg.exec(sampleString)) !== null) {
+    console.dir(JSON.stringify(result))
+};
+// '["1 cat","cat"]'
+// '["2 fish","fish"]'
+console.log('test7')
+var reg = new RegExp('([0-9]+ (cat|fish))','g'), sampleString="1 cat and 2 fish";
+while ((result = reg.exec(sampleString)) !== null){
+    console.dir(JSON.stringify(result))
+};
+// '["1 cat","1 cat","cat"]'
+// '["2 fish","2 fish","fish"]'
 
 
   const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
