@@ -37,7 +37,20 @@ app.use (
 // )
 
 
+
 app.get('/splits', (req, res) => {
+  
+  const iCalContent = "summery=blablabla"
+  var rx = /summery=(.*)/g;
+  var arr = rx.exec(iCalContent);
+  console.log ('substring2 ',arr);
+
+  
+const input = '[2021-05-29] Version 2.24.9  13.13.14';
+const regex = /(\d+)\.(\d+)\.(\d+)/g;
+let x = regex.exec(input);
+console.log('substring3 ', x)
+
 
   const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
   const options = {
@@ -48,14 +61,15 @@ app.get('/splits', (req, res) => {
     console.log (result.data.length, url)
     // res.send (result.data)
 
-    var pattern = "/#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)/g";
-    pattern = "/CCCCCC/g"
-    const regex1 = RegExp (pattern, 'g');
+    var pattern = "#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)";
+    // pattern = "CCCCCC"
+    const regex1 = new RegExp (pattern, 'g');
 
 
-    // const text = result.data;
-    const found = regex1.exec (pattern);
-    console.log ('found ' + found)
+    const text = result.data;
+    const found1 = [...text.matchAll(regex1)];
+    // const found = regex1.matchAll (pattern);
+    console.log ('found ' + found1)
 
     res.send (result.data.length + " " + url)
   })
