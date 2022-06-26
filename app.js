@@ -36,6 +36,13 @@ app.use (
 // proxy ({target: })
 // )
 
+function getDate() {
+  const today = new Date();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
+  return date + " " + time;    
+}
 
 
 app.get('/splits', (req, res) => {
@@ -80,7 +87,7 @@ app.get('/splits', (req, res) => {
   };
   axios.get (url)
   .then ((result) => {
-    console.log (result.data.length, url, new Date())
+    console.log (result.data.length, url, getDate())
     // res.send (result.data)
 
     var pattern = "#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)";
