@@ -88,11 +88,15 @@ while ((result = reg.exec(sampleString)) !== null){
 
 
     const text = result.data;
-    const found1 = [...text.matchAll(regex1)];
+    
+    while ((result = regex1.exec(text)) !== null){
+      console.dir(JSON.stringify(result))
+  };
+    // const found1 = [...text.matchAll(regex1)];
     // const found = regex1.matchAll (pattern);
-    console.log ('found ' + found1)
+    // console.log ('found ' + found1)
 
-    res.send (result.data.length + " " + url)
+    res.send (text.length + " " + url)
   })
   .catch ((err) => {
     console.log(err)
