@@ -89,9 +89,12 @@ app.get('/splits', (req, res) => {
 
 
     const text = result.data;
+    var count = 0;
     const splits = [];
     while ((result = regex1.exec(text)) !== null){
-      console.dir(JSON.stringify(result))
+      if (count == 0)
+        console.dir(JSON.stringify(result)) //log first
+      i++
       const oneSplit = {
         jump: Number(result[4] / result[5]),
         year: Number(result [3]),
