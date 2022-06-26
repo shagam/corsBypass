@@ -95,8 +95,8 @@ app.get('/splits', (req, res) => {
       const oneSplit = {
         jump: Number(result[4] / result[5]),
         year: Number(result [3]),
-        month: Number(result[2]),
-        day: Number(result[1]),
+        month: Number(result[1]),
+        day: Number(result[2]),
       }
       splits.push(oneSplit);
 
