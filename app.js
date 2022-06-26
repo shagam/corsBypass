@@ -25,7 +25,7 @@ app.options('*', cors())
 
 app.use (
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["PUT","GET"],
     credetials: true,
     optionsSuccessStatus: 200,
