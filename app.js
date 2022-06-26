@@ -80,7 +80,7 @@ app.get('/splits', (req, res) => {
   };
   axios.get (url)
   .then ((result) => {
-    console.log (result.data.length, url)
+    console.log (result.data.length, url, new Date())
     // res.send (result.data)
 
     var pattern = "#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)";
@@ -94,7 +94,7 @@ app.get('/splits', (req, res) => {
     while ((result = regex1.exec(text)) !== null){
       if (count == 0)
         console.dir(JSON.stringify(result)) //log first
-      i++
+      count++
       const oneSplit = {
         jump: Number(result[4] / result[5]),
         year: Number(result [3]),
