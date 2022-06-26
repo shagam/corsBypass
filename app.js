@@ -106,7 +106,8 @@ app.get('/splits', (req, res) => {
     // const found = regex1.matchAll (pattern);
     // console.log ('found ' + found1)
 
-    res.send (text.length + " " + url)
+    //res.send (text.length + " " + url)
+    res.send (JSON.stringify(splits))
   })
   .catch ((err) => {
     console.log(err)
