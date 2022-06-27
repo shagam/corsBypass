@@ -2,11 +2,13 @@
 // http://localhost:5000/splits?stock=APPL
 // https://www.stocksplithistory.com/?symbol=APPL
 
-const express = require('express')
-
-const axios = require('axios')
-const cors = require ("cors")
-const proxy = require ("http-proxy-middleware")
+import express from 'express'
+// const express = require('express')
+import axios from 'axios'
+// const axios = require('axios')
+import cors from 'cors'
+// const cors = require ("cors")
+// const proxy = require ("http-proxy-middleware")
 
 // const fetch = require ("node-fetch")
 
@@ -26,7 +28,7 @@ app.options('*', cors())
 app.use (
   cors({
     origin: "*",
-    methods: ["PUT","GET"],
+    methods: ["GET","PUT","POST","DELETE"],
     credetials: true,
     optionsSuccessStatus: 200,
   })
@@ -46,7 +48,8 @@ function getDate() {
 
 
 app.get('/splits', (req, res) => {
-  
+  // res.send ("hello")
+  // return
   // const iCalContent = " Summery=blablabla summery=bla"
   // var rx = /summery=(\w*)/i;
   // var arr = rx.exec(iCalContent);
@@ -103,7 +106,7 @@ app.get('/splits', (req, res) => {
         console.dir(JSON.stringify(result)) //log first
       count++
       const oneSplit = {
-        jump: Number(result[4] / result[5]),
+        jump: (Number(result[4] / result[5])).toFixed(4),
         year: Number(result [3]),
         month: Number(result[1]),
         day: Number(result[2]),

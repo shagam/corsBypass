@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "backend to bypass cors",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
