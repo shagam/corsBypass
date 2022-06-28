@@ -90,7 +90,7 @@ app.get('/splits', (req, res) => {
   };
   axios.get (url)
   .then ((result) => {
-    console.log (result.data.length, url, getDate())
+    console.log ("\n", getDate(), "pageSize: " + result.data.length, req.query.stock, url)
     // res.send (result.data)
 
     var pattern = "#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)";
