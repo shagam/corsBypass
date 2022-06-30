@@ -46,43 +46,7 @@ function getDate() {
   return date + " " + time;    
 }
 
-
 app.get('/splits', (req, res) => {
-  // res.send ("hello")
-  // return
-  // const iCalContent = " Summery=blablabla summery=bla"
-  // var rx = /summery=(\w*)/i;
-  // var arr = rx.exec(iCalContent);
-  // console.log ('substring2 ',arr);
-
-  
-// const input = '[2021-05-29] Version 2.24.9  13.13.14';
-// const regex = /(\d+)\.(\d+)\.(\d+)/g;
-// let x = regex.exec(input);
-// console.log('test4', 'substring3 ', x)
-
-// var regEx = new RegExp('([0-9]+ (cat|fish))','g');
-// var sampleString1="1 cat and 2 fish";
-// var result = sampleString1.match(regEx);
-// console.log('test5', JSON.stringify(result));
-// ["1 cat","2 fish"]
-
-// console.log('test6')
-// var reg = new RegExp('[0-9]+ (cat|fish)','g'), sampleString="1 cat and 2 fish";
-// while ((result = reg.exec(sampleString)) !== null) {
-//     console.dir(JSON.stringify(result))
-// };
-// '["1 cat","cat"]'
-// '["2 fish","fish"]'
-
-// console.log('test7')
-// var reg = new RegExp('([0-9]+ (cat|fish))','g'), sampleString="1 cat and 2 fish";
-// while ((result = reg.exec(sampleString)) !== null){
-//     console.dir(JSON.stringify(result))
-// };
-// '["1 cat","1 cat","cat"]'
-// '["2 fish","2 fish","fish"]'
-
 
   const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
   const options = {
@@ -128,10 +92,90 @@ app.get('/splits', (req, res) => {
 
 })
 
-  // // Pattern pattern = Pattern.compile("#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)");
+// <tr>
+// <td colspan="2" class="shouldbecaption">
+//     <div class="aleft">Microsoft Corp.</div>
+//     <div class="aleft understated">Tue, Jun 30, 2015</div>
+// </td>
+// </tr>
+// <tr>
+// <th>Closing Price:</th>
+// <td>44.15</td>
+// </tr>
+// <tr>
+// <th>Open:</th>
+// <td>44.71</td>
+// </tr>
+// <tr>
+// <th>High:</th>
+// <td>44.72</td>
+// </tr>
+// <tr>
+// <th>Low:</th>
+// <td>43.94</td>
+// </tr>
+// <tr>
+// <th>Volume:</th>
+// <td>35,945,379</td>
+// </tr>
+// Historical Quote
+// https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
+// msft  6/30/17
 
+// https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F10&x=28&y=18
+// https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F10
+// msft Jun 30 2010 
 
-//         }
-//   )
+// http://localhost:5000/price?stock=APPL&mon=6&day=30&year=10
+// http://localhost:5000/splits?stock=APPL
+
+app.get('/val', (req, res) => {
+  console.log (getDate(), req.query, req.params, req.hostname)
+  res.send ('Hello' + JSON.stringify(req.query))
+})
+
+app.get('/price', (req, res) => {
+  console.log (getDate(), req.query)
+  // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
+
+  var url = "https://bigcharts.marketwatch.com/historical/default.asp?symb=" + req.query.stock
+  url += '&closeDate=' + req.query.mon
+  url += '%2F' + req.query.day
+  url += '%2F' + req.query.year
+  // url += '&x=28&y=18'
+
+  console.log (url)
+  const options = {
+    "method": "GET",
+  };
+  console.log ("\n", getDate(), url)
+  axios.get (url)
+  .then ((result) => {
+    console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
+
+    var pattern = "<th>Open:</th>\s+<td>([\d\.]+)</td>"
+
+    const regex1 = new RegExp (pattern, 'g');
+
+    const text = result.data;
+
+    const info = [];
+    while ((result = regex1.exec(text)) !== null){
+      // console.dir(JSON.stringify(result)) //log first
+      const val = {
+        open: Number(result[1])
+      }
+      info.push(val)
+    };
+    console.log (JSON.stringify(info))
+
+    res.send (JSON.stringify(info))
+  })
+  .catch ((err) => {
+    console.log(err)
+  })
+
+})
+
 
 
