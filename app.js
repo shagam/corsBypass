@@ -11,6 +11,7 @@ import cors from 'cors'
 // const proxy = require ("http-proxy-middleware")
 
 // const fetch = require ("node-fetch")
+import fs from 'fs'
 
 const app = express()
 const router = express.Router();
@@ -144,29 +145,39 @@ app.get('/price', (req, res) => {
   url += '%2F' + req.query.year
   // url += '&x=28&y=18'
 
-  console.log (url)
+  // console.log (url)
   const options = {
     "method": "GET",
   };
-  console.log ("\n", getDate(), url)
+
   axios.get (url)
   .then ((result) => {
     console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
 
-    var pattern = "<th>Open:</th>\s+<td>([\d\.]+)</td>"
-
-    const regex1 = new RegExp (pattern, 'g');
+    var pattern = "<th>Open:</th>\s*<td>([\D\.]+)</td>"
+    pattern = '<th>Closing Price:</th>\s*<td>([.]{1-6})</td>'
+    // pattern = "<th>[\s.]*Open:[\s.]*</th>[\s*.]<td>[\s.]*([\d\.]+)[\s.]*</td>"
+    pattern = "(<th>Open:</th>)\r\n[\s\'\+]*<"
+ 
+    const regex1 = new RegExp (pattern, 'm');
 
     const text = result.data;
+    
+    // fs.writeFile('demo.txt', text);
 
     const info = [];
-    while ((result = regex1.exec(text)) !== null){
-      // console.dir(JSON.stringify(result)) //log first
-      const val = {
-        open: Number(result[1])
-      }
-      info.push(val)
-    };
+    var result1 = regex1.exec(text)
+    console.log (result1[0])
+    // while ((result = regex1.exec(text)) !== null){
+    //   console.dir(JSON.stringify(result)) //log first
+    //   const val = {
+    //     url: {url},
+    //     // match: Number(result[0]), 
+    //     open: Number(result[0])
+    //   }
+    //   info.push(val)
+    // };
+    // info.push(url)
     console.log (JSON.stringify(info))
 
     res.send (JSON.stringify(info))
@@ -178,4 +189,32 @@ app.get('/price', (req, res) => {
 })
 
 
+
+
+//               <tr>\r\n' +
+// '                <td colspan="2" class="shouldbecaption">\r\n' +
+// '                    <div class="aleft">Microsoft Corp.</div>\r\n' +
+// '                    <div class="aleft understated">Wed, Jun 30, 2010</div>\r\n' +
+// '                </td>\r\n' +
+// '            </tr>\r\n' +
+// '            <tr>\r\n' +
+// '                <th>Closing Price:</th>\r\n' +
+// '                <td>23.01</td>\r\n' +
+// '            </tr>\r\n' +
+// '            <tr>\r\n' +
+// '                <th>Open:</th>\r\n' +
+// '                <td>23.30</td>\r\n' +
+// '            </tr>\r\n' +
+// '            <tr>\r\n' +
+// '                <th>High:</th>\r\n' +
+// '                <td>23.68</td>\r\n' +
+// '            </tr>\r\n' +
+// '            <tr>\r\n' +
+// '                <th>Low:</th>\r\n' +
+// '                <td>22.95</td>\r\n' +
+// '            </tr>\r\n' +
+// '            <tr>\r\n' +
+// '                <th>Volume:</th>\r\n' +
+// '                <td>81,058,000</td>\r\n' +
+// '            </tr>\r\n' +
 
