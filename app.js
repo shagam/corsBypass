@@ -154,20 +154,29 @@ app.get('/price', (req, res) => {
   .then ((result) => {
     console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
 
-    var pattern = "<th>Open:</th>\s*<td>([\D\.]+)</td>"
+    var pattern = "<th>Open:</th>\s*<td>([\d\.]+)</td>"
     pattern = '<th>Closing Price:</th>\s*<td>([.]{1-6})</td>'
     // pattern = "<th>[\s.]*Open:[\s.]*</th>[\s*.]<td>[\s.]*([\d\.]+)[\s.]*</td>"
-    pattern = "(<th>Open:</th>)\r\n[\s\'\+]*<"
- 
-    const regex1 = new RegExp (pattern, 'm');
+    pattern = "(<th>Open:</th>)[\r\n\s\+]*<td>([\d\.]+)</td>"
 
-    const text = result.data;
+    var text = result.data;
+
+    text = "<th>Open:</th>\r\n '<td>55.64</td>"
+    pattern = "<th>Open:</th>[\r\n\s\+']*<td>([\d\.]+)</td>"
+
+    var regex1 = new RegExp (pattern, 'm');
+
+    regex1 = new RegExp (text, '');
+
     
     // fs.writeFile('demo.txt', text);
 
-    const info = [];
+    const info = {
+      open: 12.34,
+      close: 34.56
+    };
     var result1 = regex1.exec(text)
-    console.log (result1[0])
+    console.log (result1)
     // while ((result = regex1.exec(text)) !== null){
     //   console.dir(JSON.stringify(result)) //log first
     //   const val = {
