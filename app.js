@@ -157,9 +157,11 @@ app.get('/price', (req, res) => {
     console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
     // var text = result.data;
   
-    const filler = "[\\s\\+\\r\\n]*";
-    var pattern = "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
-    // "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
+    const filler = "[\\s\\+\\r\\n\\']*";
+    var pattern = 
+    // "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler +
+    "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
+
 
     // pattern = '<th>Closing Price:</th>\s*<td>([.]{1-6})</td>'
     // pattern = "<th>[\s.]*Open:[\s.]*</th>[\s*.]<td>[\s.]*([\d\.]+)[\s.]*</td>"
@@ -169,13 +171,14 @@ app.get('/price', (req, res) => {
 
 
     var regex1 = new RegExp (pattern);
-    var result1 = regex1.exec(result.data)
-    
-    console.log (result1[1])
+    var regExpResult = regex1.exec(result.data)
+
+    console.log (JSON.stringify(regExpResult))
 
     const info = {
-      open: result1[1],
-      close: 34.56
+      stock: req.query.stock,
+      open: regExpResult[1],
+      close: -1
     };
 
 
