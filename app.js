@@ -130,6 +130,8 @@ app.get('/splits', (req, res) => {
 // http://localhost:5000/price?stock=APPL&mon=6&day=30&year=10
 // http://localhost:5000/splits?stock=APPL
 
+
+
 app.get('/val', (req, res) => {
   console.log (getDate(), req.query, req.params, req.hostname)
   res.send ('Hello' + JSON.stringify(req.query))
@@ -153,30 +155,31 @@ app.get('/price', (req, res) => {
   axios.get (url)
   .then ((result) => {
     console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
+    // var text = result.data;
+  
+    const filler = "[\\s\\+\\r\\n]*";
+    var pattern = "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
+    // "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
 
-    var pattern = "<th>Open:</th>\s*<td>([\d\.]+)</td>"
-    pattern = '<th>Closing Price:</th>\s*<td>([.]{1-6})</td>'
+    // pattern = '<th>Closing Price:</th>\s*<td>([.]{1-6})</td>'
     // pattern = "<th>[\s.]*Open:[\s.]*</th>[\s*.]<td>[\s.]*([\d\.]+)[\s.]*</td>"
-    pattern = "(<th>Open:</th>)[\r\n\s\+]*<td>([\d\.]+)</td>"
+    // pattern = "(<th>Open:</th>)[\r\n\s\+]*<td>[\d\.]+</td>"
 
-    var text = result.data;
+    var text = "<th>Open:</th> <td>55.64</td>"
 
-    text = "<th>Open:</th>\r\n '<td>55.64</td>"
-    pattern = "<th>Open:</th>[\r\n\s\+']*<td>([\d\.]+)</td>"
 
-    var regex1 = new RegExp (pattern, 'm');
-
-    regex1 = new RegExp (text, '');
-
+    var regex1 = new RegExp (pattern);
+    var result1 = regex1.exec(result.data)
     
-    // fs.writeFile('demo.txt', text);
+    console.log (result1[1])
 
     const info = {
-      open: 12.34,
+      open: result1[1],
       close: 34.56
     };
-    var result1 = regex1.exec(text)
-    console.log (result1)
+
+
+
     // while ((result = regex1.exec(text)) !== null){
     //   console.dir(JSON.stringify(result)) //log first
     //   const val = {
