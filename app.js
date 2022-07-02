@@ -93,32 +93,6 @@ app.get('/splits', (req, res) => {
 
 })
 
-// <tr>
-// <td colspan="2" class="shouldbecaption">
-//     <div class="aleft">Microsoft Corp.</div>
-//     <div class="aleft understated">Tue, Jun 30, 2015</div>
-// </td>
-// </tr>
-// <tr>
-// <th>Closing Price:</th>
-// <td>44.15</td>
-// </tr>
-// <tr>
-// <th>Open:</th>
-// <td>44.71</td>
-// </tr>
-// <tr>
-// <th>High:</th>
-// <td>44.72</td>
-// </tr>
-// <tr>
-// <th>Low:</th>
-// <td>43.94</td>
-// </tr>
-// <tr>
-// <th>Volume:</th>
-// <td>35,945,379</td>
-// </tr>
 // Historical Quote
 // https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
 // msft  6/30/17
@@ -155,25 +129,19 @@ app.get('/price', (req, res) => {
   axios.get (url)
   .then ((result) => {
     console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
-    // var text = result.data;
   
-    const filler = "[\\s\\+\\r\\n\\']*";
+    const filler = "[\\s\\+\\r\\n']*";
     var pattern = 
-    // "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler +
+    // "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
+    //  +
     "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
 
-
-    // pattern = '<th>Closing Price:</th>\s*<td>([.]{1-6})</td>'
-    // pattern = "<th>[\s.]*Open:[\s.]*</th>[\s*.]<td>[\s.]*([\d\.]+)[\s.]*</td>"
-    // pattern = "(<th>Open:</th>)[\r\n\s\+]*<td>[\d\.]+</td>"
-
     var text = "<th>Open:</th> <td>55.64</td>"
-
 
     var regex1 = new RegExp (pattern);
     var regExpResult = regex1.exec(result.data)
 
-    console.log (JSON.stringify(regExpResult))
+    // console.log (JSON.stringify(regExpResult))
 
     const info = {
       stock: req.query.stock,
@@ -181,18 +149,6 @@ app.get('/price', (req, res) => {
       close: -1
     };
 
-
-
-    // while ((result = regex1.exec(text)) !== null){
-    //   console.dir(JSON.stringify(result)) //log first
-    //   const val = {
-    //     url: {url},
-    //     // match: Number(result[0]), 
-    //     open: Number(result[0])
-    //   }
-    //   info.push(val)
-    // };
-    // info.push(url)
     console.log (JSON.stringify(info))
 
     res.send (JSON.stringify(info))
