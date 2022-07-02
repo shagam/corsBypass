@@ -146,7 +146,7 @@ app.get('/price', (req, res) => {
 
     const info = {
       stock: req.query.stock,
-      open: regExpResult[1],
+      open: Number(regExpResult[1]),
       // close: -1
     };
 
