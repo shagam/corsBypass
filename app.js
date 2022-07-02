@@ -133,8 +133,9 @@ app.get('/price', (req, res) => {
     const filler = "[\\s\\+\\r\\n']*";
     var pattern = 
     // "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
+    //  + "[.]" + filler 
     //  +
-    "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
+    "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>"
 
     var text = "<th>Open:</th> <td>55.64</td>"
 
