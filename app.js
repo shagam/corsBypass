@@ -147,7 +147,7 @@ app.get('/price', (req, res) => {
     const info = {
       stock: req.query.stock,
       open: regExpResult[1],
-      close: -1
+      // close: -1
     };
 
     console.log (JSON.stringify(info))
