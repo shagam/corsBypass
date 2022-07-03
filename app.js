@@ -35,9 +35,7 @@ app.use (
   })
 )
 
-// app.use('/api',
-// proxy ({target: })
-// )
+var nowMili = Date.now();
 
 function getDate() {
   const today = new Date();
@@ -47,7 +45,32 @@ function getDate() {
   return date + " " + time;    
 }
 
+//============================================================================
+
+// read splitsArray from local file once on startup
+var splitsArray = {};    // saved one obj per stock
+fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
+  if (err) {
+    console.error (err)
+    return;
+  }
+  splitsArray = JSON.parse(data);
+});
+
+
 app.get('/splits', (req, res) => {
+
+  //! try to get saved split
+  nowMili = Date.now();
+  const savedSplit = splitsArray[req.query.stock];
+  if (savedSplit != null) {
+    if (nowMili - savedSplit.updateMili  < 24 * 3600 * 1000) {
+      console.log ("\n", getDate(), 'Saved split found:', JSON.stringify(savedSplit))
+      res.send (JSON.stringify(savedSplit))
+      return;
+    }
+  }
+
 
   const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
   const options = {
@@ -55,7 +78,7 @@ app.get('/splits', (req, res) => {
   };
   axios.get (url)
   .then ((result) => {
-    console.log ("\n", getDate(), "pageSize: " + result.data.length, req.query.stock, url)
+    // console.log ("\n", getDate(), 'splitInfo', "pageSize: " + result.data.length, req.query.stock, url)
     // res.send (result.data)
 
     var pattern = "#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)";
@@ -67,24 +90,41 @@ app.get('/splits', (req, res) => {
     var count = 0;
     const splits = [];
     while ((result = regex1.exec(text)) !== null){
-      if (count == 0)
-        console.dir(JSON.stringify(result)) //log first
+      // if (count == 0)
+      //   console.dir(JSON.stringify(result)) //log first
+      if (result[3] < 1998)
+        continue;   // ignore splits older than year 1998  
       count++
       const oneSplit = {
+        stock: req.query.stock,
         jump: (Number(result[4] / result[5])).toFixed(4),
         year: Number(result [3]),
         month: Number(result[1]),
         day: Number(result[2]),
+        updateMili: nowMili
       }
       splits.push(oneSplit);
 
     };
-    console.log (JSON.stringify(splits))
-    // const found1 = [...text.matchAll(regex1)];
-    // const found = regex1.matchAll (pattern);
-    // console.log ('found ' + found1)
+    if (splits.length == 0) {
+      console.log ('no splits', Object.keys(splitsArray).length, req.query.stock)
+      res.send (JSON.stringify("[]"))
+      return     
+    }
 
-    //res.send (text.length + " " + url)
+    console.log ('\nsplits:', Object.keys(splitsArray).length, splits)
+
+    // save local split
+    splitsArray [req.query.stock] = splits;
+    console.dir (splitsArray)
+
+    fs.writeFile ('splitsArray.txt', JSON.stringify(splitsArray), err => {
+      if (err) {
+        console.err('splitsArray.txt write fail', err)
+      }
+    })
+
+
     res.send (JSON.stringify(splits))
   })
   .catch ((err) => {
@@ -92,6 +132,16 @@ app.get('/splits', (req, res) => {
   })
 
 })
+
+//============================================================================
+
+
+app.get('/val', (req, res) => {
+  console.log (getDate(), req.query, req.params, req.hostname)
+  res.send ('Hello' + JSON.stringify(req.query))
+})
+
+//============================================================================
 
 // Historical Quote
 // https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
@@ -105,15 +155,31 @@ app.get('/splits', (req, res) => {
 // http://localhost:5000/splits?stock=APPL
 
 
-
-app.get('/val', (req, res) => {
-  console.log (getDate(), req.query, req.params, req.hostname)
-  res.send ('Hello' + JSON.stringify(req.query))
-})
+var priceArray = {};   // saved one obj per stock
+// read price from local file once on startup
+fs.readFile('priceArray.txt', 'utf8', (err, data) => {
+  if (err) {
+    console.error (err)
+    return;
+  }
+  priceArray = JSON.parse(data);
+});
 
 app.get('/price', (req, res) => {
-  console.log (getDate(), req.query)
+  // console.log (getDate(), req.query)
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
+
+  // try to get saved record
+  nowMili = Date.now();
+
+  const savedPrice = priceArray[req.query.stock];
+  if (savedPrice != null) {
+    if (nowMili - savedPrice.updateMili < 24 * 3600 * 1000) {
+      console.log ('Saved price found:', JSON.stringify(savedPrice))
+      res.send (JSON.stringify(savedPrice))
+      return;
+    }
+  }
 
   var url = "https://bigcharts.marketwatch.com/historical/default.asp?symb=" + req.query.stock
   url += '&closeDate=' + req.query.mon
@@ -128,31 +194,44 @@ app.get('/price', (req, res) => {
 
   axios.get (url)
   .then ((result) => {
-    console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
+    // console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
   
     const filler = "[\\s]*";
     var pattern = 
     "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
     + "</tr>" + filler + "<tr>" + filler +
     "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>"
-
-    var text = "<th>Open:</th> <td>55.64</td>"
-
+ 
     var regex1 = new RegExp (pattern);
     var regExpResult = regex1.exec(result.data)
 
-    console.log (JSON.stringify(regExpResult))
+    // console.log (JSON.stringify(regExpResult))
 
-    const info = {
+    const priceObject = {
       stock: req.query.stock,
+      year: req.query.year,
+      mon: req.query.mon,
+      day: req.query.day,
       close: Number(regExpResult[1]),
       open: Number(regExpResult[2]),
+      updateMili: nowMili
       // close: -1
     };
 
-    console.log (JSON.stringify(info))
 
-    res.send (JSON.stringify(info))
+    // save local price
+    priceArray [req.query.stock] = priceObject;
+    console.log (getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject))
+    console.dir (priceArray)
+
+    fs.writeFile ('priceArray.txt', JSON.stringify (priceArray), err => {
+      if (err) {
+        console.err('priceArray.txt write fail', err)
+      }
+    })
+
+
+    res.send (JSON.stringify(priceObject))
   })
   .catch ((err) => {
     console.log(err)
