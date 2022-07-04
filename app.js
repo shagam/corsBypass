@@ -55,6 +55,7 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
     return;
   }
   splitsArray = JSON.parse(data);
+  console.dir (splitsArray)
 });
 
 
@@ -62,15 +63,14 @@ app.get('/splits', (req, res) => {
 
   //! try to get saved split
   nowMili = Date.now();
-  const savedSplit = splitsArray[req.query.stock];
-  if (savedSplit != null) {
-    if (nowMili - savedSplit.updateMili  < 24 * 3600 * 1000) {
-      console.log ("\n", getDate(), 'Saved split found:', JSON.stringify(savedSplit))
-      res.send (JSON.stringify(savedSplit))
-      return;
-    }
+  const savedSplit = splitsArray [req.query.stock];
+  if (savedSplit && (nowMili - savedSplit.updateMili)  < 24 * 3600 * 1000) {
+    console.log ("\n", getDate(), 'Saved split found:', Object.keys(splitsArray).length, JSON.stringify(savedSplit))
+    res.send (JSON.stringify(savedSplit))
+    return;
   }
 
+  // console.log ('\nsaved splits not found', Object.keys(splitsArray).length, req.query.stock)
 
   const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
   const options = {
@@ -84,7 +84,6 @@ app.get('/splits', (req, res) => {
     var pattern = "#CCCCCC\">(\\d\\d)/(\\d\\d)/(\\d\\d\\d\\d)</TD><TD align=\"center\" style=\"padding: 4px; border-bottom: 1px solid #CCCCCC\">(\\d*) for (\\d*)";
     // pattern = "CCCCCC"
     const regex1 = new RegExp (pattern, 'g');
-
 
     const text = result.data;
     var count = 0;
@@ -101,22 +100,22 @@ app.get('/splits', (req, res) => {
         year: Number(result [3]),
         month: Number(result[1]),
         day: Number(result[2]),
-        updateMili: nowMili
       }
       splits.push(oneSplit);
 
     };
+
     if (splits.length == 0) {
       console.log ('no splits', Object.keys(splitsArray).length, req.query.stock)
       res.send (JSON.stringify("[]"))
       return     
     }
-
+    splits['updateMili'] = nowMili;
     console.log ('\nsplits:', Object.keys(splitsArray).length, splits)
 
     // save local split
     splitsArray [req.query.stock] = splits;
-    console.dir (splitsArray)
+    // console.dir (splitsArray)
 
     fs.writeFile ('splitsArray.txt', JSON.stringify(splitsArray), err => {
       if (err) {
@@ -169,16 +168,13 @@ app.get('/price', (req, res) => {
   // console.log (getDate(), req.query)
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
 
-  // try to get saved record
   nowMili = Date.now();
 
   const savedPrice = priceArray[req.query.stock];
-  if (savedPrice != null) {
-    if (nowMili - savedPrice.updateMili < 24 * 3600 * 1000) {
-      console.log ('Saved price found:', JSON.stringify(savedPrice))
-      res.send (JSON.stringify(savedPrice))
-      return;
-    }
+  if (savedPrice && (nowMili - savedPrice.updateMili < 24 * 3600 * 1000)) {
+    console.log ('\n', getDate(), 'Saved price found:', Object.keys(priceArray).length, JSON.stringify(savedPrice))
+    res.send (JSON.stringify(savedPrice))
+    return;
   }
 
   var url = "https://bigcharts.marketwatch.com/historical/default.asp?symb=" + req.query.stock
@@ -222,7 +218,7 @@ app.get('/price', (req, res) => {
     // save local price
     priceArray [req.query.stock] = priceObject;
     console.log (getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject))
-    console.dir (priceArray)
+    // console.dir (priceArray)
 
     fs.writeFile ('priceArray.txt', JSON.stringify (priceArray), err => {
       if (err) {
