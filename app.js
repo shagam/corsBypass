@@ -55,6 +55,7 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
     return;
   }
   splitsArray = JSON.parse(data);
+  console.log('splitArray.txt  read')
   console.dir (splitsArray)
 });
 
@@ -107,7 +108,7 @@ app.get('/splits', (req, res) => {
 
     if (splits.length == 0) {
       console.log ('no splits', Object.keys(splitsArray).length, req.query.stock)
-      res.send (JSON.stringify("[]"))
+      res.send ("")
       return     
     }
     splits['updateMili'] = nowMili;
@@ -162,6 +163,8 @@ fs.readFile('priceArray.txt', 'utf8', (err, data) => {
     return;
   }
   priceArray = JSON.parse(data);
+  console.log('priceArray.txt  read')
+  console.dir (priceArray)
 });
 
 app.get('/price', (req, res) => {
