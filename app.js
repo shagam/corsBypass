@@ -174,7 +174,8 @@ app.get('/price', (req, res) => {
   nowMili = Date.now();
 
   const savedPrice = priceArray[req.query.stock];
-  if (savedPrice && (nowMili - savedPrice.updateMili < 24 * 3600 * 1000)) {
+  if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
+  req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
     console.log ('\n', getDate(), 'Saved price found:', Object.keys(priceArray).length, JSON.stringify(savedPrice))
     res.send (JSON.stringify(savedPrice))
     return;
