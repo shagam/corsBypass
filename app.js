@@ -117,7 +117,7 @@ app.get('/splits', (req, res) => {
 
     // save local split
     splitsArray [req.query.stock] = splits;
-    // console.dir (splitsArray)
+    console.dir (splitsArray)
 
     fs.writeFile ('splitsArray.txt', JSON.stringify(splitsArray), err => {
       if (err) {
@@ -130,6 +130,7 @@ app.get('/splits', (req, res) => {
   })
   .catch ((err) => {
     console.log(err)
+    res.send('')
   })
 
 })
@@ -236,6 +237,7 @@ app.get('/price', (req, res) => {
   })
   .catch ((err) => {
     console.log(err)
+    res.send('')
   })
 
 })
