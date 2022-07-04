@@ -57,6 +57,7 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
   splitsArray = JSON.parse(data);
   console.log('\nsplitArray.txt  read count=', Object.keys(splitsArray).length)
   console.dir (splitsArray)
+  // console.log (JSON.stringify(splitsArray))
 });
 
 
@@ -117,7 +118,7 @@ app.get('/splits', (req, res) => {
 
     // save local split
     splitsArray [req.query.stock] = splits;
-    console.dir (splitsArray)
+    // console.dir (splitsArray)
 
     fs.writeFile ('splitsArray.txt', JSON.stringify(splitsArray), err => {
       if (err) {
