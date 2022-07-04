@@ -55,7 +55,7 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
     return;
   }
   splitsArray = JSON.parse(data);
-  console.log('splitArray.txt  read')
+  console.log('\nsplitArray.txt  read count=', Object.keys(splitsArray).length)
   console.dir (splitsArray)
 });
 
@@ -66,7 +66,8 @@ app.get('/splits', (req, res) => {
   nowMili = Date.now();
   const savedSplit = splitsArray [req.query.stock];
   if (savedSplit && (nowMili - savedSplit.updateMili)  < 24 * 3600 * 1000) {
-    console.log ("\n", getDate(), 'Saved split found:', Object.keys(splitsArray).length, JSON.stringify(savedSplit))
+    console.log ("\n", getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
+    console.dir (savedSplit)
     res.send (JSON.stringify(savedSplit))
     return;
   }
@@ -163,7 +164,7 @@ fs.readFile('priceArray.txt', 'utf8', (err, data) => {
     return;
   }
   priceArray = JSON.parse(data);
-  console.log('priceArray.txt  read')
+  console.log('\npriceArray.txt  read, count=', Object.keys(priceArray).length)
   console.dir (priceArray)
 });
 
@@ -176,7 +177,7 @@ app.get('/price', (req, res) => {
   const savedPrice = priceArray[req.query.stock];
   if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
   req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
-    console.log ('\n', getDate(), 'Saved price found:', Object.keys(priceArray).length, JSON.stringify(savedPrice))
+    console.log ('\n', getDate(), 'Saved price found, saveCount=', Object.keys(priceArray).length, JSON.stringify(savedPrice))
     res.send (JSON.stringify(savedPrice))
     return;
   }
