@@ -66,7 +66,7 @@ app.get('/splits', (req, res) => {
   //! try to get saved split
   nowMili = Date.now();
   const savedSplit = splitsArray [req.query.stock];
-  if (savedSplit && (nowMili - savedSplit.updateMili)  < 24 * 3600 * 1000) {
+  if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 24 * 3600 * 1000) {
     console.log ("\n", getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
     console.dir (savedSplit)
     res.send (JSON.stringify(savedSplit))
@@ -103,6 +103,7 @@ app.get('/splits', (req, res) => {
         year: Number(result [3]),
         month: Number(result[1]),
         day: Number(result[2]),
+        updateMili: nowMili
       }
       splits.push(oneSplit);
 
@@ -113,7 +114,7 @@ app.get('/splits', (req, res) => {
       res.send ("")
       return     
     }
-    splits['updateMili'] = nowMili;
+  
     console.log ('\nsplits:', Object.keys(splitsArray).length, splits)
 
     // save local split
