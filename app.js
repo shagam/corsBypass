@@ -69,7 +69,10 @@ app.get('/splits', (req, res) => {
   if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 24 * 3600 * 1000) {
     console.log ("\n", getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
     console.dir (savedSplit)
-    res.send (JSON.stringify(savedSplit))
+    if (savedSplit.length == 1)
+      res.send ('')
+    else
+      res.send (JSON.stringify(savedSplit))
     return;
   }
 
@@ -91,6 +94,9 @@ app.get('/splits', (req, res) => {
     const text = result.data;
     var count = 0;
     const splits = [];
+    splits.push ({
+      updateMili: nowMili
+    })
     while ((result = regex1.exec(text)) !== null){
       // if (count == 0)
       //   console.dir(JSON.stringify(result)) //log first
@@ -103,16 +109,13 @@ app.get('/splits', (req, res) => {
         year: Number(result [3]),
         month: Number(result[1]),
         day: Number(result[2]),
-        updateMili: nowMili
       }
       splits.push(oneSplit);
 
     };
 
-    if (splits.length == 0) {
-      console.log ('no splits', Object.keys(splitsArray).length, req.query.stock)
-      res.send ("")
-      return     
+    if (splits.length == 1) {
+      console.log ('no splits', Object.keys(splitsArray).length, req.query.stock) 
     }
   
     console.log ('\nsplits:', Object.keys(splitsArray).length, splits)
@@ -127,8 +130,10 @@ app.get('/splits', (req, res) => {
       }
     })
 
-
-    res.send (JSON.stringify(splits))
+    if (splits.length == 1)
+      res.send ('')
+    else
+      res.send (JSON.stringify(splits))
   })
   .catch ((err) => {
     console.log(err)
