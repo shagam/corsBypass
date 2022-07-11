@@ -118,7 +118,7 @@ app.get('/splits', (req, res) => {
       console.log ('no splits', Object.keys(splitsArray).length, req.query.stock) 
     }
   
-    console.log ('\nsplits:', Object.keys(splitsArray).length, splits)
+    console.log ('\nsplits:', req.query.stock, Object.keys(splitsArray).length, splits)
 
     // save local split
     splitsArray [req.query.stock] = splits;
