@@ -67,7 +67,7 @@ app.get('/splits', (req, res) => {
   nowMili = Date.now();
   const savedSplit = splitsArray [req.query.stock];
   if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 24 * 3600 * 1000) {
-    console.log ("\n", getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
+    console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
     console.dir (savedSplit)
     if (savedSplit.length == 1)
       res.send ('')
@@ -185,7 +185,7 @@ app.get('/price', (req, res) => {
   const savedPrice = priceArray[req.query.stock];
   if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
   req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
-    console.log ('\n', getDate(), 'Saved price found, saveCount=', Object.keys(priceArray).length, JSON.stringify(savedPrice))
+    console.log ('\n', req.query.stock, getDate(), 'Saved price found, saveCount=', Object.keys(priceArray).length, JSON.stringify(savedPrice))
     res.send (JSON.stringify(savedPrice))
     return;
   }
