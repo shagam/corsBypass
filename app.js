@@ -61,6 +61,7 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
 });
 
 
+// 7 day delay
 app.get('/splits', (req, res) => {
 
   //! try to get saved split
@@ -78,6 +79,8 @@ app.get('/splits', (req, res) => {
   get (req, res)
 })
 
+
+// 1 day delay
 app.get('/splitsDay', (req, res) => {
 
   //! try to get saved split
