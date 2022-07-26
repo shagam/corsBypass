@@ -55,9 +55,12 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
     return;
   }
   splitsArray = JSON.parse(data);
-  console.log('\nsplitArray.txt  read count=', Object.keys(splitsArray).length)
-  console.dir (splitsArray)
-  // console.log (JSON.stringify(splitsArray))
+  const keys = Object.keys(splitsArray);
+  console.log('\nsplitArray.txt  read count=', keys.length)
+  for (var i = 0; i < keys.length; i++)
+    console.log ('\n' + JSON.stringify (splitsArray[keys[i]]))
+  // for (var i = 0; i < keys.length; i++)
+  //   console.log (keys[i])
 });
 
 
@@ -126,7 +129,7 @@ function get (req, res) {
     while ((result = regex1.exec(text)) !== null){
       // if (count == 0)
       //   console.dir(JSON.stringify(result)) //log first
-      if (result[3] < 1998)
+      if (result[3] < 1995)
         continue;   // ignore splits older than year 1998  
       count++
       const oneSplit = {
@@ -198,8 +201,10 @@ fs.readFile('priceArray.txt', 'utf8', (err, data) => {
     return;
   }
   priceArray = JSON.parse(data);
-  console.log('\npriceArray.txt  read, count=', Object.keys(priceArray).length)
-  console.dir (priceArray)
+  const keys = Object.keys(priceArray);
+  console.log('\npriceArray.txt  read, count=', keys.length)
+  for (var i = 0; i < keys.length; i++)
+    console.log (JSON.stringify (priceArray[keys[i]]))
 });
 
 app.get('/price', (req, res) => {
