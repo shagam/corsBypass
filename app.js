@@ -144,10 +144,10 @@ function get (req, res) {
     };
 
     if (splits.length == 1) {
-      console.log ('no splits', Object.keys(splitsArray).length, req.query.stock) 
+      console.log ('no splits', req.query.stock, Object.keys(splitsArray).length) 
     }
-  
-    console.log ('\nsplits:', req.query.stock, Object.keys(splitsArray).length, splits)
+    else
+      console.log ('\nsplits:', req.query.stock, Object.keys(splitsArray).length, splits)
 
     // save local split
     splitsArray [req.query.stock] = splits;
