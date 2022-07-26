@@ -58,7 +58,7 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
   const keys = Object.keys(splitsArray);
   console.log('\nsplitArray.txt  read count=', keys.length)
   for (var i = 0; i < keys.length; i++)
-    console.log ('\n' + JSON.stringify (splitsArray[keys[i]]))
+    console.log ('\n', keys[i], JSON.stringify (splitsArray[keys[i]]))
   // for (var i = 0; i < keys.length; i++)
   //   console.log (keys[i])
 });
