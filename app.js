@@ -105,6 +105,27 @@ app.get('/splitsDay', (req, res) => {
 // main body allow multipple
 function get (req, res) {
 
+  const oldSplits = splitsArray [req.query.stock];
+  if (oldSplits !== undefined) {
+    for (var i = 0; i < oldSplits.length; i++) {
+      const oneSplit = oldSplits[i];
+      if (oneSplit.year === undefined)
+        continue;
+      const splitDate = new Date([oneSplit.year, oneSplit.month, oneSplit.day])
+      const today = new Date();
+      console.log (today.getDate(), splitDate.getDate()) 
+      if ((today.getTime() - splitDate.getTime()) / (1000 * 3600 * 24) < 180) { // less than 180 days
+        console.log (req.query.stock, 'recentSplit', splitDate.toLocaleDateString())
+        console.dir (oneSplit)
+        if (oneSplit.length == 1)
+          res.send ('')
+        else
+          res.send (JSON.stringify(oneSplit))
+        return;
+      }
+    }
+  }
+
   // console.log ('\nsaved splits not found', Object.keys(splitsArray).length, req.query.stock)
 
   const url = "https://www.stocksplithistory.com/?symbol=" + req.query.stock;
