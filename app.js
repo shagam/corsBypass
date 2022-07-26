@@ -66,30 +66,23 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
 
 // 7 day delay
 app.get('/splits', (req, res) => {
-
-  //! try to get saved split
-  nowMili = Date.now();
-  const savedSplit = splitsArray [req.query.stock];
-  if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 7 * 24 * 3600 * 1000) {
-    console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
-    console.dir (savedSplit)
-    if (savedSplit.length == 1)
-      res.send ('')
-    else
-      res.send (JSON.stringify(savedSplit))
-    return;
-  }
-  get (req, res)
+  get (req, res, 7)
 })
 
 
 // 1 day delay
 app.get('/splitsDay', (req, res) => {
+   get (req, res, 1)
+})
 
-  //! try to get saved split
+
+// main body allow multipple
+function get (req, res, daysDelay) {
+
+  // search saved splits retrieved lately
   nowMili = Date.now();
   const savedSplit = splitsArray [req.query.stock];
-  if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 1 * 24 * 3600 * 1000) {
+  if (savedSplit && (nowMili - savedSplit[0].updateMili)  < daysDelay * 24 * 3600 * 1000) {
     console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
     console.dir (savedSplit)
     if (savedSplit.length == 1)
@@ -98,17 +91,11 @@ app.get('/splitsDay', (req, res) => {
       res.send (JSON.stringify(savedSplit))
     return;
   }
-  get (req, res)
-})
 
-
-// main body allow multipple
-function get (req, res) {
-
-  const oldSplits = splitsArray [req.query.stock];
-  if (oldSplits !== undefined) {
-    for (var i = 0; i < oldSplits.length; i++) {
-      const oneSplit = oldSplits[i];
+  // avoid getting from url if any split is recent
+  if (savedSplit) {
+    for (var i = 0; i < savedSplit.length; i++) {
+      const oneSplit = savedSplit[i];
       if (oneSplit.year === undefined)
         continue;
       const splitDate = new Date([oneSplit.year, oneSplit.month, oneSplit.day])
