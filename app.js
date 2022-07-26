@@ -66,7 +66,7 @@ app.get('/splits', (req, res) => {
   //! try to get saved split
   nowMili = Date.now();
   const savedSplit = splitsArray [req.query.stock];
-  if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 24 * 3600 * 1000) {
+  if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 7 * 24 * 3600 * 1000) {
     console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
     console.dir (savedSplit)
     if (savedSplit.length == 1)
@@ -75,6 +75,29 @@ app.get('/splits', (req, res) => {
       res.send (JSON.stringify(savedSplit))
     return;
   }
+  get (req, res)
+})
+
+app.get('/splitsDay', (req, res) => {
+
+  //! try to get saved split
+  nowMili = Date.now();
+  const savedSplit = splitsArray [req.query.stock];
+  if (savedSplit && (nowMili - savedSplit[0].updateMili)  < 1 * 24 * 3600 * 1000) {
+    console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
+    console.dir (savedSplit)
+    if (savedSplit.length == 1)
+      res.send ('')
+    else
+      res.send (JSON.stringify(savedSplit))
+    return;
+  }
+  get (req, res)
+})
+
+
+// main body allow multipple
+function get (req, res) {
 
   // console.log ('\nsaved splits not found', Object.keys(splitsArray).length, req.query.stock)
 
@@ -140,7 +163,7 @@ app.get('/splits', (req, res) => {
     res.send('')
   })
 
-})
+}
 
 //============================================================================
 
