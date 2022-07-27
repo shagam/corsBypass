@@ -7,10 +7,10 @@ import express from 'express'
 import axios from 'axios'
 // const axios = require('axios')
 import cors from 'cors'
-// const cors = require ("cors")
-// const proxy = require ("http-proxy-middleware")
+import { detect } from 'detect-browser';
+// import http from 'http'
+// import expressUseragent from 'express-useragent'
 
-// const fetch = require ("node-fetch")
 import fs from 'fs'
 
 const app = express()
@@ -44,6 +44,32 @@ function getDate() {
   // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
   return date + " " + time;    
 }
+
+app.get('/user', (req, res) => {
+
+  // console.log (req.user)
+  var source = req.headers['user-agent']
+  console.dir (source)
+
+  const browser = detect();
+  if (browser) {
+    console.dir(browser)
+  }
+
+  const result = axios.get('https://geolocation-db.com/json/')
+  .then ((result) => {
+    console.dir(result.data)
+
+    res.send(result.data)
+  })
+
+  .catch ((err) => {
+    console.log(err)
+    res.send('')
+  })
+
+  })
+
 
 //============================================================================
 
