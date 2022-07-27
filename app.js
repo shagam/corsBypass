@@ -45,6 +45,31 @@ function getDate() {
   return date + " " + time;    
 }
 
+app.get('/userTest', (req, res) => {
+
+  var source = req.headers['user-agent']
+  console.dir (source)
+
+  const browser = detect();
+  if (browser) {
+    console.dir(browser)
+  }
+  
+  const result = axios.get('http://84.95.84.236:5000/user')
+  .then ((result) => {
+    console.dir(result.data)
+    res.send(result.data)
+  })
+
+  .catch ((err) => {
+    console.log(err)
+    res.send('')
+  })
+
+  
+})
+
+
 app.get('/user', (req, res) => {
 
   // console.log (req.user)
