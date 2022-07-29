@@ -2,18 +2,18 @@
 // http://localhost:5000/splits?stock=APPL
 // https://www.stocksplithistory.com/?symbol=APPL
 
-import express from 'express'
-// const express = require('express')
-import axios from 'axios'
-// const axios = require('axios')
-import cors from 'cors'
-import { detect } from 'detect-browser';
-// import {getLocalIp} from './getLocalIp'
+// import express from 'express'
+const express = require('express')
+// import axios from 'axios'
+const axios = require('axios')
+const cors = require ('cors')
+const detect = require ('detect-browser')
+const getLocalIp_ = require ('./getLocalIp')
 
 // import http from 'http'
 // import expressUseragent from 'express-useragent'
 
-import fs from 'fs'
+const fs = require ('fs')
 
 const app = express()
 const router = express.Router();
@@ -65,7 +65,7 @@ app.get('/userTest', (req, res) => {
   const browser = detect();
   if (browser) {
     console.dir(browser)
-    txt += browser;
+    txt += JSON.stringify(browser);
   }
 
   const result1 = axios.get('https://geolocation-db.com/json/')
@@ -74,7 +74,8 @@ app.get('/userTest', (req, res) => {
     IPv4 = result1.data.IPv4;
     console.log ('IPv4', IPv4)
 
-    txt += result1.data;
+    txt += JSON.stringify(result1.data);
+    txt += " " + IPv4;
     // res.send(result1.data)
   })
 
@@ -89,7 +90,7 @@ app.get('/userTest', (req, res) => {
 
   const result = axios.get('http://' + externalIp + ':5000/user')
   .then ((result) => {
-    console.log('from other: ', result.data)
+    console.log('from other: ', JSON.stringify(result.data))
     // txt += result.data;
   })
   .catch ((err) => {
@@ -98,7 +99,10 @@ app.get('/userTest', (req, res) => {
     return;
   })
 
-  res.send (txt)
+  console.dir (res.getHeaderNames())
+  res.send (txt)  
+
+
 })
 
 
@@ -108,10 +112,10 @@ app.get('/user', (req, res) => {
   var source = req.headers['user-agent']
   console.dir (source)
 
-  const browser = detect();
-  if (browser) {
-    console.dir(browser)
-  }
+  // const browser = detect();
+  // if (browser) {
+  //   console.dir(browser)
+  // }
 
   const result = axios.get('https://geolocation-db.com/json/')
   .then ((result) => {

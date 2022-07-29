@@ -7,7 +7,10 @@
  *    console.log(ipAddr); // 192.168.0.122
  * });
  */
-export function getLocalIp() {
+
+const {networkInterfaces} = require ('os')
+
+ function getLocalIp() {
   return new Promise(function(resolve, reject) {
     // NOTE: window.RTCPeerConnection is "not a constructor" in FF22/23
     var RTCPeerConnection = /*window.RTCPeerConnection ||*/ window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
@@ -58,5 +61,5 @@ export function getLocalIp() {
   });
 }
 
-export default getLocalIp
+module.exports = getLocalIp
 // @Natarajan8344

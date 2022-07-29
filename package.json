@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "backend to bypass cors",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "test",
     "start": "node app.js"
@@ -30,7 +29,9 @@
     "http": "^0.0.1-security",
     "http-proxy-middleware": "^2.0.6",
     "node-fetch": "^3.2.6",
+    "os": "^0.1.2",
     "request": "^2.88.2",
+    "window": "^4.2.7",
     "xpath": "^0.0.32"
   }
 }
