@@ -114,6 +114,7 @@ app.get('/userTest', (req, res) => {
   var url = 'http://'
   const result = axios.get('http://' + testIp + ':5000/user')
   .then ((result) => {
+    console.log ('testIp', testIp)
     console.log('\nfrom other: ', JSON.stringify(result.data))
     txt += result.data;
   })
