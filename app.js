@@ -82,7 +82,7 @@ app.get('/userTest', (req, res) => {
     IPv4 = result1.data.IPv4;
     console.log ('\nPublic global IPv4', IPv4)
     console.dir(result1.data)
-    txt += JSON.stringify(result1.data);
+    // txt += JSON.stringify(result1.data);
     txt += " " + IPv4;
   // res.send(result1.data)  
   })
@@ -108,6 +108,7 @@ app.get('/userTest', (req, res) => {
   })
 
   console.dir (res.getHeaderNames())
+  txt += 'headers: ' + res.getHeaderNames()
   res.send (txt)  
 
 
@@ -118,17 +119,14 @@ app.get('/user', (req, res) => {
 
   // console.log (req.user)
   var source = req.headers['user-agent']
-  console.dir (source)
-
-  // const browser = detect();
-  // if (browser) {
-  //   console.dir(browser)
-  // }
+  console.log ('user-agent:', source)
+  var txt = source;
 
   const result = axios.get('https://geolocation-db.com/json/')
   .then ((result) => {
     console.dir(result.data)
-    res.send(result.data)
+    txt += result.data;
+    res.send(txt)
   })
 
   .catch ((err) => {
