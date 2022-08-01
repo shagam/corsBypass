@@ -51,7 +51,7 @@ function getDate() {
 }
 
 
-function getLOcalIp () {
+function getLocalIp () {
   var localIp = '';
   const {networkInterfaces} = require ('os')
   const nets = networkInterfaces().Ethernet;
@@ -65,44 +65,42 @@ function getLOcalIp () {
   while ((match = regex0.exec(str)) !== null){
     localIp = match[1]
   }
-  console.log ('\nlocal ip:', localIp)
+  // console.log ('\nlocal ip:', localIp)
   return localIp;
 }
 
-function getPunlicIp () {
+function getPublicIp () {
   const result1 = axios.get('https://geolocation-db.com/json/')
   .then ((result1) => {
-    const IPv4 = result1.data.IPv4;
-    console.log ('\nPublic global IPv4', IPv4)
-    console.dir(result1.data)
-    return IPv4;
+    const publicIp = result1.data.IPv4;
+    console.log ('\nPublic global IPv4', publicIp)
+    // console.dir(result1.data)
+    return publicIp;
   })
   .catch ((err) => {
     console.log(err)
-    res.send('')
-    return;
+    // res.send('')
+    return '';
   })
 
+}
+
+function collectInfo (req, res) {
+  var source = req.headers['user-agent']
+  var txt = '\nsource:' + source;
+
+  txt += '\nlocalIp: ' + getLocalIp();
+  getPublicIp();
+  txt += '\nheaders: ' + res.getHeaderNames()
+  console.log ('collected: ', txt)
+  return txt;
 }
 
 
 app.get('/userTest', (req, res) => {
 
-  // get browser type
-  var source = req.headers['user-agent']
-  var txt = source;
-  console.log ('\nuser-agent', source)
-
-  var localIp = getLOcalIp();
-  txt += localIp
-
-  // get public IPv4
-  var IPv4 = getPunlicIp();
-  txt += IPv4
-
-  console.dir (res.getHeaderNames())
-  txt += 'headers: ' + res.getHeaderNames()
-
+  var txt = collectInfo (req, res);
+  var localIp = getLocalIp();
 
   // get data from remote    192.168.1.3 192.168.1.4
   const testIp = localIp === '192.168.1.3' ? '192.168.1.4' : '192.168.1.3' 
@@ -110,7 +108,7 @@ app.get('/userTest', (req, res) => {
   const result = axios.get('http://' + testIp + ':5000/user')
   .then ((result) => {
     console.log('\nfrom other: ', JSON.stringify(result.data))
-    // txt += result.data;
+    txt += result.data;
   })
   .catch ((err) => {
     console.log(err)
