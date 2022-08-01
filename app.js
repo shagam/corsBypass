@@ -87,7 +87,7 @@ function getPublicIp () {
 
 function collectInfo (req, res) {
   var source = req.headers['user-agent']
-  var txt = '\nsource:' + source;
+  var txt = '\nsource: ' + source;
 
   txt += '\nlocalIp: ' + getLocalIp();
   getPublicIp();
@@ -122,22 +122,9 @@ app.get('/userTest', (req, res) => {
 
 app.get('/user', (req, res) => {
 
-  // console.log (req.user)
-  var source = req.headers['user-agent']
-  console.log ('user-agent:', source)
-  var txt = source;
+  const txt = collectInfo (req, res)
+  res.send(txt)
 
-  const result = axios.get('https://geolocation-db.com/json/')
-  .then ((result) => {
-    console.dir(result.data)
-    txt += result.data;
-    res.send(txt)
-  })
-
-  .catch ((err) => {
-    console.log(err)
-    res.send('')
-  })
 
   })
 
