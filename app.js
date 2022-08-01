@@ -16,9 +16,10 @@ const fs = require ('fs')
 
 const app = express()
 const router = express.Router();
-var IPv4 = '';
+
 const externalIp = '84.95.84.236'
-const l2Ip = '192.168.1.4'
+const l2_Ip = '192.168.1.4'
+const pc_ip = '192.168.1.3'
 
 const port = 5000;
 app.listen(port, (err) => {
@@ -67,34 +68,37 @@ app.get('/userTest', (req, res) => {
   }
   console.log ('\nlocal ip:', localIp)
 
-  // get public IPv4
+
+  // get browser type
   var source = req.headers['user-agent']
   var txt = source;
-  console.dir (source)
-  var IPv4 = '';
+  console.log ('\nuser-agent', source)
 
+
+  // get public IPv4
+  var IPv4 = '';
   const result1 = axios.get('https://geolocation-db.com/json/')
   .then ((result1) => {
     IPv4 = result1.data.IPv4;
-    console.log ('Public global IPv4', IPv4)
+    console.log ('\nPublic global IPv4', IPv4)
     console.dir(result1.data)
     txt += JSON.stringify(result1.data);
     txt += " " + IPv4;
   // res.send(result1.data)  
   })
-
   .catch ((err) => {
     console.log(err)
     res.send('')
     return;
   })
 
-  // 192.168.1.3
-  var url = 'http://'
 
-  const result = axios.get('http://' + externalIp + ':5000/user')
+  // get data from remote    192.168.1.3 192.168.1.4
+  const testIp = localIp === '192.168.1.3' ? '192.168.1.4' : '192.168.1.3' 
+  var url = 'http://'
+  const result = axios.get('http://' + testIp + ':5000/user')
   .then ((result) => {
-    console.log('from other: ', JSON.stringify(result.data))
+    console.log('\nfrom other: ', JSON.stringify(result.data))
     // txt += result.data;
   })
   .catch ((err) => {
