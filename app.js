@@ -8,8 +8,7 @@ const express = require('express')
 const axios = require('axios')
 const cors = require ('cors')
 const detect = require ('detect-browser')
-const getLocalIp_ = require ('./getLocalIp')
-
+// const getLocalIp = require ('./getLocalIp')
 // import http from 'http'
 // import expressUseragent from 'express-useragent'
 
@@ -52,31 +51,36 @@ function getDate() {
 
 app.get('/userTest', (req, res) => {
 
-  // getLocalIp().then((ipAddr) => {
-  //   console.log(ipAddr); // 192.168.0.122
-  // });
+  // get localIp
+  var localIp = '';
+  const {networkInterfaces} = require ('os')
+  const nets = networkInterfaces().Ethernet;
+  // console.log ('nets', nets)
+  const pattern = '"address":"([\\d\\.]+)"';
+  const regex0 = new RegExp (pattern, 'gm');
+  
+  var match;
+  const str = JSON.stringify(nets)
+  // console.log ('getLocalIp', str)
+  while ((match = regex0.exec(str)) !== null){
+    localIp = match[1]
+  }
+  console.log ('\nlocal ip:', localIp)
 
-
+  // get public IPv4
   var source = req.headers['user-agent']
   var txt = source;
   console.dir (source)
   var IPv4 = '';
 
-  const browser = detect();
-  if (browser) {
-    console.dir(browser)
-    txt += JSON.stringify(browser);
-  }
-
   const result1 = axios.get('https://geolocation-db.com/json/')
   .then ((result1) => {
-    console.dir(result1.data)
     IPv4 = result1.data.IPv4;
-    console.log ('IPv4', IPv4)
-
+    console.log ('Public global IPv4', IPv4)
+    console.dir(result1.data)
     txt += JSON.stringify(result1.data);
     txt += " " + IPv4;
-    // res.send(result1.data)
+  // res.send(result1.data)  
   })
 
   .catch ((err) => {
