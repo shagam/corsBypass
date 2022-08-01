@@ -50,9 +50,8 @@ function getDate() {
   return date + " " + time;    
 }
 
-app.get('/userTest', (req, res) => {
 
-  // get localIp
+function getLOcalIp () {
   var localIp = '';
   const {networkInterfaces} = require ('os')
   const nets = networkInterfaces().Ethernet;
@@ -67,30 +66,42 @@ app.get('/userTest', (req, res) => {
     localIp = match[1]
   }
   console.log ('\nlocal ip:', localIp)
+  return localIp;
+}
 
-
-  // get browser type
-  var source = req.headers['user-agent']
-  var txt = source;
-  console.log ('\nuser-agent', source)
-
-
-  // get public IPv4
-  var IPv4 = '';
+function getPunlicIp () {
   const result1 = axios.get('https://geolocation-db.com/json/')
   .then ((result1) => {
-    IPv4 = result1.data.IPv4;
+    const IPv4 = result1.data.IPv4;
     console.log ('\nPublic global IPv4', IPv4)
     console.dir(result1.data)
-    // txt += JSON.stringify(result1.data);
-    txt += " " + IPv4;
-  // res.send(result1.data)  
+    return IPv4;
   })
   .catch ((err) => {
     console.log(err)
     res.send('')
     return;
   })
+
+}
+
+
+app.get('/userTest', (req, res) => {
+
+  // get browser type
+  var source = req.headers['user-agent']
+  var txt = source;
+  console.log ('\nuser-agent', source)
+
+  var localIp = getLOcalIp();
+  txt += localIp
+
+  // get public IPv4
+  var IPv4 = getPunlicIp();
+  txt += IPv4
+
+  console.dir (res.getHeaderNames())
+  txt += 'headers: ' + res.getHeaderNames()
 
 
   // get data from remote    192.168.1.3 192.168.1.4
@@ -107,11 +118,7 @@ app.get('/userTest', (req, res) => {
     return;
   })
 
-  console.dir (res.getHeaderNames())
-  txt += 'headers: ' + res.getHeaderNames()
   res.send (txt)  
-
-
 })
 
 
