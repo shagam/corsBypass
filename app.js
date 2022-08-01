@@ -55,8 +55,10 @@ function getLocalIp () {
   var localIp = '';
 
   var ip = require("ip")
-  console.log ('ipAddress: ',
-  ip.address())
+  // console.log ('ipAddress: ', addr);
+  const addr = ip.address();
+  if (addr)
+    return addr;
 
   const {networkInterfaces} = require ('os')
   const nets = networkInterfaces().Ethernet;
