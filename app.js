@@ -50,12 +50,17 @@ function getDate() {
   return date + " " + time;    
 }
 
-
+// for windows onlynpm i ip
 function getLocalIp () {
   var localIp = '';
+
+  var ip = require("ip")
+  console.log ('ipAddress: ',
+  ip.address())
+
   const {networkInterfaces} = require ('os')
   const nets = networkInterfaces().Ethernet;
-  console.log ('nets', nets)
+  // console.log ('nets', nets)
   const pattern = '"address":"([\\d\\.]+)"';
   const regex0 = new RegExp (pattern, 'gm');
   

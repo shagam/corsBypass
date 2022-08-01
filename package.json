@@ -28,6 +28,7 @@
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "http-proxy-middleware": "^2.0.6",
+    "ip": "^1.1.8",
     "node-fetch": "^3.2.6",
     "os": "^0.1.2",
     "request": "^2.88.2",
