@@ -335,12 +335,11 @@ app.get('/price', (req, res) => {
   axios.get (url)
   .then ((result) => {
     // console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
-  
-    const filler = "[\\s]*";
-    var pattern = 
-    "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
-    + "</tr>" + filler + "<tr>" + filler +
-    "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>"
+    // Split Adjusted Price:</span> <span class="padded">26.0255</span>
+    '<div class="acenter"><span class="understated">Split Adjusted Price:</span> <span class="padded">26.0255</span> <span class="understated">Adjustment Factor:</span> <span class="padded">20:1</span></div>'
+
+    var pattern = '<div class="acenter"><span class="understated">Split Adjusted Price:</span> <span class="padded">([\\d\\.]+)</span> <span class="understated">Adjustment Factor:</span> <span class="padded">([\\d\\.]+)</span></div>'
+    var pattern = 'Split Adjusted Price:</span> <span class="padded">([\\d\\.]+)</span>'
  
     var regex1 = new RegExp (pattern);
     var regExpResult = regex1.exec(result.data)
@@ -352,10 +351,10 @@ app.get('/price', (req, res) => {
       year: req.query.year,
       mon: req.query.mon,
       day: req.query.day,
-      close: Number(regExpResult[1]),
-      open: Number(regExpResult[2]),
+      close: Number(regExpResult[2]),
+      open: Number(regExpResult[1]),
+      factor:  Number(regExpResult[2]),
       updateMili: nowMili
-      // close: -1
     };
 
 
