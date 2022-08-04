@@ -334,29 +334,53 @@ app.get('/price', (req, res) => {
 
   axios.get (url)
   .then ((result) => {
+
     // console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
     // Split Adjusted Price:</span> <span class="padded">26.0255</span>
-    '<div class="acenter"><span class="understated">Split Adjusted Price:</span> <span class="padded">26.0255</span> <span class="understated">Adjustment Factor:</span> <span class="padded">20:1</span></div>'
-
-    var pattern = '<div class="acenter"><span class="understated">Split Adjusted Price:</span> <span class="padded">([\\d\\.]+)</span> <span class="understated">Adjustment Factor:</span> <span class="padded">([\\d\\.]+)</span></div>'
+    // <div class="acenter"><span class="understated">Split Adjusted Price:</span> <span class="padded">26.0255</span> <span class="understated">Adjustment Factor:</span> <span class="padded">20:1</span></div>'
+    // var pattern = '<div class="acenter"><span class="understated">Split Adjusted Price:</span> <span class="padded">([\\d\\.]+)</span> <span class="understated">Adjustment Factor:</span> <span class="padded">([\\d\\.]+)</span></div>'
     var pattern = 'Split Adjusted Price:</span> <span class="padded">([\\d\\.]+)</span>'
  
     var regex1 = new RegExp (pattern);
     var regExpResult = regex1.exec(result.data)
+    var splitAdjusted = false;
+    var priceObject = {};
 
-    // console.log (JSON.stringify(regExpResult))
 
-    const priceObject = {
-      stock: req.query.stock,
-      year: req.query.year,
-      mon: req.query.mon,
-      day: req.query.day,
-      close: Number(regExpResult[2]),
-      open: Number(regExpResult[1]),
-      factor:  Number(regExpResult[2]),
-      updateMili: nowMili
-    };
+    if (regExpResult !== null) {
+      splitAdjusted = true;
+      priceObject = {
+        stock: req.query.stock,
+        year: req.query.year,
+        mon: req.query.mon,
+        day: req.query.day,
+        close: Number(regExpResult[1]),
+        open: Number(regExpResult[1]),
+        // factor: Number(regExpResult[2]),
+        updateMili: nowMili
+      };
+    }
+    else {
+      splitAdjusted = false;
+      const filler = "[\\s]*";
+      var pattern = 
+      "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
+      + "</tr>" + filler + "<tr>" + filler +
+      "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>"
+      regex1 = new RegExp (pattern);
+      regExpResult = regex1.exec(result.data)
 
+      priceObject = {
+        stock: req.query.stock,
+        year: req.query.year,
+        mon: req.query.mon,
+        day: req.query.day,
+        close: Number(regExpResult[1]),
+        open: Number(regExpResult[2]),
+        updateMili: nowMili
+      };
+
+    }
 
     // save local price
     priceArray [req.query.stock] = priceObject;
