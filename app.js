@@ -158,21 +158,25 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
 
 // 7 day delay
 app.get('/splits', (req, res) => {
-  get (req, res, 7)
+  get (req, res, 7, false)
 })
-
 
 // 1 day delay
 app.get('/splitsDay', (req, res) => {
-   get (req, res, 1)
+   get (req, res, 1, false)
 })
 
+app.get('/splitsNew', (req, res) => {
+  get (req, res, 1, true)
+})
 
 // main body allow multipple
-function get (req, res, daysDelay) {
+function get (req, res, daysDelay, ignoreSaved) {
 
   // search saved splits retrieved lately
   nowMili = Date.now();
+
+  if (ignoreSaved) {
   const savedSplit = splitsArray [req.query.stock];
   if (savedSplit && (nowMili - savedSplit[0].updateMili)  < daysDelay * 24 * 3600 * 1000) {
     console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
@@ -203,6 +207,7 @@ function get (req, res, daysDelay) {
         return;
       }
     }
+  }
   }
 
   // console.log ('\nsaved splits not found', Object.keys(splitsArray).length, req.query.stock)
