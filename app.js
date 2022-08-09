@@ -167,6 +167,7 @@ app.get('/splitsDay', (req, res) => {
 })
 
 app.get('/splitsNew', (req, res) => {
+  console.log ( req.query.stock, 'ignore saved splits')
   get (req, res, 1, true)
 })
 
@@ -176,7 +177,7 @@ function get (req, res, daysDelay, ignoreSaved) {
   // search saved splits retrieved lately
   nowMili = Date.now();
 
-  if (ignoreSaved) {
+  if (! ignoreSaved) {
   const savedSplit = splitsArray [req.query.stock];
   if (savedSplit && (nowMili - savedSplit[0].updateMili)  < daysDelay * 24 * 3600 * 1000) {
     console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
