@@ -313,6 +313,13 @@ fs.readFile('priceArray.txt', 'utf8', (err, data) => {
     console.log (JSON.stringify (priceArray[keys[i]]))
 });
 
+// delete bad data
+app.get('/priceDel', (req, res) => {
+  console.log (req.query.stock, 'priceDel')
+  priceArray[req.query.stock] = undefined;
+  res.send('price deleted')
+})
+
 app.get('/price', (req, res) => {
   // console.log (getDate(), req.query)
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
@@ -349,12 +356,11 @@ app.get('/price', (req, res) => {
  
     var regex1 = new RegExp (pattern);
     var regExpResult = regex1.exec(result.data)
-    var splitAdjusted = false;
-    var priceObject = {};
-
+    var saveValidData = false;
+    var priceObject = undefined;
 
     if (regExpResult !== null) {
-      splitAdjusted = true;
+      saveValidData= true;
       priceObject = {
         stock: req.query.stock,
         year: req.query.year,
@@ -363,11 +369,10 @@ app.get('/price', (req, res) => {
         close: Number(regExpResult[1]),
         open: Number(regExpResult[1]),
         // factor: Number(regExpResult[2]),
-        updateMili: nowMili
+        updateMili: nowMili,
       };
     }
-    else {
-      splitAdjusted = false;
+    if (priceObject === undefined) {
       const filler = "[\\s]*";
       var pattern = 
       "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
@@ -375,22 +380,60 @@ app.get('/price', (req, res) => {
       "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>"
       regex1 = new RegExp (pattern);
       regExpResult = regex1.exec(result.data)
+      if (regExpResult) {
+        saveValidData = true;
+        priceObject = {
+          stock: req.query.stock,
+          year: req.query.year,
+          mon: req.query.mon,
+          day: req.query.day,
+          close: Number(regExpResult[1]),
+          open: Number(regExpResult[2]),
+          updateMili: nowMili,
+        };
+      }
+    }
 
+    if (priceObject === undefined) {
+      var pattern = '<div>No data for <span class="upper">'+ req.query.stock + '</span></div>'
+      // var pattern = 'No data for'
+      regex1 = new RegExp (pattern);
+      regExpResult = regex1.exec(result.data)      
+      if (regExpResult)
+        priceObject = {
+          stock: req.query.stock,
+          year: req.query.year,
+          mon: req.query.mon,
+          day: req.query.day,
+          close: Number(-1),
+          open: Number(-1),
+          updateMili: nowMili,
+          err: 'No data'
+        };
+    }
+
+    if (priceObject === undefined) {
       priceObject = {
         stock: req.query.stock,
         year: req.query.year,
         mon: req.query.mon,
         day: req.query.day,
-        close: Number(regExpResult[1]),
-        open: Number(regExpResult[2]),
-        updateMili: nowMili
-      };
 
+        updateMili: nowMili,
+        err: 'noMatch'
+      }
     }
 
     // save local price
-    priceArray [req.query.stock] = priceObject;
-    console.log (getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject))
+    if (saveValidData)
+      priceArray [req.query.stock] = priceObject;
+    else {
+      if (priceArray [req.query.stock])
+        console.log (req.query.stock, 'erase obsolete')
+      priceArray [req.query.stock] = undefined; //erase obsolete
+
+    }
+    console.log (getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
     // console.dir (priceArray)
 
     fs.writeFile ('priceArray.txt', JSON.stringify (priceArray), err => {
