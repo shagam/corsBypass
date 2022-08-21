@@ -4,15 +4,32 @@
 
 // import express from 'express'
 const express = require('express')
-// import axios from 'axios'
+const https = require('https')
+const path = require('path')
+const fs = require ('fs')
 const axios = require('axios')
 const cors = require ('cors')
 const detect = require ('detect-browser')
+
+const appSSL = express()
+// const router = express.Router();
+
+appSSL.use('/', (req,res,next) => { 
+  res.send('hello from ssl server')
+})
+
+const sslServer = https.createServer({
+  key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
+}, appSSL)
+
+sslServer.listen(5001, () => {
+  console.log ('secureServer on port 5001')
+})
+
 // const getLocalIp = require ('./getLocalIp')
 // import http from 'http'
 // import expressUseragent from 'express-useragent'
-
-const fs = require ('fs')
 
 const app = express()
 const router = express.Router();
@@ -197,7 +214,7 @@ function get (req, res, daysDelay, ignoreSaved) {
         continue;
       const splitDate = new Date([oneSplit.year, oneSplit.month, oneSplit.day])
       const today = new Date();
-      console.log (today.getDate(), splitDate.getDate()) 
+      console.log ('checkIfOld', today.getDate(), splitDate.getDate()) 
       if ((today.getTime() - splitDate.getTime()) / (1000 * 3600 * 24) < 180) { // less than 180 days
         console.log (req.query.stock, 'recentSplit', splitDate.toLocaleDateString())
         console.dir (oneSplit)
