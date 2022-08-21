@@ -1,6 +1,9 @@
 "use strict";
 // http://localhost:5000/splits?stock=APPL
 // https://www.stocksplithistory.com/?symbol=APPL
+// http://localhost:5000/price?stock=APPL&mon=6&day=30&year=10
+// http://localhost:5000/user
+// http://84.95.84.236:5000/userTest
 
 // import express from 'express'
 const express = require('express')
