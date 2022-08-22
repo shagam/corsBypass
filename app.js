@@ -217,7 +217,7 @@ function get (req, res, daysDelay, ignoreSaved) {
         continue;
       const splitDate = new Date([oneSplit.year, oneSplit.month, oneSplit.day])
       const today = new Date();
-      console.log ('checkIfOld', today.getDate(), splitDate.getDate()) 
+      // console.log ('checkIfOld', today.getDate(), splitDate.getDate()) 
       if ((today.getTime() - splitDate.getTime()) / (1000 * 3600 * 24) < 180) { // less than 180 days
         console.log (req.query.stock, 'recentSplit', splitDate.toLocaleDateString())
         console.dir (oneSplit)
@@ -270,10 +270,10 @@ function get (req, res, daysDelay, ignoreSaved) {
     };
 
     if (splits.length == 1) {
-      console.log ('no splits', req.query.stock, Object.keys(splitsArray).length) 
+      console.log ('\n', req.query.stock, getDate(), 'no splits', Object.keys(splitsArray).length) 
     }
     else
-      console.log ('\nsplits:', req.query.stock, Object.keys(splitsArray).length, splits)
+      console.log ('\n', req.query.stock, getDate(), 'splits:', Object.keys(splitsArray).length, splits)
 
     // save local split
     splitsArray [req.query.stock] = splits;
