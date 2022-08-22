@@ -453,7 +453,7 @@ app.get('/price', (req, res) => {
       priceArray [req.query.stock] = undefined; //erase obsolete
 
     }
-    console.log (getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
+    console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
     // console.dir (priceArray)
 
     fs.writeFile ('priceArray.txt', JSON.stringify (priceArray), err => {
