@@ -14,26 +14,6 @@ const axios = require('axios')
 const cors = require ('cors')
 const detect = require ('detect-browser')
 
-const appSSL = express()
-// const router = express.Router();
-
-appSSL.use('/', (req,res,next) => { 
-  res.send('hello from ssl server')
-})
-
-const sslServer = https.createServer({
-  key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
-}, appSSL)
-
-sslServer.listen(5001, () => {
-  console.log ('secureServer on port 5001')
-})
-
-// const getLocalIp = require ('./getLocalIp')
-// import http from 'http'
-// import expressUseragent from 'express-useragent'
-
 const app = express()
 const router = express.Router();
 
@@ -41,13 +21,49 @@ const externalIp = '84.95.84.236'
 const l2_Ip = '192.168.1.4'
 const pc_ip = '192.168.1.3'
 
-const port = 5000;
-app.listen(port, (err) => {
-  console.log (`Listening on  ${port}`)
+
+// app.use('/', (req,res,next) => { 
+//   res.send('hello from ssl server')
+// })
+
+const ssl = false
+if (ssl) {
+var sslServer;
+if (getLocalIp() == l2_Ip)
+  sslServer = https.createServer({
+    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/', 'privkey.pem'),
+    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/', 'fullchain.pem'),
+}, app)
+else
+  sslServer = https.createServer({
+    key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
+  }, app)
+
+
+
+sslServer.listen(5000, (err) => {
+  console.log ('secureServer on port 5001')
   if (err) {
     console.log ('err: ', err)
   }
 })
+}
+
+// const getLocalIp = require ('./getLocalIp')
+// import http from 'http'
+// import expressUseragent from 'express-useragent'
+
+
+if (! ssl) {
+const port = 5000;
+app.listen(port, (err) => {
+  console.log (`no ssl Listening on  ${port}`)
+  if (err) {
+    console.log ('err: ', err)
+  }
+})
+}
 
 app.options('*', cors()) 
 
