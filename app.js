@@ -123,6 +123,9 @@ function collectInfo (req, res) {
   return txt;
 }
 
+app.get('/', (req, res) => {
+  res.send('root')
+})
 
 app.get('/userTest', (req, res) => {
 
