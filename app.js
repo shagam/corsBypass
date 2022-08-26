@@ -26,13 +26,13 @@ const pc_ip = '192.168.1.3'
 //   res.send('hello from ssl server')
 // })
 
-const ssl = true
+const ssl = false
 if (ssl) {
 var sslServer;
 if (getLocalIp() == l2_Ip)
   sslServer = https.createServer({
-    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/', 'privkey.pem'),
-    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/', 'fullchain.pem'),
+    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/privkey.pem'),
+    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
 }, app)
 else
   sslServer = https.createServer({
