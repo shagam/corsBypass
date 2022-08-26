@@ -156,14 +156,12 @@ app.get('/userTest', (req, res) => {
     console.log ('testIp', testIp)
     console.log('\nfrom other: ', JSON.stringify(result.data))
     txt += result.data;
+    res.send (txt)  
   })
   .catch ((err) => {
     console.log(err)
-    res.send('')
-    return;
+    res.send(err)
   })
-
-  res.send (txt)  
 })
 
 
