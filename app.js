@@ -26,7 +26,7 @@ const pc_ip = '192.168.1.3'
 //   res.send('hello from ssl server')
 // })
 
-const ssl = false
+const ssl = true
 if (ssl) {
 var sslServer;
 if (getLocalIp() == l2_Ip)
