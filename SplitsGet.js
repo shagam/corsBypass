@@ -7,11 +7,28 @@ function getDate() {
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
     return date + " " + time;    
+}
+
+// read splitsArray from local file once on startup
+var splitsArray = {};    // saved one obj per stock
+fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
+  if (err) {
+    console.error (err)
+    return;
   }
-  
+  splitsArray = JSON.parse(data);
+  const keys = Object.keys(splitsArray);
+  console.log('\nsplitArray.txt  read count=', keys.length)
+  for (var i = 0; i < keys.length; i++)
+    console.log ('\n', keys[i], JSON.stringify (splitsArray[keys[i]]))
+  // for (var i = 0; i < keys.length; i++)
+  //   console.log (keys[i])
+});
+
+
 
 // main body allow multipple
-function splitsGet (req, res, daysDelay, ignoreSaved, splitsArray) {
+function splitsGet (req, res, daysDelay, ignoreSaved) {
 
     // search saved splits retrieved lately
     nowMili = Date.now();
