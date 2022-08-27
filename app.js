@@ -195,21 +195,21 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
 
 // 7 day delay
 app.get('/splits', (req, res) => {
-  get (req, res, 7, false)
+  splitsGet (req, res, 7, false)
 })
 
 // 1 day delay
 app.get('/splitsDay', (req, res) => {
-   get (req, res, 1, false)
+   splitsGet (req, res, 1, false)
 })
 
 app.get('/splitsNew', (req, res) => {
   console.log ( req.query.stock, 'ignore saved splits')
-  get (req, res, 1, true)
+  splitsGet (req, res, 1, true)
 })
 
 // main body allow multipple
-function get (req, res, daysDelay, ignoreSaved) {
+function splitsGet (req, res, daysDelay, ignoreSaved) {
 
   // search saved splits retrieved lately
   nowMili = Date.now();
