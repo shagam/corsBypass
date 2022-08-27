@@ -12,10 +12,18 @@ const axios = require('axios')
 // http://localhost:5000/price?stock=APPL&mon=6&day=30&year=10
 // http://localhost:5000/splits?stock=APPL
 
+function getDate() {
+    const today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
+    return date + " " + time;    
+}
+
 
 var priceArray = {};   // saved one obj per stock
 
-function historicPrice () {
+
 // read price from local file once on startup
 fs.readFile('priceArray.txt', 'utf8', (err, data) => {
   if (err) {
@@ -30,16 +38,17 @@ fs.readFile('priceArray.txt', 'utf8', (err, data) => {
 });
 
 // delete bad data
-app.get('/priceDel', (req, res) => {
+// app.get('/priceDel', (req, res) => {
+function priceDel (req, res) {
   console.log (req.query.stock, 'priceDel')
   priceArray[req.query.stock] = undefined;
   res.send('price deleted')
-})
+}
 
-app.get('/price', (req, res) => {
+// app.get('/price', (req, res) => {
   // console.log (getDate(), req.query)
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
-
+function price (req, res) {
   nowMili = Date.now();
 
   const savedPrice = priceArray[req.query.stock];
@@ -166,10 +175,9 @@ app.get('/price', (req, res) => {
     res.send('')
   })
 
-})
-
 }
 
+module.exports = {price, priceDel}
 
 //               <tr>\r\n' +
 // '                <td colspan="2" class="shouldbecaption">\r\n' +
