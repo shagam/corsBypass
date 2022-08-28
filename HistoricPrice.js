@@ -1,6 +1,9 @@
 const fs = require ('fs')
 const axios = require('axios')
 
+
+const {getDate} = require ('./Utils')
+
 // Historical Quote
 // https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
 // msft  6/30/17
@@ -12,17 +15,7 @@ const axios = require('axios')
 // http://localhost:5000/price?stock=APPL&mon=6&day=30&year=10
 // http://localhost:5000/splits?stock=APPL
 
-function getDate() {
-    const today = new Date();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
-    return date + " " + time;    
-}
-
-
 var priceArray = {};   // saved one obj per stock
-
 
 // read price from local file once on startup
 fs.readFile('priceArray.txt', 'utf8', (err, data) => {

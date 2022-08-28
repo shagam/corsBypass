@@ -1,5 +1,5 @@
 "use strict";
-// http://localhost:5000/splits?stock=APPL
+// http://localhost:5000/splits?stock=QQQ
 // https://www.stocksplithistory.com/?symbol=APPL
 // http://localhost:5000/price?stock=APPL&mon=6&day=30&year=10
 // http://localhost:5000/user

@@ -1,13 +1,8 @@
 const fs = require ('fs')
 const axios = require('axios')
 
-function getDate() {
-    const today = new Date();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
-    return date + " " + time;    
-}
+
+const {getDate} = require ('./Utils')
 
 // read splitsArray from local file once on startup
 var splitsArray = {};    // saved one obj per stock
