@@ -91,7 +91,7 @@ function user (req, res) {
   
 
     
-module.exports = {user, userTest, root}
+module.exports = {getLocalIp, user, userTest, root}
 
 
 

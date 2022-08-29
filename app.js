@@ -17,7 +17,7 @@ const cors = require ('cors')
 
 const splitsGet = require ('./SplitsGet')
 const {price, priceDel} = require ('./HistoricPrice')
-const  {user, userTest, root} = require ('./Tests')
+const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
 
 const app = express()
