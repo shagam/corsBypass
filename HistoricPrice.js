@@ -4,6 +4,8 @@ const axios = require('axios')
 
 const {getDate} = require ('./Utils')
 
+const print_textFiles = false
+
 // Historical Quote
 // https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
 // msft  6/30/17
@@ -26,8 +28,16 @@ fs.readFile('priceArray.txt', 'utf8', (err, data) => {
   priceArray = JSON.parse(data);
   const keys = Object.keys(priceArray);
   console.log('\npriceArray.txt  read, count=', keys.length)
-  for (var i = 0; i < keys.length; i++)
-    console.log (JSON.stringify (priceArray[keys[i]]))
+  if (print_textFiles) {
+    for (var i = 0; i < keys.length; i++)
+      console.log (JSON.stringify (priceArray[keys[i]]))
+  }
+  else {
+      var symbols = "";
+      for (var i = 0; i < keys.length; i++)
+        symbols += keys[i] + '  '
+      console.log(symbols)
+  }
 });
 
 // delete bad data

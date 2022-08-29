@@ -4,6 +4,9 @@ const axios = require('axios')
 
 const {getDate} = require ('./Utils')
 
+
+const print_textFiles = false
+
 // read splitsArray from local file once on startup
 var splitsArray = {};    // saved one obj per stock
 fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
@@ -14,8 +17,15 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
   splitsArray = JSON.parse(data);
   const keys = Object.keys(splitsArray);
   console.log('\nsplitArray.txt  read count=', keys.length)
-  for (var i = 0; i < keys.length; i++)
-    console.log ('\n', keys[i], JSON.stringify (splitsArray[keys[i]]))
+  if (print_textFiles)
+    for (var i = 0; i < keys.length; i++)
+      console.log ('\n', keys[i], JSON.stringify (splitsArray[keys[i]]))
+  else {
+    var symbols ="";
+    for (var i = 0; i < keys.length; i++)
+      symbols += keys[i] + '  ';
+    console.log (symbols)
+  }
   // for (var i = 0; i < keys.length; i++)
   //   console.log (keys[i])
 });
