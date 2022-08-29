@@ -1,5 +1,7 @@
 "use strict";
 // http://localhost:5000/splits?stock=QQQ
+// http://dinagold.org:5000/splitsNew?stock=AMZN
+// http://dinagold.org:5000/splitsDay?stock=AMZN
 // https://www.stocksplithistory.com/?symbol=APPL
 // http://localhost:5000/price?stock=APPL&mon=6&day=30&year=10
 // http://localhost:5000/user
@@ -32,7 +34,7 @@ const pc_ip = '192.168.1.3'
 //   res.send('hello from ssl server')
 // })
 
-const ssl = false
+const ssl = true
 if (ssl) {
 var sslServer;
 if (getLocalIp() == l2_Ip)
@@ -49,7 +51,7 @@ else
 
 
 sslServer.listen(5000, (err) => {
-  console.log ('secureServer on port 5001')
+  console.log ('secureServer on port 5000')
   if (err) {
     console.log ('err: ', err)
   }
