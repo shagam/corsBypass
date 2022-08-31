@@ -40,7 +40,7 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
   
     if (! ignoreSaved) {
     const savedSplit = splitsArray [req.query.stock];
-    if (savedSplit && (nowMili - savedSplit[0].updateMili)  < daysDelay * 24 * 3600 * 1000) {
+    if (savedSplit && savedSplit.updateMili && (nowMili - savedSplit[0].updateMili)  < daysDelay * 24 * 3600 * 1000) {
       console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
       console.dir (savedSplit)
       if (savedSplit.length == 1)
@@ -49,6 +49,12 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
         res.send (JSON.stringify(savedSplit))
       return;
     }
+    else {  // delete old wrong saved format
+      splitsArray [req.query.stock] = undefined;
+      console.log ("\n", req.query.stock, getDate(), 'bad format', savedSplit);
+      savedSplit = undefined;
+    }
+
   
     // avoid getting from url if any split is recent
     if (savedSplit) {
