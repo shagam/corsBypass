@@ -39,7 +39,7 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
     nowMili = Date.now();
   
     if (! ignoreSaved) {
-    const savedSplit = splitsArray [req.query.stock];
+    var savedSplit = splitsArray [req.query.stock];
     if (savedSplit && savedSplit.updateMili && (nowMili - savedSplit[0].updateMili)  < daysDelay * 24 * 3600 * 1000) {
       console.log ("\n", req.query.stock, getDate(), 'Saved split found, saveCount=', Object.keys(splitsArray).length)
       console.dir (savedSplit)
