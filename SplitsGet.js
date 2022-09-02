@@ -23,7 +23,7 @@ fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
   else {
     var symbols ="";
     for (var i = 0; i < keys.length; i++)
-      symbols += keys[i] + '  ';
+      symbols += keys[i] + ' (' + splitsArray[keys[i]].length + ')  ';
     console.log (symbols)
   }
   // for (var i = 0; i < keys.length; i++)
