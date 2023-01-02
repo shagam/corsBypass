@@ -39,8 +39,8 @@ if (ssl) {
 var sslServer;
 if (getLocalIp() == l2_Ip)
   sslServer = https.createServer({
-    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/privkey.pem'),
-    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
+    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org-0001/privkey.pem'),
+    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org-0001/fullchain.pem'),
 }, app)
 else
   sslServer = https.createServer({
