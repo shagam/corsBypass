@@ -37,12 +37,19 @@ const pc_ip = '192.168.1.3'
 const ssl = true
 if (ssl) {
 var sslServer;
-if (getLocalIp() == l2_Ip)
-  sslServer = https.createServer({
-    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org-0001/privkey.pem'),
-    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org-0001/fullchain.pem'),
-}, app)
-else
+if (getLocalIp() == l2_Ip) {
+  if (false) // letsaencrypt
+  sslServer = https.createServer({ 
+    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/privkey.pem'),
+    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
+  }, app)
+  else   // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
+    sslServer = https.createServer({
+      key: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.key'),
+      cert: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.crt'),
+    }, app)
+}
+else // local certificate
   sslServer = https.createServer({
     key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
     cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
