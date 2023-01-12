@@ -34,28 +34,34 @@ const pc_ip = '10.100.102.3'
 //   res.send('hello from ssl server')
 // })
 
+
 const ssl = true
 if (ssl) {
 var sslServer;
-if (getLocalIp() == l2_Ip) {
-  if (true) // letsaencrypt
-  sslServer = https.createServer({ 
-    key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/privkey.pem'),
-    cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
-  }, app)
-  else   // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
+// if (getLocalIp() == l2_Ip) {
+if (true) {
+  if (true) {// letsaencrypt
+    console.log ('Certificate letsEncrypt')
+    sslServer = https.createServer({ 
+      key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/privkey.pem'),
+      cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
+    }, app)
+  }
+  else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
+    console.log ('certificate local authority')
     sslServer = https.createServer({
       key: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.key'),
       cert: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.crt'),
     }, app)
+  }
 }
-else // local certificate
+else { // certificate local
+  console.log ('certificate without authority')
   sslServer = https.createServer({
     key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
     cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
   }, app)
-
-
+}
 
 sslServer.listen(5000, (err) => {
   console.log ('secureServer on port 5000')
