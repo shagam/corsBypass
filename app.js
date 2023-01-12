@@ -25,9 +25,9 @@ const  {getLocalIp, user, userTest, root} = require ('./Tests')
 const app = express()
 const router = express.Router();
 
-const externalIp = '84.95.84.236'
-const l2_Ip = '192.168.1.4'
-const pc_ip = '192.168.1.3'
+const externalIp = '62.90.44.227'
+const l2_Ip = '10.100.102.4'
+const pc_ip = '10.100.102.3'
 
 
 // app.use('/', (req,res,next) => { 
