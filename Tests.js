@@ -66,7 +66,7 @@ function getLocalIp () {
     var localIp = getLocalIp();
   
     // get data from remote    192.168.1.3 192.168.1.4
-    const testIp = localIp === '192.168.1.3' ? '192.168.1.4' : '192.168.1.3' 
+    const testIp = localIp === '10.100.102.3' ? '10.100.102.4' : '10.100.102.3' 
     var url = 'http://'
     const result = axios.get('http://' + testIp + ':5000/user')
     .then ((result) => {
