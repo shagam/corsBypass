@@ -57,7 +57,9 @@ function price (req, res) {
   const savedPrice = priceArray[req.query.stock];
   if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
   req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
-    console.log ('\n', req.query.stock, getDate(), 'Saved price found, saveCount=', Object.keys(priceArray).length, JSON.stringify(savedPrice), 'background: #fff; color: #22ef11')
+    console.log ('\n' + req.query.stock, getDate() + '\x1b[36m Saved price found\x1b[0m',
+     'saveCount=' + Object.keys(priceArray).length)
+    console.log (JSON.stringify(savedPrice))
     res.send (JSON.stringify(savedPrice))
     return;
   }
