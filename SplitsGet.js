@@ -52,7 +52,7 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
     }
     else {  // delete old wrong saved format
       splitsArray [req.query.stock] = undefined;
-      console.log ("\n", req.query.stock, getDate(), 'bad format', savedSplit);
+      console.log ("\n", req.query.stock, getDate(), '\x1b[31m splits old\x1b[0m', savedSplit);
       savedSplit = undefined;
     }
 
@@ -118,7 +118,7 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
       };
   
       if (splits.length == 1) {
-        console.log ('\n', req.query.stock, getDate(), 'no splits', Object.keys(splitsArray).length) 
+        console.log ('\n', req.query.stock, getDate(), '\x1b[33m no splits\x1b[0m count=', Object.keys(splitsArray).length) 
       }
       else
         console.log ('\n', req.query.stock, getDate(), 'splits:', Object.keys(splitsArray).length, splits)
