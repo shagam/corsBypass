@@ -42,7 +42,7 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
       var savedSplit = splitsArray [req.query.stock];
       if (savedSplit && savedSplit[0].updateMili)
         diff = nowMili - savedSplit[0].updateMili
-      }
+
       if (savedSplit && savedSplit[0].updateMili && (nowMili - savedSplit[0].updateMili)  < daysDelay * miliInADay) {
         console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved split found\x1b[0m,',
         ' saveCount=', Object.keys(splitsArray).length)
