@@ -6,7 +6,7 @@ const {getDate} = require ('./Utils')
 
 
 const print_textFiles = false
-
+const miliInADay = 24 * 3600 + 1000;
 // read splitsArray from local file once on startup
 var splitsArray = {};    // saved one obj per stock
 fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
@@ -37,46 +37,49 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
 
     // search saved splits retrieved lately
     nowMili = Date.now();
-  
+    var diff;
     if (! ignoreSaved) {
-    var savedSplit = splitsArray [req.query.stock];
-    if (savedSplit && savedSplit[0].updateMili && (nowMili - savedSplit[0].updateMili)  < daysDelay * 24 * 3600 * 1000) {
-      console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved split found\x1b[0m,',
-       ' saveCount=', Object.keys(splitsArray).length)
-      console.dir (savedSplit)
-      if (savedSplit.length == 1)
-        res.send ('')
-      else
-        res.send (JSON.stringify(savedSplit))
-      return;
-    }
-    else {  // delete old wrong saved format
-      splitsArray [req.query.stock] = undefined;
-      console.log ("\n", req.query.stock, getDate(), '\x1b[31m splits old\x1b[0m', savedSplit);
-      savedSplit = undefined;
-    }
+      var savedSplit = splitsArray [req.query.stock];
+      if ((savedSplit && savedSplit[0].updateMili) {
+        diff = nowMili - savedSplit[0].updateMili
+      }
+      if (savedSplit && savedSplit[0].updateMili && (nowMili - savedSplit[0].updateMili)  < daysDelay * miliInADay) {
+        console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved split found\x1b[0m,',
+        ' saveCount=', Object.keys(splitsArray).length)
+        console.dir (savedSplit)
+        if (savedSplit.length == 1)
+          res.send ('')
+        else
+          res.send (JSON.stringify(savedSplit))
+        return;
+      }
+      else {  // delete old wrong saved format
+        splitsArray [req.query.stock] = undefined;
+        console.log ("\n", req.query.stock, getDate(), '\x1b[31m splits old\x1b[0m', diff / miliInADay, savedSplit);
+        savedSplit = undefined;
+      }
 
-  
-    // avoid getting from url if any split is recent
-    if (savedSplit) {
-      for (var i = 0; i < savedSplit.length; i++) {
-        const oneSplit = savedSplit[i];
-        if (oneSplit.year === undefined)
-          continue;
-        const splitDate = new Date([oneSplit.year, oneSplit.month, oneSplit.day])
-        const today = new Date();
-        // console.log ('checkIfOld', today.getDate(), splitDate.getDate()) 
-        if ((today.getTime() - splitDate.getTime()) / (1000 * 3600 * 24) < 180) { // less than 180 days
-          console.log (req.query.stock, 'recentSplit', splitDate.toLocaleDateString())
-          console.dir (oneSplit)
-          if (oneSplit.length == 1)
-            res.send ('')
-          else
-            res.send (JSON.stringify(oneSplit))
-          return;
+    
+      // avoid getting from url if any split is recent
+      if (savedSplit) {
+        for (var i = 0; i < savedSplit.length; i++) {
+          const oneSplit = savedSplit[i];
+          if (oneSplit.year === undefined)
+            continue;
+          const splitDate = new Date([oneSplit.year, oneSplit.month, oneSplit.day])
+          const today = new Date();
+          // console.log ('checkIfOld', today.getDate(), splitDate.getDate()) 
+          if ((today.getTime() - splitDate.getTime()) / (1000 * 3600 * 24) < 180) { // less than 180 days
+            console.log (req.query.stock, 'recentSplit', splitDate.toLocaleDateString())
+            console.dir (oneSplit)
+            if (oneSplit.length == 1)
+              res.send ('')
+            else
+              res.send (JSON.stringify(oneSplit))
+            return;
+          }
         }
       }
-    }
     }
   
     // console.log ('\nsaved splits not found', Object.keys(splitsArray).length, req.query.stock)
