@@ -55,7 +55,7 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
       }
       else {  // delete old wrong saved format
         splitsArray [req.query.stock] = undefined;
-        console.log ("\n", req.query.stock, getDate(), '\x1b[31m splits old\x1b[0m', diff / miliInADay, savedSplit);
+        console.log ("\n", req.query.stock, getDate(), '\x1b[31m splits old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedSplit);
         savedSplit = undefined;
       }
 
@@ -69,7 +69,7 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
           const splitDate = new Date([oneSplit.year, oneSplit.month, oneSplit.day])
           const today = new Date();
           // console.log ('checkIfOld', today.getDate(), splitDate.getDate()) 
-          if ((today.getTime() - splitDate.getTime()) / (1000 * 3600 * 24) < 180) { // less than 180 days
+          if ((today.getTime() - splitDate.getTime()) / miliInADay < 180) { // less than 180 days
             console.log (req.query.stock, 'recentSplit', splitDate.toLocaleDateString())
             console.dir (oneSplit)
             if (oneSplit.length == 1)
