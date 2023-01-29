@@ -6,7 +6,7 @@ const {getDate} = require ('./Utils')
 
 
 const print_textFiles = false
-const miliInADay = 24 * 3600 + 1000;
+const miliInADay = 24 * 3600 * 1000;
 // read splitsArray from local file once on startup
 var splitsArray = {};    // saved one obj per stock
 fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
