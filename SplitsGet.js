@@ -11,8 +11,11 @@ const miliInADay = 24 * 3600 * 1000;
 var splitsArray = {};    // saved one obj per stock
 fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
   if (err) {
-    console.error (err)
-    return;
+    fs.readFile('splitsArray.txt_save', 'utf8', (err, data) => {
+    if (err) {
+      console.error (err)
+      return;
+    }})
   }
   splitsArray = JSON.parse(data);
   const keys = Object.keys(splitsArray);
