@@ -23,7 +23,7 @@ const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
 
 const app = express()
-const router = express.Router();
+// const router = express.Router();
 
 const externalIp = '62.90.44.227'
 const l2_Ip = '10.100.102.4'
