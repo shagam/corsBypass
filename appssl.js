@@ -7,30 +7,66 @@
 // http://localhost:5000/user
 // http://84.95.84.236:5000/userTest
 
+// ssl
+
 // import express from 'express'
 const express = require('express')
-
-
+const https = require('https')
+const path = require('path')
+const fs = require ('fs')
+// const axios = require('axios')
 const cors = require ('cors')
 //const detect = require ('detect-browser')
 
 
 const splitsGet = require ('./SplitsGet')
 const {price, priceDel} = require ('./HistoricPrice')
-const  {getLocalIp, user, userTest, root} = require ('./Tests')
-const appssl = require ('./appssl')
+// const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
-const app = express()
+
+const appssl = express()
 // const router = express.Router();
-
-const externalIp = '62.90.44.227'
-const l2_Ip = '10.100.102.4'
-const pc_ip = '10.100.102.3'
 
 
 // app.use('/', (req,res,next) => { 
 //   res.send('hello from ssl server')
 // })
+
+
+
+var sslServer;
+// if (getLocalIp() == l2_Ip) {
+if (true) {
+  if (true) {// letsaencrypt
+    console.log ('Certificate letsEncrypt')
+    sslServer = https.createServer({ 
+      key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/privkey.pem'),
+      cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
+    }, appssl)
+  }
+  else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
+    console.log ('certificate local authority')
+    sslServer = https.createServer({
+      key: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.key'),
+      cert: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.crt'),
+    }, appssl)
+  }
+}
+else { // certificate local
+  console.log ('certificate without authority')
+  sslServer = https.createServer({
+    key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
+  }, appssl)
+}
+
+sslServer.listen(5001, (err) => {
+  console.log ('secureServer on port 5001')
+  if (err) {
+    console.log ('err: ', err)
+  }
+})
+
 
 // const getLocalIp = require ('./getLocalIp')
 // import http from 'http'
@@ -38,18 +74,10 @@ const pc_ip = '10.100.102.3'
 
 
 
-const port = 5000;
-app.listen(port, (err) => {
-  console.log (`no ssl Listening on  ${port}`)
-  if (err) {
-    console.log ('err: ', err)
-  }
-})
 
+appssl.options('*', cors()) 
 
-app.options('*', cors()) 
-
-app.use (
+appssl.use (
   cors({
     origin: "*",
     methods: ["GET","PUT","POST","DELETE"],
@@ -69,16 +97,16 @@ function getDate() {
 }
 
 
-app.get('/', (req, res) => {
+appssl.get('/', (req, res) => {
   // res.send('root')
   root (req, res)
 })
 
-app.get('/userTest', (req, res) => {
+appssl.get('/userTest', (req, res) => {
   userTest (req, res)
 })
 
-app.get('/user', (req, res) => {
+appssl.get('/user', (req, res) => {
   user (req, res)
 })
 
@@ -87,16 +115,16 @@ app.get('/user', (req, res) => {
 
 
 // 7 day delay
-app.get('/splits', (req, res) => {
+appssl.get('/splits', (req, res) => {
   splitsGet (req, res, 7, false)
 })
 
 // 1 day delay
-app.get('/splitsDay', (req, res) => {
+appssl.get('/splitsDay', (req, res) => {
    splitsGet (req, res, 1, false)
 })
 
-app.get('/splitsNew', (req, res) => {
+appssl.get('/splitsNew', (req, res) => {
   console.log ( req.query.stock, 'ignore saved splits')
   splitsGet (req, res, 1, true)
 })
@@ -105,7 +133,7 @@ app.get('/splitsNew', (req, res) => {
 //============================================================================
 
 
-app.get('/val', (req, res) => {
+appssl.get('/val', (req, res) => {
   console.log (getDate(), req.query, req.params, req.hostname)
   res.send ('Hello' + JSON.stringify(req.query))
 })
@@ -113,11 +141,11 @@ app.get('/val', (req, res) => {
 //============================================================================
 
 // delete bad data
-app.get('/priceDel', (req, res) => {
+appssl.get('/priceDel', (req, res) => {
   priceDel  (req, res)
 })
 
-app.get('/price', (req, res) => {
+appssl.get('/price', (req, res) => {
   price(req, res)
   // console.log (getDate(), req.query)
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
