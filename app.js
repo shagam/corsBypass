@@ -62,17 +62,6 @@ else { // certificate local
 // import expressUseragent from 'express-useragent'
 
 
-
-var nowMili = Date.now();
-
-function getDate() {
-  const today = new Date();
-  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-  // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
-  return date + " " + time;    
-}
-
 appGet (app, 5000)
 
 appGet (appssl, 5001)
