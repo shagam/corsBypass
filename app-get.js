@@ -25,94 +25,99 @@ function getDate() {
   return date + " " + time;    
 }
 
+
+
 // access both ssh and vanilla
 
 function appGet (app, port) {
    
-app.options('*', cors()) 
+  app.options('*', cors()) 
 
-app.use (
-  cors({
-    origin: "*",
-    methods: ["GET","PUT","POST","DELETE"],
-    credetials: true,
-    optionsSuccessStatus: 200,
-  })
-)
-
-app.listen(port, (err) => {
-    console.log (`no ssl Listening on  ${port}`)
-    if (err) {
-        console.log ('err: ', err)
-    }
-})
-    
-app.options('*', cors()) 
-
-app.use (
+  app.use (
     cors({
-    origin: "*",
-    methods: ["GET","PUT","POST","DELETE"],
-    credetials: true,
-    optionsSuccessStatus: 200,
+      origin: "*",
+      methods: ["GET","PUT","POST","DELETE"],
+      credetials: true,
+      optionsSuccessStatus: 200,
     })
-)
+  )
+
+  app.listen(port, (err) => {
+      if (port == 5000)
+        console.log (`\nno ssl Listening on  ${port}`)
+      else
+        console.log (`ssl Listening on  ${port}`)
+      if (err) {
+          console.log ('err: ', err)
+      }
+  })
+      
+  app.options('*', cors()) 
+
+  app.use (
+      cors({
+      origin: "*",
+      methods: ["GET","PUT","POST","DELETE"],
+      credetials: true,
+      optionsSuccessStatus: 200,
+      })
+  )
    
 
-    app.get('/', (req, res) => {
-    // res.send('root')
-    root (req, res)
-    })
+  app.get('/', (req, res) => {
+  // res.send('root')
+  root (req, res)
+  })
 
-    app.get('/userTest', (req, res) => {
-    userTest (req, res)
-    })
+  app.get('/userTest', (req, res) => {
+  userTest (req, res)
+  })
 
-    app.get('/user', (req, res) => {
-    user (req, res)
-    })
-
-
-    //============================================================================
+  app.get('/user', (req, res) => {
+  user (req, res)
+  })
 
 
-    // 7 day delay
-    app.get('/splits', (req, res) => {
-    splitsGet (req, res, 7, false)
-    })
-
-    // 1 day delay
-    app.get('/splitsDay', (req, res) => {
-    splitsGet (req, res, 1, false)
-    })
-
-    app.get('/splitsNew', (req, res) => {
-    console.log ( req.query.stock, 'ignore saved splits')
-    splitsGet (req, res, 1, true)
-    })
+  //============================================================================
 
 
-    //============================================================================
+  // 7 day delay
+  app.get('/splits', (req, res) => {
+  splitsGet (req, res, 7, false)
+  })
+
+  // 1 day delay
+  app.get('/splitsDay', (req, res) => {
+  splitsGet (req, res, 1, false)
+  })
+
+  app.get('/splitsNew', (req, res) => {
+  console.log ( req.query.stock, 'ignore saved splits')
+  splitsGet (req, res, 1, true)
+  })
 
 
-    app.get('/val', (req, res) => {
-    console.log (getDate(), req.query, req.params, req.hostname)
-    res.send ('Hello' + JSON.stringify(req.query))
-    })
+  //============================================================================
 
-    //============================================================================
 
-    // delete bad data
-    app.get('/priceDel', (req, res) => {
-    priceDel  (req, res)
-    })
+  app.get('/val', (req, res) => {
+  console.log (getDate(), req.query, req.params, req.hostname)
+  res.send ('Hello' + JSON.stringify(req.query))
+  })
 
-    app.get('/price', (req, res) => {
-    price(req, res)
-    // console.log (getDate(), req.query)
-    // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
+  //============================================================================
 
-    })
+  // delete bad data
+  app.get('/priceDel', (req, res) => {
+  priceDel  (req, res)
+  })
+
+  app.get('/price', (req, res) => {
+  price(req, res)
+  // console.log (getDate(), req.query)
+  // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
+
+  })
 
 }
 
