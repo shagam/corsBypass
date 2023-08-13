@@ -76,15 +76,15 @@ sslServer.listen(5000, (err) => {
 // import expressUseragent from 'express-useragent'
 
 
-if (! ssl) {
-const port = 5000;
-app.listen(port, (err) => {
-  console.log (`no ssl Listening on  ${port}`)
-  if (err) {
-    console.log ('err: ', err)
-  }
-})
-}
+// if (! ssl) {
+// const port = 5000;
+// app.listen(port, (err) => {
+//   console.log (`no ssl Listening on  ${port}`)
+//   if (err) {
+//     console.log ('err: ', err)
+//   }
+// })
+// }
 
 app.options('*', cors()) 
 
