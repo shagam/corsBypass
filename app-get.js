@@ -5,7 +5,7 @@ const cors = require ('cors')
 
 const splitsGet = require ('./SplitsGet')
 const {price, priceDel} = require ('./HistoricPrice')
-const  {getLocalIp, user, userTest, root} = require ('./Tests')
+// const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
 
 // const router = express.Router();

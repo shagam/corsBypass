@@ -19,6 +19,8 @@ const cors = require ('cors')
 
 const splitsGet = require ('./SplitsGet')
 const {price, priceDel} = require ('./HistoricPrice')
+const {priceNasdaq, priceNasdaqDel} = require ('./HistoricPriceNasdaq')
+const appGet = require ('./app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
 
@@ -62,6 +64,12 @@ else { // certificate local
     cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
   }, app)
 }
+
+const port = 5000
+// appGet (sslServer, app, port) 
+
+
+
 
 sslServer.listen(5000, (err) => {
   console.log ('secureServer on port 5000')
@@ -151,3 +159,17 @@ app.get('/price', (req, res) => {
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
 
 })
+
+
+app.get('/priceNasdaqDel', (req, res) => {
+  priceNasdaqDel  (req, res)
+})
+
+app.get('/priceNasdaq', (req, res) => {
+  priceNasdaq(req, res)
+  // console.log (getDate(), req.query)
+  // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
+
+})
+
+
