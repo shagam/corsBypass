@@ -5,7 +5,7 @@ const axios = require('axios')
 const {getDate} = require ('./Utils')
 
 const print_textFiles = false
-
+const LOG = false
 // Historical Quote
 // https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
 // msft  6/30/17
@@ -101,6 +101,7 @@ function priceNasdaq (req, res) {
   nowMili = Date.now();
   const start_date = '&start_date=' + req.query.year + '-' + req.query.mon + '-' + req.query.day
   const end_date = '&end_date=' + (Number(req.query.year)+1) + '-' + req.query.mon + '-' + req.query.day
+  if (LOG)
   console.log(req.query.stock, start_date, end_date)
 
 
@@ -114,15 +115,17 @@ function priceNasdaq (req, res) {
     return;
   }
   const api_key = 'NZC-x6kxVdYZ4fDxzawH'
+  const api_key_txt = '&api_key=NZC-x6kxVdYZ4fDxzawH'
 
   var url = "https://bigcharts.marketwatch.com/historical/default.asp?symb=" + req.query.stock
   url =  "https://data.nasdaq.com/api/v3/datasets/WIKI/qqq/data.json?start_date=2019-05-01&limit=1&api_key=NZC-x6kxVdYZ4fDxzawH&"
-  url='https://data.nasdaq.com/api/v3/datasets/WIKI/'+req.query.stock+'/data.json?limit=1'+start_date+end_date
+  url='https://data.nasdaq.com/api/v3/datasets/WIKI/'+req.query.stock+'/data.json?limit=1'+start_date+end_date+api_key_txt
 //   url += '&closeDate=' + req.query.mon
 //   url += '%2F' + req.query.day
 //   url += '%2F' + req.query.year
   // url += '&x=28&y=18'
 
+    if (LOG)
   console.log (url)
   const options = {
     "method": "GET",
@@ -133,7 +136,8 @@ function priceNasdaq (req, res) {
     const res_date = result.data.dataset_data.data[0][0];
     const res_open = result.data.dataset_data.data[0][8].toFixed(2);
     const res_close = result.data.dataset_data.data[0][11].toFixed(2);
-    console.log("\n",result.data.dataset_data.column_names, result.data.dataset_data.data,
+    if(LOG)
+        console.log("\n",result.data.dataset_data.column_names, result.data.dataset_data.data,
         res_date, res_open, res_close)
 
 
@@ -148,7 +152,7 @@ function priceNasdaq (req, res) {
     var saveValidData = false;
     var priceObject = undefined;
 
-    if (regExpResult !== null) {
+    // if (regExpResult !== null) {
       saveValidData= true;
       priceObject = {
         stock: req.query.stock,
@@ -160,8 +164,10 @@ function priceNasdaq (req, res) {
         // factor: Number(regExpResult[2]),
         updateMili: nowMili,
       };
-      
-    }
+      res.send (JSON.stringify(priceObject))
+      console.log ('nasdaqVerify: ', priceObject)
+      return;
+    // }
 
 
 
@@ -171,8 +177,8 @@ function priceNasdaq (req, res) {
       "<th>Closing Price:</th>" + filler + "<td>([\\d\\.]+)</td>" + filler
       + "</tr>" + filler + "<tr>" + filler +
       "<th>Open:</th>" + filler + "<td>([\\d\\.]+)</td>"
-      regex1 = new RegExp (pattern);
-      regExpResult = regex1.exec(result.data)
+    //   regex1 = new RegExp (pattern);
+    //   regExpResult = regex1.exec(result.data)
       if (regExpResult) {
         saveValidData = true;
         priceObject = {
