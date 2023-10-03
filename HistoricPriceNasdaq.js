@@ -133,6 +133,23 @@ function priceNasdaq (req, res) {
 
   axios.get (url)
   .then ((result) => {
+    console.log ('result.code: ', result.code, )
+    if (result.code !== undefined){
+        res.send (JSON.stringify(
+         {
+            stock: req.query.stock,
+            year: req.query.year,
+            mon: req.query.mon,
+            day: req.query.day,
+            close: -1,
+            open: -1,
+            updateMili: nowMili,
+            code: result.code
+         }   
+        ))
+        return;
+    }
+
     const res_date = result.data.dataset_data.data[0][0];
     const res_open = result.data.dataset_data.data[0][8].toFixed(2);
     const res_close = result.data.dataset_data.data[0][11].toFixed(2);
@@ -155,6 +172,7 @@ function priceNasdaq (req, res) {
     // if (regExpResult !== null) {
       saveValidData= true;
       priceObject = {
+        source: 'nasdaq',
         stock: req.query.stock,
         year: req.query.year,
         mon: req.query.mon,
@@ -181,7 +199,7 @@ function priceNasdaq (req, res) {
     //   regExpResult = regex1.exec(result.data)
       if (regExpResult) {
         saveValidData = true;
-        priceObject = {
+        priceObject = { 
           stock: req.query.stock,
           year: req.query.year,
           mon: req.query.mon,
@@ -232,7 +250,7 @@ function priceNasdaq (req, res) {
       priceArray [req.query.stock] = undefined; //erase obsolete
 
     }
-    console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
+    // console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
     // console.dir (priceArray)
 
     fs.writeFile ('priceNasdaqArray.txt', JSON.stringify (priceArray), err => {
@@ -245,8 +263,20 @@ function priceNasdaq (req, res) {
     res.send (JSON.stringify(priceObject))
   })
   .catch ((err) => {
-    console.log(err)
-    res.send('')
+
+    priceObject = {
+        source: 'nasdaq', 
+        stock: req.query.stock,
+        year: req.query.year,
+        mon: req.query.mon,
+        day: req.query.day,
+
+        // factor: Number(regExpResult[2]),
+        updateMili: nowMili,
+        err: err.message
+      };
+      res.send (JSON.stringify(priceObject))
+      console.log(JSON.stringify(priceObject))
   })
 
 }
