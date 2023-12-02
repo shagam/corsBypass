@@ -5,7 +5,7 @@ const axios = require('axios')
 const {getDate} = require ('./Utils')
 
 const print_textFiles = false
-const LOG = false
+const LOG = true
 // Historical Quote
 // https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
 // msft  6/30/17
@@ -100,7 +100,7 @@ function priceNasdaqDel (req, res) {
 function priceNasdaq (req, res) {
   nowMili = Date.now();
   const start_date = '&start_date=' + req.query.year + '-' + req.query.mon + '-' + req.query.day
-  const end_date = '&end_date=' + (Number(req.query.year)+1) + '-' + req.query.mon + '-' + req.query.day
+  const end_date = '&end_date=' + (Number(req.query.year)) + '-' + req.query.mon + '-' + req.query.day
   if (LOG)
   console.log(req.query.stock, start_date, end_date)
 
@@ -276,7 +276,8 @@ function priceNasdaq (req, res) {
         err: err.message
       };
       res.send (JSON.stringify(priceObject))
-      console.log(JSON.stringify(priceObject))
+      console.log('err', JSON.stringify(priceObject))
+      console.log (url)
   })
 
 }
