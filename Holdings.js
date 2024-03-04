@@ -26,6 +26,10 @@ function holdings (req, res) {
   .then ((result) => {
     const text = result.data;
     // console.log (text)
+
+
+
+    // get stock array
     var pattern='<a href="/stocks/msft/">MSFT</a>'
     pattern='<a href="/stocks/[a-z]+/" >([A-Z]+)</a>'
 
@@ -37,7 +41,7 @@ function holdings (req, res) {
 
 
 
-    // get percentage
+    // get percentage array
 
     var percent = [];
     //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
@@ -47,6 +51,7 @@ function holdings (req, res) {
         percent.push(rs[1]);
     };
 
+    // build jason for send 
     // console.log (JSON.stringify(percent))
     var combined = [];
     for (let i = 0; i < stocks.length; i++)
@@ -58,7 +63,7 @@ function holdings (req, res) {
   })
   .catch ((err) => {
     console.log(err)
-    res.send('test' + '')
+    res.send('err' + err.message)
   })
 
 }
