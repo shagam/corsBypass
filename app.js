@@ -11,18 +11,19 @@
 const express = require('express')
 const https = require('https')
 const path = require('path')
-const fs = require ('fs')
+const fs = require('fs')
 const axios = require('axios')
-const cors = require ('cors')
+const cors = require('cors')
 //const detect = require ('detect-browser')
 
 
-const splitsGet = require ('./SplitsGet')
-const {price, priceDel} = require ('./HistoricPrice')
-const {priceNasdaq, priceNasdaqDel} = require ('./HistoricPriceNasdaq')
-const appGet = require ('./app-get')
+const splitsGet = require('./SplitsGet')
+const { price, priceDel } = require('./HistoricPrice')
+const { priceNasdaq, priceNasdaqDel } = require('./HistoricPriceNasdaq')
+const appGet = require('./app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
-
+const {holdings} = require('./Holdings')
+// console.log (holdings)
 
 const app = express()
 const router = express.Router();
@@ -39,56 +40,56 @@ const pc_ip = '10.100.102.3'
 
 const ssl = true
 if (ssl) {
-var sslServer;
-// if (getLocalIp() == l2_Ip) {
-if (true) {
-  if (true) {// letsaencrypt
-    console.log ('Certificate letsEncrypt')
-    sslServer = https.createServer({ 
-      key: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/privkey.pem'),
-      cert: fs.readFileSync( '/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
-    }, app)
+  var sslServer;
+  // if (getLocalIp() == l2_Ip) {
+  if (true) {
+    if (true) {// letsaencrypt
+      console.log('Certificate letsEncrypt')
+      sslServer = https.createServer({
+        key: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
+      }, app)
+    }
+    else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
+      console.log('certificate local authority')
+      sslServer = https.createServer({
+        key: fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.key'),
+        cert: fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.crt'),
+      }, app)
+    }
   }
-  else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
-    console.log ('certificate local authority')
+  else { // certificate local
+    console.log('certificate without authority')
     sslServer = https.createServer({
-      key: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.key'),
-      cert: fs.readFileSync( '/home/eli/react/corsBypass/cert_ca/server.crt'),
+      key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+      cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
     }, app)
   }
-}
-else { // certificate local
-  console.log ('certificate without authority')
-  sslServer = https.createServer({
-    key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-    cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
-  }, app)
-}
 
-const port = 5000
-// appGet (sslServer, app, port) 
+  const port = 5000
+  // appGet (sslServer, app, port) 
 
 
 
 
-sslServer.listen(5000, (err) => {
-  console.log ('secureServer on port 5000')
-  if (err) {
-    console.log ('err: ', err)
-  }
-})
+  sslServer.listen(5000, (err) => {
+    console.log('secureServer on port 5000')
+    if (err) {
+      console.log('err: ', err)
+    }
+  })
 }
 
 // const getLocalIp = require ('./getLocalIp')
 // import http from 'http'
 // import expressUseragent from 'express-useragent'
 
-app.options('*', cors()) 
+app.options('*', cors())
 
-app.use (
+app.use(
   cors({
     origin: "*",
-    methods: ["GET","PUT","POST","DELETE"],
+    methods: ["GET", "PUT", "POST", "DELETE"],
     credetials: true,
     optionsSuccessStatus: 200,
   })
@@ -99,42 +100,48 @@ var nowMili = Date.now();
 function getDate() {
   const today = new Date();
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
   // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
-  return date + " " + time;    
+  return date + " " + time;
 }
 
 
 app.get('/', (req, res) => {
   // res.send('root')
-  root (req, res)
+  root(req, res)
 })
 
 app.get('/userTest', (req, res) => {
-  userTest (req, res)
+  userTest(req, res)
 })
 
 app.get('/user', (req, res) => {
-  user (req, res)
+  user(req, res)
 })
 
 
 //============================================================================
 
+// holdings of a stock
+app.get('/holdings', (req, res) => {
+  holdings (req, res)
+})
+
+
 
 // 7 day delay
 app.get('/splits', (req, res) => {
-  splitsGet (req, res, 7, false)
+  splitsGet(req, res, 7, false)
 })
 
 // 1 day delay
 app.get('/splitsDay', (req, res) => {
-   splitsGet (req, res, 1, false)
+  splitsGet(req, res, 1, false)
 })
 
 app.get('/splitsNew', (req, res) => {
-  console.log ( req.query.stock, 'ignore saved splits')
-  splitsGet (req, res, 1, true)
+  console.log(req.query.stock, 'ignore saved splits')
+  splitsGet(req, res, 1, true)
 })
 
 
@@ -142,15 +149,15 @@ app.get('/splitsNew', (req, res) => {
 
 
 app.get('/val', (req, res) => {
-  console.log (getDate(), req.query, req.params, req.hostname)
-  res.send ('Hello' + JSON.stringify(req.query))
+  console.log(getDate(), req.query, req.params, req.hostname)
+  res.send('Hello' + JSON.stringify(req.query))
 })
 
 //============================================================================
 
 // delete bad data
 app.get('/priceDel', (req, res) => {
-  priceDel  (req, res)
+  priceDel(req, res)
 })
 
 app.get('/price', (req, res) => {
@@ -162,7 +169,7 @@ app.get('/price', (req, res) => {
 
 
 app.get('/priceNasdaqDel', (req, res) => {
-  priceNasdaqDel  (req, res)
+  priceNasdaqDel(req, res)
 })
 
 app.get('/priceNasdaq', (req, res) => {
