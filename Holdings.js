@@ -7,7 +7,7 @@ const {getDate} = require ('./Utils')
 const print_textFiles = false
 
 
-// http://localhost:5000/holdings?stock=APPL
+// http://localhost:5000/holdings?stock=AAPL
 
 function holdings (req, res) {
     nowMili = Date.now();
@@ -51,11 +51,23 @@ function holdings (req, res) {
         percent.push(rs[1]);
     };
 
+
+    // get company name
+    var names = [];
+    '<td class="shr svelte-1jtwn20">Microsoft Corporation</td>'
+    pattern = '<td class="shr svelte-1jtwn20">([a-zA-Z0-9&\\.\\, \'\\-]+)</td>'
+    rx = new RegExp (pattern,'g');
+      while ((rs = rx.exec(text)) !== null){
+        names.push(rs[1]);
+    };
+    console.log ('sym=', stocks.length, 'percent=', percent.length, 'names=', names.length)
+
     // build jason for send 
     // console.log (JSON.stringify(percent))
     var combined = [];
+    combined.push ({sym: stocks.length, perc: percent.length, nam: names.length})
     for (let i = 0; i < stocks.length; i++)
-        combined.push ({sym: stocks[i], perc: percent[i]})
+        combined.push ({sym: stocks[i], perc: percent[i], nam: names[i]})
 
 
 
