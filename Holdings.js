@@ -27,23 +27,34 @@ function holdings (req, res) {
     const text = result.data;
     // console.log (text)
     var pattern='<a href="/stocks/msft/">MSFT</a>'
-    pattern='<a href="/stocks/nvda/" >(NVDA)</a>'
+    pattern='<a href="/stocks/[a-z]+/" >([A-Z]+)</a>'
 
     var stocks=[];
-    var count = 0;
-    console.log (text.length)
-    var rx = new RegExp (pattern,'g'); // , 'g'
- 
-    // const regExpResult = rx.exec(text)
-    // console.log (regExpResult[1])
-
+    var rx = new RegExp (pattern,'g');
     while ((rs = rx.exec(text)) !== null){
-        count++
-        console.log (rs[1])
         stocks.push(rs[1]);
       };
-  
-    res.send('Holdings (' + stocks.length + ') ' + JSON.stringify(stocks))
+
+
+
+    // get percentage
+
+    var percent = [];
+    //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
+    pattern = '<td class="svelte-1jtwn20">([0-9.]+)%</td>'
+    rx = new RegExp (pattern,'g');
+      while ((rs = rx.exec(text)) !== null){
+        percent.push(rs[1]);
+    };
+
+    // console.log (JSON.stringify(percent))
+    var combined = [];
+    for (let i = 0; i < stocks.length; i++)
+        combined.push ({sym: stocks[i], perc: percent[i]})
+
+
+
+    res.send(JSON.stringify(combined))
   })
   .catch ((err) => {
     console.log(err)
