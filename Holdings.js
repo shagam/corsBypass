@@ -74,7 +74,7 @@ function holdings (req, res) {
     res.send(JSON.stringify(combined))
   })
   .catch ((err) => {
-    console.log(err)
+    console.log(err.message)
     res.send('err' + err.message)
   })
 
