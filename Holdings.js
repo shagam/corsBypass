@@ -38,8 +38,11 @@ function holdings (req, res) {
     while ((rs = rx.exec(text)) !== null){
         stocks.push(rs[1]);
       };
-
-
+    // pattern= '<td class="rlpad svelte-1jtwn20">[A-Z\\.]+</td>'
+    // var rx = new RegExp (pattern,'g');
+    // while ((rs = rx.exec(text)) !== null){
+    //   stocks.push(rs[1]);
+    // };
 
     // get percentage array
 
@@ -52,24 +55,14 @@ function holdings (req, res) {
     };
 
 
-    // get company name
-    var names = [];
-    '<td class="shr svelte-1jtwn20">Microsoft Corporation</td>'
-    pattern = '<td class="shr svelte-1jtwn20">([a-zA-Z0-9&/\\.\\, \'\\-]+)</td>'
-    rx = new RegExp (pattern,'g');
-      while ((rs = rx.exec(text)) !== null){
-        names.push(rs[1]);
-    };
-   
-
     // build jason for send 
     // console.log (JSON.stringify(percent))
     var combined = [];
-    combined.push ({sym: stocks.length, perc: percent.length, nam: names.length})
+    combined.push ({sym: stocks.length, perc: percent.length})
     for (let i = 0; i < stocks.length; i++)
-        combined.push ({sym: stocks[i], perc: percent[i], nam: names[i]})
+        combined.push ({sym: stocks[i], perc: percent[i]})
 
-    console.log ('sym=', stocks.length, 'percent=', percent.length, 'names=', names.length, 'combined-records=', combined.length)
+    console.log ('sym=', stocks.length, 'percent=', percent.length, 'combined-records=', combined.length)
 
     res.send(JSON.stringify(combined))
   })
