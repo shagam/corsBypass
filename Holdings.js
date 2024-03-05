@@ -31,7 +31,7 @@ function holdings (req, res) {
 
     // get stock array
     var pattern='<a href="/stocks/msft/">MSFT</a>'
-    pattern='<a href="/stocks/[a-z]+/" >([A-Z]+)</a>'
+    pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
 
     var stocks=[];
     var rx = new RegExp (pattern,'g');
@@ -55,12 +55,12 @@ function holdings (req, res) {
     // get company name
     var names = [];
     '<td class="shr svelte-1jtwn20">Microsoft Corporation</td>'
-    pattern = '<td class="shr svelte-1jtwn20">([a-zA-Z0-9&\\.\\, \'\\-]+)</td>'
+    pattern = '<td class="shr svelte-1jtwn20">([a-zA-Z0-9&/\\.\\, \'\\-]+)</td>'
     rx = new RegExp (pattern,'g');
       while ((rs = rx.exec(text)) !== null){
         names.push(rs[1]);
     };
-    console.log ('sym=', stocks.length, 'percent=', percent.length, 'names=', names.length)
+   
 
     // build jason for send 
     // console.log (JSON.stringify(percent))
@@ -69,7 +69,7 @@ function holdings (req, res) {
     for (let i = 0; i < stocks.length; i++)
         combined.push ({sym: stocks[i], perc: percent[i], nam: names[i]})
 
-
+    console.log ('sym=', stocks.length, 'percent=', percent.length, 'names=', names.length, 'combined-records=', combined.length)
 
     res.send(JSON.stringify(combined))
   })
