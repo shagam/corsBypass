@@ -2,3 +2,4 @@ node_modules
 priceArray.txt
 priceNasdaqArray.txt
 splitsArray.txt
+holdingsArray.txt

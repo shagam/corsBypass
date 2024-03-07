@@ -124,7 +124,7 @@ app.get('/user', (req, res) => {
 
 // holdings of a stock
 app.get('/holdings', (req, res) => {
-  holdings (req, res)
+  holdings (req, res, 7, false)
 })
 
 
