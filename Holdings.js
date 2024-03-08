@@ -3,7 +3,7 @@ const axios = require('axios')
 
 
 const {getDate} = require ('./Utils')
-
+const FAIL = 'Request failed with status code 404'
 
 const print_textFiles = false
 const miliInADay = 24 * 3600 * 1000;
@@ -30,7 +30,7 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
   else {
     var symbols ="";
     for (var i = 0; i < keys.length; i++)
-      symbols += keys[i] + '  ';
+      symbols += keys[i] +' (' + JSON.stringify (holdingsArray[keys[i]]).length + ')  '
     console.log (symbols)
   }
   // for (var i = 0; i < keys.length; i++)
@@ -53,13 +53,21 @@ function holdings (req, res, daysDelay, ignoreSaved) {
    var diff;
    if (! ignoreSaved) {
      var savedHoldings = holdingsArray [req.query.stock];
+
+     if (savedHoldings && savedHoldings.holdArr === FAIL) {
+      console.log (savedHoldings)
+      // console.log ('Found FAIL', FAIL)
+      res.send (savedHoldings)
+      return;
+     }
+
      if (savedHoldings && savedHoldings.updateMili)
        diff = updateMili - savedHoldings.updateMili
 
      if (savedHoldings && savedHoldings.updateMili && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay) {
        console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved holdings found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
-      //  console.dir (savedHoldings)
+
        if (savedHoldings.length == 1)
          res.send ('')
        else
@@ -109,7 +117,6 @@ function holdings (req, res, daysDelay, ignoreSaved) {
   .then ((result) => {
     const text = result.data;
     // console.log (text)
-
 
 
     // get stock array
@@ -162,7 +169,16 @@ function holdings (req, res, daysDelay, ignoreSaved) {
   })
   .catch ((err) => {
     console.log(err.message)
-    res.send('err' + err.message)
+    res.send(err.message)
+    const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: err.message}
+    holdingsArray [req.query.stock] = holdingsObg;
+
+    fs.writeFile ('holdingsArray.txt', JSON.stringify(holdingsArray), err => {
+      if (err) {
+        console.err('holdingsArray.txt write fail', err)
+      }
+    })
+
   })
 
 }
