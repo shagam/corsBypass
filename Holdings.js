@@ -54,20 +54,15 @@ function holdings (req, res, daysDelay, ignoreSaved) {
    if (! ignoreSaved) {
      var savedHoldings = holdingsArray [req.query.stock];
 
-     if (savedHoldings && savedHoldings.holdArr === FAIL) {
-      console.log (savedHoldings)
-      // console.log ('Found FAIL', FAIL)
-      res.send (savedHoldings)
-      return;
-     }
-
      if (savedHoldings && savedHoldings.updateMili)
        diff = updateMili - savedHoldings.updateMili
 
      if (savedHoldings && savedHoldings.updateMili && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay) {
        console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved holdings found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
-
+      
+     if (savedHoldings.holdArr === FAIL)
+      console.log (savedHoldings )
        if (savedHoldings.length == 1)
          res.send ('')
        else
