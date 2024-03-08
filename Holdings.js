@@ -30,7 +30,7 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
   else {
     var symbols ="";
     for (var i = 0; i < keys.length; i++)
-      symbols += keys[i] + ' (' + holdingsArray[keys[i]].length + ')  ';
+      symbols += keys[i] + '  ';
     console.log (symbols)
   }
   // for (var i = 0; i < keys.length; i++)
