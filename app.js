@@ -124,14 +124,18 @@ app.get('/user', (req, res) => {
 
 // holdings of a stock
 app.get('/holdings', (req, res) => {
+  var nowMili = Date.now();
   holdings (req, res, 7, false)
+  console.log ('holdings delay=', Date.now() - nowMili)
 })
 
 
 
 // 7 day delay
 app.get('/splits', (req, res) => {
+  var nowMili = Date.now();
   splitsGet(req, res, 7, false)
+  console.log ('splits delay=', Date.now() - nowMili)
 })
 
 // 1 day delay
