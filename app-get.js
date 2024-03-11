@@ -10,7 +10,7 @@ const {price, priceDel} = require ('./HistoricPrice')
 
 // const router = express.Router();
 
-const externalIp = '62.90.44.227'
+const externalIp = '62.0.92.49'
 const l2_Ip = '10.100.102.4'
 const pc_ip = '10.100.102.3'
 
