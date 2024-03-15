@@ -45,7 +45,7 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
 // http://localhost:5000/holdings?stock=AAPL
 
 function holdings (req, res, daysDelay, ignoreSaved) {
-    console.log ('holdings', req.query.stock)
+    // console.log ('holdings', req.query.stock)
 
    // search saved holdings retrieved lately
    const updateMili = Date.now();
@@ -87,7 +87,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
          // console.log ('checkIfOld', today.getDate(), holdingsDate.getDate()) 
          if ((today.getTime() - holdingsDate.getTime()) / miliInADay < 180) { // less than 180 days
            console.log (req.query.stock, 'recentHoldings', holdingsDate.toLocaleDateString())
-           console.dir (oneHoldings)
+          //  console.dir (oneHoldings)
            if (oneHoldings.length == 1)
              res.send ('')
            else
