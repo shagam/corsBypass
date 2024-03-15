@@ -22,13 +22,14 @@ const { price, priceDel } = require('./HistoricPrice')
 const { priceNasdaq, priceNasdaqDel } = require('./HistoricPriceNasdaq')
 const appGet = require('./app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
-const {holdings} = require('./Holdings')
+const {holdingsMain} = require('./Holdings')
+const {holdingsSchMain} = require('./HoldingsSch')
 // console.log (holdings)
 
 const app = express()
 const router = express.Router();
 
-const externalIp = '62.90.44.227'
+const externalIp = '62.0.90.49'
 const l2_Ip = '10.100.102.4'
 const pc_ip = '10.100.102.3'
 
@@ -106,29 +107,26 @@ function getDate() {
 }
 
 
-app.get('/', (req, res) => {
-  // res.send('root')
-  root(req, res)
-})
+// app.get('/', (req, res) => {
+//   // res.send('root')
+//   root(req, res)
+// })
 
-app.get('/userTest', (req, res) => {
-  userTest(req, res)
-})
+// app.get('/userTest', (req, res) => {
+//   userTest(req, res)
+// })
 
-app.get('/user', (req, res) => {
-  user(req, res)
-})
+// app.get('/user', (req, res) => {
+//   user(req, res)
+// })
 
 
 //============================================================================
 
 // holdings of a stock
-app.get('/holdings', (req, res) => {
-  var nowMili = Date.now();
-  holdings (req, res, 7, false)
-  console.log ('holdings delay=', Date.now() - nowMili)
-})
+holdingsMain (app)
 
+holdingsSchMain (app)
 
 
 // 7 day delay
@@ -139,30 +137,30 @@ app.get('/splits', (req, res) => {
 })
 
 // 1 day delay
-app.get('/splitsDay', (req, res) => {
-  splitsGet(req, res, 1, false)
-})
+// app.get('/splitsDay', (req, res) => {
+//   splitsGet(req, res, 1, false)
+// })
 
-app.get('/splitsNew', (req, res) => {
-  console.log(req.query.stock, 'ignore saved splits')
-  splitsGet(req, res, 1, true)
-})
+// app.get('/splitsNew', (req, res) => {
+//   console.log(req.query.stock, 'ignore saved splits')
+//   splitsGet(req, res, 1, true)
+// })
 
 
 //============================================================================
 
 
-app.get('/val', (req, res) => {
-  console.log(getDate(), req.query, req.params, req.hostname)
-  res.send('Hello' + JSON.stringify(req.query))
-})
+// app.get('/val', (req, res) => {
+//   console.log(getDate(), req.query, req.params, req.hostname)
+//   res.send('Hello' + JSON.stringify(req.query))
+// })
 
 //============================================================================
 
 // delete bad data
-app.get('/priceDel', (req, res) => {
-  priceDel(req, res)
-})
+// app.get('/priceDel', (req, res) => {
+//   priceDel(req, res)
+// })
 
 app.get('/price', (req, res) => {
   price(req, res)
@@ -172,9 +170,9 @@ app.get('/price', (req, res) => {
 })
 
 
-app.get('/priceNasdaqDel', (req, res) => {
-  priceNasdaqDel(req, res)
-})
+// app.get('/priceNasdaqDel', (req, res) => {
+//   priceNasdaqDel(req, res)
+// })
 
 app.get('/priceNasdaq', (req, res) => {
   priceNasdaq(req, res)

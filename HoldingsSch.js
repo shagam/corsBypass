@@ -9,9 +9,9 @@ const print_textFiles = false
 const miliInADay = 24 * 3600 * 1000;
 // read holdingArray from local file once on startup
 var holdingsArray = {};    // saved one obj per stock
-fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
+fs.readFile('holdingsArraySch.txt', 'utf8', (err, data) => {
   if (err) {
-    fs.readFile('holdingsArray.txt_save', 'utf8', (err, data) => {
+    fs.readFile('holdingsArraySch.txt_save', 'utf8', (err, data) => {
     if (err) {
       console.error (err)
       return;
@@ -23,7 +23,7 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
     holdingsArray = JSON.parse(data);
 
   const keys = Object.keys(holdingsArray);
-  console.log('\nholdingsArray.txt  read count=', keys.length)
+  console.log('\nholdingsArraySch.txt  read count=', keys.length)
   if (print_textFiles)
     for (var i = 0; i < keys.length; i++)
       console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
@@ -44,7 +44,7 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
 
 // http://localhost:5000/holdings?stock=AAPL
 
-function holdings (req, res, daysDelay, ignoreSaved) {
+function holdingsSch (req, res, daysDelay, ignoreSaved) {
     console.log ('holdings', req.query.stock)
 
    // search saved holdings retrieved lately
@@ -71,7 +71,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
      }
      else {  // delete old wrong saved format
        holdingsArray [req.query.stock] = undefined;
-       console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdings old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
+       console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdingsSch missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
        savedHoldings = undefined;
      }
 
@@ -98,10 +98,9 @@ function holdings (req, res, daysDelay, ignoreSaved) {
      }
    }
  
-
-    // return;
-// https://stockanalysis.com/etf/xlk/holdings/
-  var url = 'https://stockanalysis.com/etf/'+req.query.stock+'/holdings/'   
+{/* <tr class="alt"><td class="symbol firstColumn" tsraw="QCOM">QCOM</td><td class="description" tsraw="Qualcomm Inc"><span>Qualcomm Inc</span></td><td class="data" tsraw="4.11">4.11%</td><td class="data" tsraw="4175052">4.2M</td><td class="data lastColumn" tsraw="712138620">$712.1M</td></tr> */}
+// http://dinagold.org:5000/holdingsSch?stock=QQQ
+  var url = 'https://www.schwab.wallst.com/schwab/Prospect/research/etfs/schwabETF/index.asp?type=holdings&symbol=' + req.query.stock
    console.log (url)
   // console.log (url)
   const options = {
@@ -115,8 +114,8 @@ function holdings (req, res, daysDelay, ignoreSaved) {
 
 
     // get stock array
-    var pattern='<a href="/stocks/msft/">MSFT</a>'
-    pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
+    var pattern='<td class="symbol firstColumn" tsraw="QCOM">QCOM'
+    pattern = '<td class="symbol firstColumn" tsraw="([A-Z]+)">([A-Z]+)'
 
     var stocks=[];
     var rx = new RegExp (pattern,'g');
@@ -133,7 +132,8 @@ function holdings (req, res, daysDelay, ignoreSaved) {
 
     var percent = [];
     //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
-    pattern = '<td class="svelte-1jtwn20">([0-9.]+)%</td>'
+    // <td class="data" tsraw="4.11">4.11%</td>
+    pattern = '<td class="data" tsraw="([0-9\\.]+)">([0-9\\.]+)%</td>'
     rx = new RegExp (pattern,'g');
       while ((rs = rx.exec(text)) !== null){
         percent.push(rs[1]);
@@ -154,9 +154,9 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    fs.writeFile ('holdingsArray.txt', JSON.stringify(holdingsArray), err => {
+    fs.writeFile ('holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
       if (err) {
-        console.err('holdingsArray.txt write fail', err)
+        console.err('holdingsArraySch.txt write fail', err)
       }
     })
 
@@ -168,9 +168,9 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: err.message}
     holdingsArray [req.query.stock] = holdingsObg;
 
-    fs.writeFile ('holdingsArray.txt', JSON.stringify(holdingsArray), err => {
+    fs.writeFile ('holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
       if (err) {
-        console.err('holdingsArray.txt write fail', err)
+        console.err('holdingsArraySch.txt write fail', err)
       }
     })
 
@@ -178,15 +178,19 @@ function holdings (req, res, daysDelay, ignoreSaved) {
 
 }
 
-function holdingsMain (app) {
-  app.get('/holdings', (req, res) => {
+function holdingsSchMain (app) {
+// holdings of a stock
+  app.get('/holdingsSch', (req, res) => {
+
+    const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    console.log (ipAddress)
+  
     var nowMili = Date.now();
-    holdings (req, res, 7, false)
+    holdingsSch (req, res, 7, false)
     console.log ('holdings delay=', Date.now() - nowMili)
   })
-}
-
-module.exports = {holdingsMain}
+} 
+module.exports = {holdingsSchMain}
 
 
 
