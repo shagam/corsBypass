@@ -45,7 +45,7 @@ fs.readFile('holdingsArraySch.txt', 'utf8', (err, data) => {
 // http://localhost:5000/holdings?stock=AAPL
 
 function holdingsSch (req, res, daysDelay, ignoreSaved) {
-    console.log ('holdings', req.query.stock)
+    // console.log ('\nholdings', req.query.stock)
 
    // search saved holdings retrieved lately
    const updateMili = Date.now();
@@ -58,7 +58,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
        diff = updateMili - savedHoldings.updateMili
 
      if (savedHoldings && savedHoldings.updateMili && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay) {
-       console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved holdings found\x1b[0m,',
+       console.log ("\n", req.query.stock, 'holdingsSch', getDate(), '\x1b[36m Saved found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
       
      if (savedHoldings.holdArr === FAIL)
@@ -71,7 +71,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
      }
      else {  // delete old wrong saved format
        holdingsArray [req.query.stock] = undefined;
-       console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdingsSch missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
+       console.log ("\n", req.query.stock, 'holdingsSch', getDate(), '\x1b[31m missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
        savedHoldings = undefined;
      }
 
@@ -101,7 +101,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
 {/* <tr class="alt"><td class="symbol firstColumn" tsraw="QCOM">QCOM</td><td class="description" tsraw="Qualcomm Inc"><span>Qualcomm Inc</span></td><td class="data" tsraw="4.11">4.11%</td><td class="data" tsraw="4175052">4.2M</td><td class="data lastColumn" tsraw="712138620">$712.1M</td></tr> */}
 // http://dinagold.org:5000/holdingsSch?stock=QQQ
   var url = 'https://www.schwab.wallst.com/schwab/Prospect/research/etfs/schwabETF/index.asp?type=holdings&symbol=' + req.query.stock
-   console.log (url)
+  //  console.log (url)
   // console.log (url)
   const options = {
     "method": "GET",
@@ -136,7 +136,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     pattern = '<td class="data" tsraw="([0-9\\.]+)">([0-9\\.]+)%</td>'
     rx = new RegExp (pattern,'g');
       while ((rs = rx.exec(text)) !== null){
-        percent.push(rs[1]);
+        percent.push(Number(rs[1]).toFixed(2));
     };
 
 
