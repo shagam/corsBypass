@@ -73,8 +73,8 @@ if (ssl) {
 
 
 
-  sslServer.listen(5000, (err) => {
-    console.log('secureServer on port 5000')
+  sslServer.listen(port, (err) => {
+    console.log('secureServer on port=', port)
     if (err) {
       console.log('err: ', err)
     }
