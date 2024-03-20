@@ -39,13 +39,15 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
 
 
 
-function parse_1 (stocks, percent) {
+function parse_0 (stocks, percent, text) {
 
   // get stock array
+ 
   var pattern='<a href="/stocks/msft/">MSFT</a>'
-  pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
-
-  var stocks=[];
+  pattern =  pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
+  // pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>|<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
+  // pattern='<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
+  // pattern='<td class="rlpad svelte-1jtwn20">(6861.T)</td>'
   var rx = new RegExp (pattern,'g');
   while ((rs = rx.exec(text)) !== null){
       stocks.push(rs[1]);
@@ -53,7 +55,6 @@ function parse_1 (stocks, percent) {
   
   // get percentage array
 
-  var percent = [];
   //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
   pattern = '<td class="svelte-1jtwn20">([0-9.]+)%</td>'
   rx = new RegExp (pattern,'g');
@@ -134,8 +135,9 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     const text = result.data;
     // console.log (text)
 
-
-    parse_0 (stocks, percent)
+    var stocks=[];
+    var percent = [];
+    parse_0 (stocks, percent, text)
 
 
     // build jason for send 
