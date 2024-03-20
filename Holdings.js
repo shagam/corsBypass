@@ -42,7 +42,6 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
 function parse_0 (stocks, percent, text) {
 
   // get stock array
- 
   var pattern='<a href="/stocks/msft/">MSFT</a>'
   pattern =  pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
   // pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>|<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
@@ -84,7 +83,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
        ' saveCount=', Object.keys(holdingsArray).length)
       
      if (savedHoldings.holdArr === FAIL)
-      console.log (savedHoldings )
+      console.log (savedHoldings)
        if (savedHoldings.length == 1)
          res.send ('')
        else
@@ -93,7 +92,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
      }
      else {  // delete old wrong saved format
        holdingsArray [req.query.stock] = undefined;
-       console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdings old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
+       console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdings missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
        savedHoldings = undefined;
      }
 
@@ -147,7 +146,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     for (let i = 0; i < stocks.length; i++)
         holdingArray.push ({sym: stocks[i], perc: percent[i]})
 
-    console.log ('sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
+    console.log (req.query.stock, 'sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
 
     // save local holdings
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
@@ -182,7 +181,7 @@ function holdingsMain (app) {
   app.get('/holdings', (req, res) => {
     var nowMili = Date.now();
     holdings (req, res, 7, false)
-    console.log ('holdings delay=', Date.now() - nowMili)
+    console.log (req.query.stock, 'holdings delay=', Date.now() - nowMili)
   })
 }
 
