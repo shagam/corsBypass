@@ -39,7 +39,28 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
 
 
 
+function parse_1 (stocks, percent) {
 
+  // get stock array
+  var pattern='<a href="/stocks/msft/">MSFT</a>'
+  pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
+
+  var stocks=[];
+  var rx = new RegExp (pattern,'g');
+  while ((rs = rx.exec(text)) !== null){
+      stocks.push(rs[1]);
+    };
+  
+  // get percentage array
+
+  var percent = [];
+  //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
+  pattern = '<td class="svelte-1jtwn20">([0-9.]+)%</td>'
+  rx = new RegExp (pattern,'g');
+    while ((rs = rx.exec(text)) !== null){
+      percent.push(rs[1]);
+  };
+}
 
 
 // http://localhost:5000/holdings?stock=AAPL
@@ -114,30 +135,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     // console.log (text)
 
 
-    // get stock array
-    var pattern='<a href="/stocks/msft/">MSFT</a>'
-    pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
-
-    var stocks=[];
-    var rx = new RegExp (pattern,'g');
-    while ((rs = rx.exec(text)) !== null){
-        stocks.push(rs[1]);
-      };
-    // pattern= '<td class="rlpad svelte-1jtwn20">[A-Z\\.]+</td>'
-    // var rx = new RegExp (pattern,'g');
-    // while ((rs = rx.exec(text)) !== null){
-    //   stocks.push(rs[1]);
-    // };
-
-    // get percentage array
-
-    var percent = [];
-    //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
-    pattern = '<td class="svelte-1jtwn20">([0-9.]+)%</td>'
-    rx = new RegExp (pattern,'g');
-      while ((rs = rx.exec(text)) !== null){
-        percent.push(rs[1]);
-    };
+    parse_0 (stocks, percent)
 
 
     // build jason for send 
