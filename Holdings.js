@@ -23,7 +23,7 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
     holdingsArray = JSON.parse(data);
 
   const keys = Object.keys(holdingsArray);
-  console.log('\nholdingsArray.txt  read count=', keys.length)
+  console.log('\n', getDate(), 'holdingsArray.txt  read count=', keys.length)
   if (print_textFiles)
     for (var i = 0; i < keys.length; i++)
       console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
@@ -83,7 +83,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
        ' saveCount=', Object.keys(holdingsArray).length)
       
      if (savedHoldings.holdArr === FAIL)
-      console.log (savedHoldings)
+      console.log (req.query.stock, updateDate, savedHoldings)
        if (savedHoldings.length == 1)
          res.send ('')
        else
@@ -107,7 +107,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
          const today = new Date();
          // console.log ('checkIfOld', today.getDate(), holdingsDate.getDate()) 
          if ((today.getTime() - holdingsDate.getTime()) / miliInADay < 180) { // less than 180 days
-           console.log (req.query.stock, 'recentHoldings', holdingsDate.toLocaleDateString())
+           console.log (req.query.stock, updateDate, 'recentHoldings', holdingsDate.toLocaleDateString())
           //  console.dir (oneHoldings)
            if (oneHoldings.length == 1)
              res.send ('')
@@ -123,7 +123,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     // return;
 // https://stockanalysis.com/etf/xlk/holdings/
   var url = 'https://stockanalysis.com/etf/'+req.query.stock+'/holdings/'   
-   console.log (url)
+   console.log (req.query.stock, updateDate, url)
   // console.log (url)
   const options = {
     "method": "GET",
@@ -146,7 +146,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     for (let i = 0; i < stocks.length; i++)
         holdingArray.push ({sym: stocks[i], perc: percent[i]})
 
-    console.log (req.query.stock, 'sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
+    console.log (req.query.stock, updateDate, 'sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
 
     // save local holdings
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
@@ -155,21 +155,21 @@ function holdings (req, res, daysDelay, ignoreSaved) {
 
     fs.writeFile ('holdingsArray.txt', JSON.stringify(holdingsArray), err => {
       if (err) {
-        console.err('holdingsArray.txt write fail', err)
+        console.err(req.query.stock, updateDate, 'holdingsArray.txt write fail', err)
       }
     })
 
     res.send(JSON.stringify(holdingsObg))
   })
   .catch ((err) => {
-    console.log(err.message)
+    console.log(req.query.stock, updateDate, err.message)
     res.send(err.message)
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: err.message}
     holdingsArray [req.query.stock] = holdingsObg;
 
     fs.writeFile ('holdingsArray.txt', JSON.stringify(holdingsArray), err => {
       if (err) {
-        console.err('holdingsArray.txt write fail', err)
+        console.err(req.query.stock, updateDate, 'holdingsArray.txt write fail', err)
       }
     })
 
@@ -181,7 +181,7 @@ function holdingsMain (app) {
   app.get('/holdings', (req, res) => {
     var nowMili = Date.now();
     holdings (req, res, 7, false)
-    console.log (req.query.stock, 'holdings delay=', Date.now() - nowMili)
+    console.log (req.query.stock, getDate(), 'holdings delay=', Date.now() - nowMili)
   })
 }
 

@@ -23,7 +23,7 @@ fs.readFile('holdingsArraySch.txt', 'utf8', (err, data) => {
     holdingsArray = JSON.parse(data);
 
   const keys = Object.keys(holdingsArray);
-  console.log('\nholdingsArraySch.txt  read count=', keys.length)
+  console.log('\n', getDate(), 'holdingsArraySch.txt  read count=', keys.length)
   if (print_textFiles)
     for (var i = 0; i < keys.length; i++)
       console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
@@ -58,11 +58,11 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
        diff = updateMili - savedHoldings.updateMili
 
      if (savedHoldings && savedHoldings.updateMili && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay) {
-       console.log ("\n", req.query.stock, 'holdingsSch', getDate(), '\x1b[36m Saved found\x1b[0m,',
+       console.log ("\n", req.query.stock, updateDate, 'holdingsSch', '\x1b[36m Saved found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
       
      if (savedHoldings.holdArr === FAIL)
-      console.log (savedHoldings )
+      console.log (req.query.stock, updateDate, savedHoldings )
        if (savedHoldings.length == 1)
          res.send ('')
        else
@@ -71,7 +71,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
      }
      else {  // delete old wrong saved format
        holdingsArray [req.query.stock] = undefined;
-       console.log ("\n", req.query.stock, 'holdingsSch', getDate(), '\x1b[31m missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
+       console.log ("\n", req.query.stock, updateDate, 'holdingsSch', '\x1b[31m missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
        savedHoldings = undefined;
      }
 
@@ -86,7 +86,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
          const today = new Date();
          // console.log ('checkIfOld', today.getDate(), holdingsDate.getDate()) 
          if ((today.getTime() - holdingsDate.getTime()) / miliInADay < 180) { // less than 180 days
-           console.log (req.query.stock, 'recentHoldings', holdingsDate.toLocaleDateString())
+           console.log (req.query.stock, updateDate, 'recentHoldings', holdingsDate.toLocaleDateString())
            console.dir (oneHoldings)
            if (oneHoldings.length == 1)
              res.send ('')
@@ -147,7 +147,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     for (let i = 0; i < stocks.length; i++)
         holdingArray.push ({sym: stocks[i], perc: percent[i]})
 
-    console.log ('sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
+    console.log (req.query.stock, updateDate, 'sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
 
     // save local holdings
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
@@ -163,7 +163,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     res.send(JSON.stringify(holdingsObg))
   })
   .catch ((err) => {
-    console.log(err.message)
+    console.log(req.query.stock, updateDate, err.message)
     res.send(err.message)
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: err.message}
     holdingsArray [req.query.stock] = holdingsObg;
@@ -183,7 +183,7 @@ function holdingsSchMain (app) {
   app.get('/holdingsSch', (req, res) => {
 
     const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    console.log (ipAddress)
+    console.log (req.query.stock, updateDate, ipAddress)
   
     var nowMili = Date.now();
     holdingsSch (req, res, 7, false)
