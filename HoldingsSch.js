@@ -86,7 +86,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
          const today = new Date();
          // console.log ('checkIfOld', today.getDate(), holdingsDate.getDate()) 
          if ((today.getTime() - holdingsDate.getTime()) / miliInADay < 180) { // less than 180 days
-           console.log (req.query.stock, updateDate, 'recentHoldings', holdingsDate.toLocaleDateString())
+           console.log (req.query.stock, updateDate, 'recentHoldingsSch', holdingsDate.toLocaleDateString())
            console.dir (oneHoldings)
            if (oneHoldings.length == 1)
              res.send ('')
@@ -149,7 +149,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
 
     console.log (req.query.stock, updateDate, 'sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
 
-    // save local holdings
+    // save local holdingsSch
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
@@ -183,11 +183,11 @@ function holdingsSchMain (app) {
   app.get('/holdingsSch', (req, res) => {
 
     const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    console.log (req.query.stock, updateDate, ipAddress)
+    console.log (req.query.stock, getDate(), ipAddress)
   
     var nowMili = Date.now();
     holdingsSch (req, res, 7, false)
-    console.log ('holdings delay=', Date.now() - nowMili)
+    console.log ('holdingsSch delay=', Date.now() - nowMili)
   })
 } 
 module.exports = {holdingsSchMain}
