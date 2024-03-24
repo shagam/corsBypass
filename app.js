@@ -24,7 +24,7 @@ const appGet = require('./app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 const {holdingsMain} = require('./Holdings')
 const {holdingsSchMain} = require('./HoldingsSch')
-// console.log (holdings)
+const {gain} = require('./Gain')
 
 const app = express()
 const router = express.Router();
@@ -132,6 +132,8 @@ function getDate() {
 holdingsMain (app)
 
 holdingsSchMain (app)
+
+gain (app)
 
 
 // 7 day delay
