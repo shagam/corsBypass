@@ -2,6 +2,9 @@
 #  renew certbot key
 #  add txt record _acme-challenge in namecheap 
 
+
+#/etc/letsencrypt/live/dinagold.org/privkey.pem
+
 sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net 
 #sudo certbot --manual --preferred-challenges dns certonly -d dinagold.org 
 #sudo certbot --manual --preferred-challenges dns certonly -d portfolio-chk.com 
