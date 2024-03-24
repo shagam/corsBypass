@@ -66,6 +66,11 @@ if (ssl) {
       cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
     }, app)
   }
+}
+  else {
+    console.log('certificate none')
+    sslServer = app;
+  }
 
   const port = 5000
   // appGet (sslServer, app, port) 
@@ -79,7 +84,7 @@ if (ssl) {
       console.log('err: ', err)
     }
   })
-}
+
 
 // const getLocalIp = require ('./getLocalIp')
 // import http from 'http'
