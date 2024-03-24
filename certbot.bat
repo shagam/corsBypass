@@ -18,3 +18,15 @@ sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net
 
 # @REM HTDNSNgIUZ9xRgvR_yu2t0L_IXcJR29VnkubPYq7rNo
  
+/etc/letsencrypt/live/dinagold.org/cert.pem
+/etc/letsencrypt/live/dinagold.org/privkey.pem
+/etc/letsencrypt/live/dinagold.org/fullchain.pem
+/etc/letsencrypt/live/dinagold.org/chain.pem
+/etc/letsencrypt/live/dinagold.net/cert.pem
+/etc/letsencrypt/live/dinagold.net/privkey.pem
+/etc/letsencrypt/live/dinagold.net/fullchain.pem
+/etc/letsencrypt/live/dinagold.net/chain.pem
+/etc/letsencrypt/live/portfolio-chk.com/cert.pem
+/etc/letsencrypt/live/portfolio-chk.com/privkey.pem
+/etc/letsencrypt/live/portfolio-chk.com/fullchain.pem
+/etc/letsencrypt/live/portfolio-chk.com/chain.pem
