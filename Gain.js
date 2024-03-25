@@ -50,8 +50,8 @@ function gain (app)  {
         else if (cmd === 'w') {  // write one stock
             if (LOG)
                 console.log (req.query.dat)
-            var dat //= JSON.parse(req.query.dat)
-            dat = req.query.dat
+            var dat = JSON.parse(req.query.dat)
+            // dat = req.query.dat
             // console.log (dat)
             gainArray[stock] = dat; // readable format
             console.log (Object.keys(gainArray))
@@ -81,28 +81,32 @@ function gain (app)  {
                     console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
                 switch (Number(period)){
                     case 1:
-                        // console.log ('filter year val', gainArray[sym].year, qqqValue* factor)
+                        if (LOG)
+                            console.log (sym, 'filter year val', gainArray[sym].year, 'q*f', qqqValue* factor)
                         if (Number(gainArray[sym].year) > Number(qqqValue * factor))
                             filterdObj[sym] = gainArray[sym]
                         break;
                     case 2:
-                        // console.log (gainArray[sym].year2)
+                        if (LOG)
+                        console.log (sym, 'filter year val', gainArray[sym].year2, 'q*f', qqqValue* factor)
                         if (Number(gainArray[sym].year2) > Number(qqqValue * factor))
                             filterdObj[sym] = gainArray[sym]
                         break;
                     case 5:
-                        // console.log (gainArray[sym].year5)
+                        if (LOG)
+                            console.log (sym, 'filter year val', gainArray[sym].year5, 'q*f', qqqValue* factor)
                         if (Number(gainArray[sym].year5) > Number(qqqValue * factor))
                             filterdObj[sym] = gainArray[sym]
                         break;
                     case 10:
-                        // console.log (gainArray[sym].year10)
+                        if (LOG)
+                            console.log (sym, 'filter year val', gainArray[sym].year10, 'q*f', qqqValue* factor)
                         if (Number(gainArray[sym].year10) > Number(qqqValue * factor))
                             filterdObj[sym] = gainArray[sym]
                         break;                       
                 }         
             })
-            if (LOG)
+            // if (LOG)
             console.log(getDate(), Object.keys(filterdObj))
             res.send (JSON.stringify(filterdObj))
         }
