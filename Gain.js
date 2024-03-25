@@ -49,8 +49,9 @@ function gain (app)  {
 
         else if (cmd === 'w') {  // write one stock
             if (LOG)
-            console.log (req.query.dat)
-            const dat = JSON.parse(req.query.dat)
+                console.log (req.query.dat)
+            var dat //= JSON.parse(req.query.dat)
+            dat = req.query.dat
             // console.log (dat)
             gainArray[stock] = dat; // readable format
             console.log (Object.keys(gainArray))
@@ -101,6 +102,7 @@ function gain (app)  {
                         break;                       
                 }         
             })
+            if (LOG)
             console.log(getDate(), Object.keys(filterdObj))
             res.send (JSON.stringify(filterdObj))
         }
@@ -108,8 +110,6 @@ function gain (app)  {
             res.send ('fail cmd invalid')
 
     })
-
-
 }
 
 
