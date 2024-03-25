@@ -16,11 +16,13 @@ fs.readFile('gainArray.txt', 'utf8', (err, data) => {
   if (data)
     gainArray = JSON.parse(data);
   const keys = Object.keys(gainArray);
-  console.log('\ngainArray.txt  read, count=', keys.length, keys)
-  if (LOG) {
+  console.log('\n', getDate(), 'gainArray.txt  read count=', keys.length)
+
+    var symbols = "";
     for (var i = 0; i < keys.length; i++)
-      console.log (JSON.stringify (gainArray[keys[i]]))
-  } 
+    //   console.log (JSON.stringify (gainArray[keys[i]]))
+        symbols += keys[i] + '  '
+    console.log(symbols)
 });
 
 
