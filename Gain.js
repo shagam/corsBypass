@@ -34,11 +34,11 @@ function gain (app)  {
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
         // const dat = req.query.dat
-        console.log (stock, date, 'gain  cmd=', cmd)// 'dat=', dat.length)
+        console.log ('\n', stock, date, 'gain  cmd=', cmd)
         // res.send ('ok')
         // return;  
 
-        if (cmd == 'r') { // read one stock
+        if (cmd === 'r') { // read one stock
             const dat = gainArray[stock]
             if (dat) 
                 res.send (JSON.stringify(dat))
@@ -48,6 +48,8 @@ function gain (app)  {
         }
 
         else if (cmd === 'w') {  // write one stock
+            if (LOG)
+            console.log (req.query.dat)
             const dat = JSON.parse(req.query.dat)
             // console.log (dat)
             gainArray[stock] = dat; // readable format
@@ -57,7 +59,7 @@ function gain (app)  {
                     console.log('gainArray.txt write fail', err)
                 }
                 else
-                    console.log('gainArray.txt write, count=', Object.keys(gainArray).length)
+                    console.log('gainArray.txt write,, count=', Object.keys(gainArray).length)
             })
             res.send ('ok')
             return;           
@@ -65,6 +67,42 @@ function gain (app)  {
         else if (cmd === 'a') { // get all         
             res.send (JSON.stringify(gainArray))
             return;
+        }
+        else if (cmd === 'f') { // get best
+            const period = req.query.period;
+            const factor = req.query.factor;
+            const qqqValue = req.query.qqqValue;
+            console.log ('gainFilter periodYears=', period, ' factor=', factor, 'qqqValue=', qqqValue)
+            const filterdObj = {}
+
+            Object.keys(gainArray).forEach ((sym) => {
+                if (LOG)
+                    console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
+                switch (Number(period)){
+                    case 1:
+                        // console.log ('filter year val', gainArray[sym].year, qqqValue* factor)
+                        if (Number(gainArray[sym].year) > Number(qqqValue * factor))
+                            filterdObj[sym] = gainArray[sym]
+                        break;
+                    case 2:
+                        // console.log (gainArray[sym].year2)
+                        if (Number(gainArray[sym].year2) > Number(qqqValue * factor))
+                            filterdObj[sym] = gainArray[sym]
+                        break;
+                    case 5:
+                        // console.log (gainArray[sym].year5)
+                        if (Number(gainArray[sym].year5) > Number(qqqValue * factor))
+                            filterdObj[sym] = gainArray[sym]
+                        break;
+                    case 10:
+                        // console.log (gainArray[sym].year10)
+                        if (Number(gainArray[sym].year10) > Number(qqqValue * factor))
+                            filterdObj[sym] = gainArray[sym]
+                        break;                       
+                }         
+            })
+            console.log(getDate(), Object.keys(filterdObj))
+            res.send (JSON.stringify(filterdObj))
         }
         else
             res.send ('fail cmd invalid')
