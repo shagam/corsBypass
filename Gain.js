@@ -65,7 +65,9 @@ function gain (app)  {
             res.send ('ok')
             return;           
         }
-        else if (cmd === 'a') { // get all         
+        else if (cmd === 'a') { // get all 
+            const keys=Object.keys(gainArray)
+            console.log ('gainAll (', keys.length, ') ', keys)        
             res.send (JSON.stringify(gainArray))
             return;
         }
