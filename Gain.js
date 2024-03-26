@@ -7,6 +7,9 @@ var gainArray = {};   // key is symbol saved one obj per stock
 
 const LOG = false;
 const date = getDate();
+var writeCount = 0;
+var readCount = 0;
+var filterCount = 0;
 
 // read gain from local file once on startup
 fs.readFile('gainArray.txt', 'utf8', (err, data) => {
@@ -33,12 +36,12 @@ function gain (app)  {
 
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
-        // const dat = req.query.dat
-        console.log ('\n', stock, date, 'gain  cmd=', cmd)
-        // res.send ('ok')
-        // return;  
+
+        console.log (date, 'cmd=', cmd, 'stock=', stock, 'write=', writeCount, 'read=', readCount,
+         'filterCount=', filterCount)
 
         if (cmd === 'r') { // read one stock
+            readCount++;
             const dat = gainArray[stock]
             if (LOG)
                 console.log ('r', stock, req.query.dat)
@@ -50,24 +53,27 @@ function gain (app)  {
         }
 
         else if (cmd === 'w') {  // write one stock
+            writeCount++;
             if (LOG)
                 console.log ('w write ', req.query.dat)
             var dat = JSON.parse(req.query.dat)
-            // dat = req.query.dat
+
             // console.log (dat)
             gainArray[stock] = dat; // readable format
-            console.log (Object.keys(gainArray))
+            if(LOG)
+                console.log (Object.keys(gainArray))
             fs.writeFile ('gainArray.txt', JSON.stringify (gainArray), err => {
                 if (err) {
                     console.log('gainArray.txt write fail', err)
                 }
                 else
-                    console.log('gainArray.txt write,, count=', Object.keys(gainArray).length)
+                    console.log('gainArray.txt write, count=', Object.keys(gainArray).length)
             })
             res.send ('ok')
             return;           
         }
         else if (cmd === 'a') { // get all 
+            filterCount ++;
             const keys=Object.keys(gainArray)
             console.log ('a  gainAll (', keys.length, ') ', keys)        
             res.send (JSON.stringify(gainArray))
@@ -75,6 +81,7 @@ function gain (app)  {
         }
 
         else if (cmd === 'b') {//best
+            filterCount ++;
             if (! gainArray['QQQ']) {
                 res.send ('fail missing needed QQQ')
                 return;
@@ -99,6 +106,7 @@ function gain (app)  {
         }
 
         else if (cmd === 'f') { // get best
+            filterCount++;
             const period = req.query.period;
             const factor = req.query.factor;
             const qqqValue = req.query.qqqValue;
