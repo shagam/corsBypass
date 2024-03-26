@@ -40,16 +40,18 @@ function gain (app)  {
 
         if (cmd === 'r') { // read one stock
             const dat = gainArray[stock]
+            if (LOG)
+                console.log ('r', stock, req.query.dat)
             if (dat) 
                 res.send (JSON.stringify(dat))
             else
-            res.send ('fail not found')
+                res.send ('fail stock not found')
             return;     
         }
 
         else if (cmd === 'w') {  // write one stock
             if (LOG)
-                console.log (req.query.dat)
+                console.log ('w write ', req.query.dat)
             var dat = JSON.parse(req.query.dat)
             // dat = req.query.dat
             // console.log (dat)
@@ -67,15 +69,40 @@ function gain (app)  {
         }
         else if (cmd === 'a') { // get all 
             const keys=Object.keys(gainArray)
-            console.log ('gainAll (', keys.length, ') ', keys)        
+            console.log ('a  gainAll (', keys.length, ') ', keys)        
             res.send (JSON.stringify(gainArray))
             return;
         }
+
+        else if (cmd === 'b') {//best
+            if (! gainArray['QQQ']) {
+                res.send ('fail missing needed QQQ')
+                return;
+            }
+            const factor = req.query.factor;
+            console.log ('b  gainFilter_1_2_5_10  factor=', factor)
+            const filterdObj = {};
+            Object.keys(gainArray).forEach ((sym) => {
+                if (LOG)
+                    console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
+                if (Number(gainArray[sym].year) > Number(gainArray['QQQ'].year * factor) ||
+                 (Number(gainArray[sym].year2) > Number(gainArray['QQQ'].year2 * factor)) ||
+                 (Number(gainArray[sym].year5) > Number(gainArray['QQQ'].year5 * factor)) ||
+                 (Number(gainArray[sym].year10) > Number(gainArray['QQQ'].year10 * factor))) 
+                {
+                    filterdObj[sym] = gainArray[sym]
+                }
+            })
+            const keys=Object.keys(filterdObj)
+            console.log(getDate(), keys.length, keys)
+            res.send (JSON.stringify(filterdObj))
+        }
+
         else if (cmd === 'f') { // get best
             const period = req.query.period;
             const factor = req.query.factor;
             const qqqValue = req.query.qqqValue;
-            console.log ('gainFilter periodYears=', period, ' factor=', factor, 'qqqValue=', qqqValue)
+            console.log ('f gainFilter periodYears=', period, ' factor=', factor, 'qqqValue=', qqqValue)
             const filterdObj = {}
 
             Object.keys(gainArray).forEach ((sym) => {
