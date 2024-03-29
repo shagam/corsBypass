@@ -37,9 +37,10 @@ function gain (app)  {
 
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
+        const symOnly = req.query.symOnly;
 
         console.log (date, 'cmd=', cmd, 'stock=', stock, 'write=', writeCount, 'read=', readCount,
-         'filterCount=', filterCount)
+         'filterCount=', filterCount, 'symOnly=', symOnly)
 
         if (cmd === 'r') { // read one stock
             readCount++;
@@ -79,7 +80,17 @@ function gain (app)  {
         else if (cmd === 'a') { // get all 
             filterCount ++;
             const keys=Object.keys(gainArray)
-            console.log ('a  gainAll (', keys.length, ') ', keys)        
+            
+            console.log ('a  gainAll (', keys.length, ') ', keys, '')
+            const filterdObj = {}; 
+            if (symOnly) {
+                const keys = Object.keys(gainArray)
+                keys.map((sym) => {
+                    filterdObj[sym] = '';
+                })
+                res.send (JSON.stringify(filterdObj))
+                return;                
+            }       
             res.send (JSON.stringify(gainArray))
             return;
         }
@@ -101,7 +112,10 @@ function gain (app)  {
                  (Number(gainArray[sym].year5) > Number(gainArray['QQQ'].year5 * factor)) ||
                  (Number(gainArray[sym].year10) > Number(gainArray['QQQ'].year10 * factor))) 
                 {
-                    filterdObj[sym] = gainArray[sym]
+                    if (symOnly)
+                        filterdObj[sym]=''
+                    else
+                        filterdObj[sym] = gainArray[sym]
                 }
             })
             const keys=Object.keys(filterdObj)
@@ -131,8 +145,11 @@ function gain (app)  {
                  (Number(gainArray[sym].year10 * factor) < Number(gainArray['QQQ'].year10))) 
                 {
                     if (LOG)
-                        console.log (sym, 'bad gain')
-                    filterdObj[sym] = gainArray[sym]
+                        onsole.log (sym, 'bad gain')
+                    if (symOnly)
+                        filterdObj[sym]=''
+                    else
+                        filterdObj[sym] = gainArray[sym]
                     // delete gainArray[sym]
                 }
             })
@@ -156,26 +173,42 @@ function gain (app)  {
                     case 1:
                         if (LOG)
                             console.log (sym, 'filter year val', gainArray[sym].year, 'q*f', qqqValue* factor)
-                        if (Number(gainArray[sym].year) > Number(qqqValue * factor))
-                            filterdObj[sym] = gainArray[sym]
+                        if (Number(gainArray[sym].year) > Number(qqqValue * factor)){
+                            if (symOnly)
+                                filterdObj[sym]=''
+                            else
+                                filterdObj[sym] = gainArray[sym]
+                        }
                         break;
                     case 2:
                         if (LOG)
                         console.log (sym, 'filter year val', gainArray[sym].year2, 'q*f', qqqValue* factor)
-                        if (Number(gainArray[sym].year2) > Number(qqqValue * factor))
-                            filterdObj[sym] = gainArray[sym]
+                        if (Number(gainArray[sym].year2) > Number(qqqValue * factor)){
+                            if (symOnly)
+                                filterdObj[sym]=''
+                            else       
+                                filterdObj[sym] = gainArray[sym]
+                        }
                         break;
                     case 5:
                         if (LOG)
                             console.log (sym, 'filter year val', gainArray[sym].year5, 'q*f', qqqValue* factor)
-                        if (Number(gainArray[sym].year5) > Number(qqqValue * factor))
-                            filterdObj[sym] = gainArray[sym]
+                        if (Number(gainArray[sym].year5) > Number(qqqValue * factor)){
+                            if (symOnly)
+                                filterdObj[sym]=''
+                            else
+                                filterdObj[sym] = gainArray[sym]
+                        }
                         break;
                     case 10:
                         if (LOG)
                             console.log (sym, 'filter year val', gainArray[sym].year10, 'q*f', qqqValue* factor)
-                        if (Number(gainArray[sym].year10) > Number(qqqValue * factor))
-                            filterdObj[sym] = gainArray[sym]
+                        if (Number(gainArray[sym].year10) > Number(qqqValue * factor)){
+                            if (symOnly)
+                                filterdObj[sym]=''
+                            else
+                                filterdObj[sym] = gainArray[sym]
+                        }
                         break;                       
                 }         
             })
