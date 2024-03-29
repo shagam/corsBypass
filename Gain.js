@@ -116,7 +116,12 @@ function gain (app)  {
                 return;
             }
             const factor = req.query.factor; // overRide 
-            console.log ('d  gainFilter_1_2_5_10  factor=', factor)
+            if (Number(factor) < 1.05) {
+                console.log ('fail, factor too small:', factor)
+                res.send ('fail, del bad factor. need to be above 1.05')
+                return;
+            }
+            console.log ('d  del bad_1_2_5_10  factor=', factor)
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
 
