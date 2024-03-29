@@ -10,6 +10,7 @@ const date = getDate();
 var writeCount = 0;
 var readCount = 0;
 var filterCount = 0;
+var lastWriteMili;
 
 // read gain from local file once on startup
 fs.readFile('gainArray.txt', 'utf8', (err, data) => {
@@ -62,13 +63,16 @@ function gain (app)  {
             gainArray[stock] = dat; // readable format
             if(LOG)
                 console.log (Object.keys(gainArray))
-            fs.writeFile ('gainArray.txt', JSON.stringify (gainArray), err => {
-                if (err) {
-                    console.log('gainArray.txt write fail', err)
-                }
-                else
-                    console.log('gainArray.txt write, count=', Object.keys(gainArray).length)
-            })
+            if (Date.now() - lastWriteMili > 2000 || writeCount % 3 === 0) {
+                fs.writeFile ('gainArray.txt', JSON.stringify (gainArray), err => {
+                    if (err) {
+                        console.log('gainArray.txt write fail', err)
+                    }
+                    else
+                        console.log('gainArray.txt write, count=', Object.keys(gainArray).length)
+                })
+                lastWriteMili = Date.now()
+            }
             res.send ('ok')
             return;           
         }
@@ -98,6 +102,33 @@ function gain (app)  {
                  (Number(gainArray[sym].year10) > Number(gainArray['QQQ'].year10 * factor))) 
                 {
                     filterdObj[sym] = gainArray[sym]
+                }
+            })
+            const keys=Object.keys(filterdObj)
+            console.log(getDate(), keys.length, keys)
+            res.send (JSON.stringify(filterdObj))
+        }
+
+        else if (cmd === 'd') {//delete sym with low gain 1,2,5,10
+            filterCount ++;
+            if (! gainArray['QQQ']) {
+                res.send ('fail missing needed QQQ')
+                return;
+            }
+            const factor = req.query.factor; // overRide 
+            console.log ('d  gainFilter_1_2_5_10  factor=', factor)
+            const filterdObj = {};
+            Object.keys(gainArray).forEach ((sym) => {
+
+                if (Number(gainArray[sym].year * factor) < Number(gainArray['QQQ'].year) &&
+                 (Number(gainArray[sym].year2 * factor) < Number(gainArray['QQQ'].year2)) &&
+                 (Number(gainArray[sym].year5 * factor) < Number(gainArray['QQQ'].year5)) &&
+                 (Number(gainArray[sym].year10 * factor) < Number(gainArray['QQQ'].year10))) 
+                {
+                    if (LOG)
+                        console.log (sym, 'bad gain')
+                    filterdObj[sym] = gainArray[sym]
+                    // delete gainArray[sym]
                 }
             })
             const keys=Object.keys(filterdObj)
