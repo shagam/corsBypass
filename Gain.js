@@ -10,6 +10,7 @@ const date = getDate();
 var writeCount = 0;
 var readCount = 0;
 var filterCount = 0;
+var removeCount = 0;
 var lastWriteMili;
 
 // read gain from local file once on startup
@@ -40,7 +41,7 @@ function gain (app)  {
         const symOnly = req.query.symOnly;
 
         console.log (date, 'cmd=', cmd, 'stock=', stock, 'write=', writeCount, 'read=', readCount,
-         'filterCount=', filterCount, 'symOnly=', symOnly)
+         'filterCount=', filterCount, 'removeCount=', removeCount, 'symOnly=', symOnly)
 
         if (cmd === 'r') { // read one stock
             readCount++;
@@ -216,6 +217,19 @@ function gain (app)  {
             console.log(getDate(), Object.keys(filterdObj))
             res.send (JSON.stringify(filterdObj))
         }
+        else if (cmd === 'p') { // get best
+            removeCount++;
+            var dat = JSON.parse(req.query.dat)
+            console.log('stocks for remove', dat)
+            dat.forEach ((sym) => {
+            // if (LOG)
+                console.log (sym, 'remove')
+                // delete gainArray[sym]
+            })
+            // console.log(getDate())
+            res.send ('ok')
+        }
+
         else
             res.send ('fail cmd invalid')
 
