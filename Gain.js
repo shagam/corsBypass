@@ -39,6 +39,7 @@ function gain (app)  {
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
         const symOnly = req.query.symOnly;
+        const factor = req.query.factor;
 
         console.log (date, 'cmd=', cmd, 'stock=', stock, 'write=', writeCount, 'read=', readCount,
          'filterCount=', filterCount, 'removeCount=', removeCount, 'symOnly=', symOnly)
@@ -56,13 +57,30 @@ function gain (app)  {
         }
 
         else if (cmd === 'w') {  // write one stock
+            if (! stock) {
+                res.send ('fail, missing stock') 
+                console.log ('fail, missing stock')  
+                return
+            }
+
             writeCount++;
             if (LOG)
                 console.log ('w write ', req.query.dat)
             var dat = JSON.parse(req.query.dat)
 
+            if (Number(dat.year) < Number(gainArray['QQQ'].year / factor) ||
+            (Number(dat.year2) < Number(gainArray['QQQ'].year2 / factor)) ||
+            (Number(dat.year5) < Number(gainArray['QQQ'].year5 / factor)) ||
+            (Number(dat.year10) < Number(gainArray['QQQ'].year10 / factor))) 
+           {
+            console.log(stock, 'fail, abort write, gain too low')
+            res.send ('fail, abort write, gain too low')
+            return;
+           }
+
             // console.log (dat)
             gainArray[stock] = dat; // readable format
+
             if(LOG)
                 console.log (Object.keys(gainArray))
             if (Date.now() - lastWriteMili > 2000 || writeCount % 3 === 0) {
@@ -96,7 +114,7 @@ function gain (app)  {
             return;
         }
 
-        else if (cmd === 'b') {//best
+        else if (cmd === 'b') {//best 1,2,5,10 years
             filterCount ++;
             if (! gainArray['QQQ']) {
                 res.send ('fail missing needed QQQ')
@@ -124,7 +142,7 @@ function gain (app)  {
             res.send (JSON.stringify(filterdObj))
         }
 
-        else if (cmd === 'd') {//delete sym with low gain 1,2,5,10
+        else if (cmd === 'd') {//get list for remove gain 1,2,5,10
             filterCount ++;
             if (! gainArray['QQQ']) {
                 res.send ('fail missing needed QQQ')
@@ -136,7 +154,7 @@ function gain (app)  {
                 res.send ('fail, del bad factor. need to be above 1.05')
                 return;
             }
-            console.log ('d  del bad_1_2_5_10  factor=', factor)
+            console.log ('d  list of bad_1_2_5_10  factor=', factor)
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
 
@@ -217,7 +235,7 @@ function gain (app)  {
             console.log(getDate(), Object.keys(filterdObj))
             res.send (JSON.stringify(filterdObj))
         }
-        else if (cmd === 'p') { // get best
+        else if (cmd === 'p') { // remove list
             removeCount++;
             var dat = JSON.parse(req.query.dat)
             console.log('stocks for remove', dat)
