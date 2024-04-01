@@ -238,11 +238,11 @@ function gain (app)  {
         else if (cmd === 'p') { // remove list
             removeCount++;
             var dat = JSON.parse(req.query.dat)
-            console.log('stocks for remove', dat)
+            console.log('stocks for remove', dat.length, dat)
             dat.forEach ((sym) => {
-            // if (LOG)
+            if (LOG)
                 console.log (sym, 'remove')
-                // delete gainArray[sym]
+                delete gainArray[sym]
             })
             // console.log(getDate())
             res.send ('ok')
