@@ -25,6 +25,7 @@ const appGet = require('./app-get')
 const {holdingsMain} = require('./Holdings')
 const {holdingsSchMain} = require('./HoldingsSch')
 const {gain} = require('./Gain')
+const {email} = require('./Email') 
 
 const app = express()
 const router = express.Router();
@@ -135,6 +136,7 @@ holdingsSchMain (app)
 
 gain (app)
 
+email (app)
 
 // 7 day delay
 app.get('/splits', (req, res) => {
