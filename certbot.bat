@@ -30,3 +30,6 @@ sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net
 /etc/letsencrypt/live/portfolio-chk.com/privkey.pem
 /etc/letsencrypt/live/portfolio-chk.com/fullchain.pem
 /etc/letsencrypt/live/portfolio-chk.com/chain.pem
+
+/etc/letsencrypt/archive/dinagold.org/privkey5.pem
+
