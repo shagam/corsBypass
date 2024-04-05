@@ -55,7 +55,8 @@ function parse_0 (stocks, percent, text) {
   // get percentage array
 
   //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
-  pattern = '<td class="svelte-1jtwn20">([0-9.]+)%</td>'
+  // <td class="svelte-1yyv6eq">2.29%</td>
+  pattern = '<td class="svelte-1yyv6eq">([0-9.]+)%</td>'
   rx = new RegExp (pattern,'g');
     while ((rs = rx.exec(text)) !== null){
       percent.push(rs[1]);
@@ -78,7 +79,10 @@ function holdings (req, res, daysDelay, ignoreSaved) {
      if (savedHoldings && savedHoldings.updateMili)
        diff = updateMili - savedHoldings.updateMili
 
-     if (savedHoldings && savedHoldings.updateMili && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay) {
+     if (savedHoldings && savedHoldings.updateMili
+       && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay
+       && Math.abs(savedHoldings.holdArr[0].sym - savedHoldings.holdArr[0].perc) < 2) // if mismatch get new
+       {
        console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved holdings found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
       
@@ -143,6 +147,18 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     // console.log (JSON.stringify(percent))
     var holdingArray = [];
     holdingArray.push ({sym: stocks.length, perc: percent.length})
+
+    if (Math.abs(holdingArray[0].sym - holdingArray[0].perc) >= 2 
+      || holdingArray[0].sym === 0
+    ) {
+      console.log (sym, 'parse mismatch', 'sym:', stocks.length, 'perc:', percent.length, holdingsObg)
+      const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
+      holdingsObg[err]= 'fail, parse mismatch'
+      res.send(JSON.stringify(holdingsObg))
+      return;
+    }
+
+    console.log (holdingArray) // verify count
     for (let i = 0; i < stocks.length; i++)
         holdingArray.push ({sym: stocks[i], perc: percent[i]})
 
