@@ -33,3 +33,9 @@ sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net
 
 /etc/letsencrypt/archive/dinagold.org/privkey5.pem
 
+ssh -i "aws.pem" ubuntu@ec2-13-50-136-35.eu-north-1.compute.amazonaws.com
+
+curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+
+
+
