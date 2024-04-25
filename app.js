@@ -22,8 +22,11 @@ const { price, priceDel } = require('./HistoricPrice')
 const { priceNasdaq, priceNasdaqDel } = require('./HistoricPriceNasdaq')
 const appGet = require('./app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
+
 const {holdingsMain} = require('./Holdings')
 const {holdingsSchMain} = require('./HoldingsSch')
+
+
 const {gain} = require('./Gain')
 const {email} = require('./Email') 
 
@@ -131,8 +134,9 @@ function getDate() {
 
 // holdings of a stock
 holdingsMain (app)
-
 holdingsSchMain (app)
+// holdingsYahooMain (app)
+// holdingsMarketwatchMain(app)
 
 gain (app)
 
