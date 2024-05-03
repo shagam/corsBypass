@@ -16,7 +16,7 @@ const axios = require('axios')
 const cors = require('cors')
 //const detect = require ('detect-browser')
 
-
+const {vix} = require('./Vix')
 const splitsGet = require('./SplitsGet')
 const { price, priceDel } = require('./HistoricPrice')
 const { priceNasdaq, priceNasdaqDel } = require('./HistoricPriceNasdaq')
@@ -141,6 +141,8 @@ holdingsSchMain (app)
 gain (app)
 
 email (app)
+
+vix (app)
 
 // 7 day delay
 app.get('/splits', (req, res) => {
