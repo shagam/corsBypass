@@ -43,8 +43,11 @@ function vix (app) {
           // pattern = 'wT3VGc">([0-9\\.]+)</span>'
           var rx = new RegExp (pattern,'g');
           while ((rs = rx.exec(text)) !== null){
-            console.log('vix ', rs[1], '  ', rs[2], '  ', rs[3])
-            res.send(rs[1] + '   ' + rs[2] + '   ' + rs[3])
+            const val = {'val': rs[1], 'diff': rs[2], 'perc': rs[3]}
+            console.log('vix ', val)
+            res.send(val)
+            // res.send(JSON.stringify(val))
+
             return
           };
           const failTxt = 'fail, vix data not found' ;
