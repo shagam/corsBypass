@@ -2,7 +2,7 @@
 const axios = require('axios')
 const fs = require ('fs')
 const {getDate} = require ('./Utils')
-
+const LOG = false
 
 function vix (app) {
   const updateMili = Date.now();
@@ -20,7 +20,8 @@ function vix (app) {
         var url = 'https://www.google.com/search?q=vix'
         // url = 'https://finance.yahoo.com/quote/%5EVIX/history'
 
-        console.log ('vix,', url)
+        if (LOG)
+          console.log ('vix,', url)
         axios.get (url)
         .then ((result) => {
           const text = result.data;
@@ -30,21 +31,17 @@ function vix (app) {
           //     console.err('vix.txt write fail', err)
           //   }
           // })
-          pattern = '"BNeawe iBp4i AP7Wnd">13.49 <span dir="ltr" class="rQMQod lB8g7">-1.19 (8.11%)</span>'
+          // pattern = '"BNeawe iBp4i AP7Wnd">13.49 <span dir="ltr" class="rQMQod lB8g7">-1.19 (8.11%)</span>'
           //<span jsname="vWLAgc" class="IsqQVc NprOob wT3VGc">14.87</span>"BNeawe iBp4i AP7Wnd">13.49 <span dir="ltr" class="rQMQod lB8g7">-1.19 (8.11%)</span>
-          //<span jsname="vWLAgc" class="IsqQVc NprOob wT3VGc">13.82</span>
-        // <span jsname="vWLAgc" class="IsqQVc NprOob wT3VGc">13.92</span>
-          var pattern
-          pattern = '"BNeawe iBp4i AP7Wnd">([0-9\\.]+) <span dir="ltr" class="rQMQod lB8g7">'
 
+          var pattern
        // pattern = '"BNeawe iBp4i AP7Wnd">13.49 <span dir="ltr" class="rQMQod lB8g7">-1.19 (8.11%)</span>'
           pattern = '"BNeawe iBp4i AP7Wnd">([0-9\\.]+) <span dir="ltr" class="rQMQod lB8g7">([\\-]?[0-9\\.]+) ([\\(]?[0-9\\.]+%[\\)]?)</span>'
 
-          // pattern = 'wT3VGc">([0-9\\.]+)</span>'
           var rx = new RegExp (pattern,'g');
           while ((rs = rx.exec(text)) !== null){
             const val = {'val': rs[1], 'diff': rs[2], 'perc': rs[3]}
-            console.log('vix ', val)
+            console.log('\n' + updateDate, 'vix ', val)
             res.send(val)
             // res.send(JSON.stringify(val))
 
