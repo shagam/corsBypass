@@ -9,6 +9,8 @@ function vix (app) {
   const updateDate = getDate()
     // app.get('/holdingsSch', (req, res) => {
     app.get('/vix', (req, res) => {
+
+      const txt = req.query.txt
       // https://go.cboe.com/l/77532/2021-10-13/bwkqfd
       // https://www.marketwatch.com/investing/index/vix
         
@@ -25,12 +27,15 @@ function vix (app) {
         axios.get (url)
         .then ((result) => {
           const text = result.data;
-          // console.log ('response length=', text.length)
-          // fs.writeFile ('vix.txt', text, err => {
-          //   if (err) {
-          //     console.err('vix.txt write fail', err)
-          //   }
-          // })
+
+          if (txt) {
+            console.log ('vix.txt')
+            fs.writeFile ('vix.txt', text, err => {
+              if (err) {
+                console.err('vix.txt write fail', err)
+              }
+            })
+          }
           // pattern = '"BNeawe iBp4i AP7Wnd">13.49 <span dir="ltr" class="rQMQod lB8g7">-1.19 (8.11%)</span>'
           //<span jsname="vWLAgc" class="IsqQVc NprOob wT3VGc">14.87</span>"BNeawe iBp4i AP7Wnd">13.49 <span dir="ltr" class="rQMQod lB8g7">-1.19 (8.11%)</span>
 
