@@ -10,7 +10,6 @@ function vix (app) {
     // app.get('/holdingsSch', (req, res) => {
     app.get('/vix', (req, res) => {
 
-      const txt = req.query.txt
       // https://go.cboe.com/l/77532/2021-10-13/bwkqfd
       // https://www.marketwatch.com/investing/index/vix
         
@@ -27,9 +26,9 @@ function vix (app) {
         axios.get (url)
         .then ((result) => {
           const text = result.data;
-
+          const txt = req.query.txt
           if (txt) {
-            console.log ('vix.txt')
+            console.log ('\nvix.txt')
             fs.writeFile ('vix.txt', text, err => {
               if (err) {
                 console.err('vix.txt write fail', err)
