@@ -37,7 +37,7 @@ function targetPrice (app)  {
         const cmd = req.query.cmd; // R, W, F
         const datNew = req.query.dat
 
-        console.log ('targetPrice ', stock, cmd, dat)
+        console.log ('targetPrice ', stock, cmd, datNew)
         res.send ('ok_')
         return
 
