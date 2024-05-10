@@ -41,7 +41,7 @@ function gain (app)  {
         const symOnly = req.query.symOnly;
         const factor = req.query.factor;
 
-        console.log ('\n', date, 'cmd=', cmd, 'stock=', stock, 'factor=', factor, 'write=', writeCount, 'read=', readCount,
+        console.log ('\n', date, 'gain cmd=', cmd, 'stock=', stock, 'factor=', factor, 'write=', writeCount, 'read=', readCount,
          'filterCount=', filterCount, 'removeCount=', removeCount, 'symOnly=', symOnly)
 
         if (cmd === 'r') { // read one stock
