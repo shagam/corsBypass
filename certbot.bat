@@ -1,7 +1,7 @@
 #!/bin/bash
 #  renew certbot key
 #  add txt record _acme-challenge in namecheap 
-
+#  github.com/saasscaleup/nodejs-ssl-server
 
 #/etc/letsencrypt/live/dinagold.org/privkey.pem
 
