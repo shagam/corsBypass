@@ -178,7 +178,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
   .catch ((err) => {
     console.log(req.query.stock, updateDate, err.message)
     res.send('fail,' + err.message)
-    console.log(req.query.stock, updateDate, 'fail, holding gail')
+    console.log(req.query.stock, updateDate, 'fail, holding fail')
   })
 
 }
