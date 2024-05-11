@@ -38,17 +38,16 @@ const router = express.Router();
 var metadata = require("node-ec2-metadata");
 
 var port;
-var EC2 = false;
+
 metadata.isEC2().then(function (onEC2) {
-  console.log("\nRunning on EC2? " + onEC2 + '\n');
-  EC2 = onEC2
 
 
-if (EC2)
+if (onEC2)
   port = 443
 else
   port = 5000
 
+  console.log("\nRunning on EC2? " + onEC2 + ',  port=' + port + '\n');
 
 const externalIp = '62.0.90.49'
 const l2_Ip = '10.100.102.4'
@@ -69,7 +68,7 @@ if (ssl) {
   if (true) {
     if (true) {// letsaencrypt
       console.log('Certificate letsEncrypt')
-      if (EC2)
+      if (onEC2)
         sslServer = https.createServer({
           key: fs.readFileSync('/etc/letsencrypt/live/dinagold.net/privkey.pem'),
           cert: fs.readFileSync('/etc/letsencrypt/live/dinagold.net/fullchain.pem'),
@@ -107,7 +106,7 @@ if (ssl) {
 
 
   sslServer.listen(port, (err) => {
-    console.log('secureServer on port=', port)
+    // console.log('secureServer on port=', port)
     if (err) {
       console.log('err: ', err)
     }
