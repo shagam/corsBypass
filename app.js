@@ -37,9 +37,18 @@ const router = express.Router();
 
 var metadata = require("node-ec2-metadata");
 
+var port;
+var EC2 = false;
 metadata.isEC2().then(function (onEC2) {
-  console.log("Running on EC2? " + onEC2);
+  console.log("\nRunning on EC2? " + onEC2 + '\n');
+  EC2 = true
 });
+
+if (EC2)
+  port = 443
+else
+  port = 5000
+
 
 const externalIp = '62.0.90.49'
 const l2_Ip = '10.100.102.4'
@@ -60,10 +69,17 @@ if (ssl) {
   if (true) {
     if (true) {// letsaencrypt
       console.log('Certificate letsEncrypt')
-      sslServer = https.createServer({
-        key: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
-      }, app)
+      if (EC2)
+        sslServer = https.createServer({
+          key: fs.readFileSync('/etc/letsencrypt/live/dinagold.net/privkey.pem'),
+          cert: fs.readFileSync('/etc/letsencrypt/live/dinagold.net/fullchain.pem'),
+        }, app)
+      else
+        sslServer = https.createServer({
+          key: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/privkey.pem'),
+          cert: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
+        }, app)
+
     }
     else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
       console.log('certificate local authority')
@@ -86,7 +102,7 @@ if (ssl) {
     sslServer = app;
   }
 
-  const port = 5000
+
   // appGet (sslServer, app, port) 
 
 
