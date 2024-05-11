@@ -35,12 +35,18 @@ const {email} = require('./Email')
 const app = express()
 const router = express.Router();
 
+var metadata = require("node-ec2-metadata");
+
+metadata.isEC2().then(function (onEC2) {
+  console.log("Running on EC2? " + onEC2);
+});
+
 const externalIp = '62.0.90.49'
 const l2_Ip = '10.100.102.4'
 const pc_ip = '10.100.102.3'
 
 
-console.log ('AWS_ENV=', process.env.AWS_ENV)
+// console.log ('AWS_ENV=', process.env.AWS_ENV)
 
 // app.use('/', (req,res,next) => { 
 //   res.send('hello from ssl server')
