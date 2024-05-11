@@ -81,7 +81,7 @@ if (ssl) {
   const port = 5000
   // appGet (sslServer, app, port) 
 
-
+  console.log ('AWS_ENV=', process.env.AWS_ENV)
 
 
   sslServer.listen(port, (err) => {
@@ -199,5 +199,4 @@ app.get('/priceNasdaq', (req, res) => {
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
 
 })
-
 
