@@ -40,6 +40,8 @@ const l2_Ip = '10.100.102.4'
 const pc_ip = '10.100.102.3'
 
 
+console.log ('AWS_ENV=', process.env.AWS_ENV)
+
 // app.use('/', (req,res,next) => { 
 //   res.send('hello from ssl server')
 // })
@@ -80,8 +82,6 @@ if (ssl) {
 
   const port = 5000
   // appGet (sslServer, app, port) 
-
-  console.log ('AWS_ENV=', process.env.AWS_ENV)
 
 
   sslServer.listen(port, (err) => {
