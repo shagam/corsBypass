@@ -41,8 +41,8 @@ var port;
 var EC2 = false;
 metadata.isEC2().then(function (onEC2) {
   console.log("\nRunning on EC2? " + onEC2 + '\n');
-  EC2 = true
-});
+  EC2 = onEC2
+
 
 if (EC2)
   port = 443
@@ -222,3 +222,4 @@ app.get('/priceNasdaq', (req, res) => {
 
 })
 
+}); // onEC2
