@@ -66,7 +66,7 @@ function parse_0 (stocks, percent, text) {
 
 function holdings (req, res, daysDelay, ignoreSaved) {
     // console.log ('holdings', req.query.stock)
-
+  const sym = req.query.stock;
    // search saved holdings retrieved lately
    const updateMili = Date.now();
    const updateDate = getDate()
@@ -147,11 +147,10 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     holdingArray.push ({sym: stocks.length, perc: percent.length})
 
     if (Math.abs(holdingArray[0].sym - holdingArray[0].perc) >= 2 
-      || holdingArray[0].sym === 0
-    ) {
-      console.log (sym, 'parse mismatch', 'sym:', stocks.length, 'perc:', percent.length, holdingsObg)
+      || holdingArray[0].sym === 0) {
       const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
-      holdingsObg[err]= 'fail, parse mismatch'
+      console.log (sym, 'parse mismatch', 'sym:', stocks.length, 'perc:', percent.length, holdingsObg)
+      holdingsObg['err']= 'fail, parse mismatch'
       res.send(JSON.stringify(holdingsObg))
       return;
     }
