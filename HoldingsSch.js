@@ -11,11 +11,8 @@ const miliInADay = 24 * 3600 * 1000;
 var holdingsArray = {};    // saved one obj per stock
 fs.readFile('holdingsArraySch.txt', 'utf8', (err, data) => {
   if (err) {
-    fs.readFile('holdingsArraySch.txt_save', 'utf8', (err, data) => {
-    if (err) {
-      console.error (err)
-      return;
-    }})
+    console.error (err)
+    return;
   }
   if (data === undefined)
     holdingsArray == []
