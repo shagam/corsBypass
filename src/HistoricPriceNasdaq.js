@@ -6,6 +6,7 @@ const {getDate} = require ('./Utils')
 
 const print_textFiles = false
 const LOG = true
+const LOG_EXTRA = false 
 // Historical Quote
 // https://bigcharts.marketwatch.com/historical/default.asp?symb=msft&closeDate=6%2F30%2F17&x=26&y=20
 // msft  6/30/17
@@ -63,28 +64,29 @@ const LOG = true
 var priceArray = {};   // saved one obj per stock
 
 // read price from local file once on startup
-// fs.readFile('priceNasdaqArray.txt', 'utf8', (err, data) => {
-//   if (err) {
-//     fs.readFile('priceArrayNasdaq.txt_save', 'utf8', (err, data) => {
-//       if (err) {
-//         console.error (err)
-//         eturn;
-//     }})
-//   }
-//   priceArray = JSON.parse(data);
-//   const keys = Object.keys(priceArray);
-//   console.log('\npriceArray.txt  read, count=', keys.length)
-//   if (print_textFiles) {
-//     for (var i = 0; i < keys.length; i++)
-//       console.log (JSON.stringify (priceArray[keys[i]]))
-//   }
-//   else {
-//       var symbols = "";
-//       for (var i = 0; i < keys.length; i++)
-//         symbols += keys[i] + '  '
-//       console.log(symbols)
-//   }
-// });
+
+fs.readFile('priceNasdaqArray.txt', 'utf8', (err, data) => {
+  if (err) {
+    console.error ('priceNasdaqArray.txt', err)
+    return;
+  }
+
+  priceArray =  JSON.parse(data);
+  const keys = Object.keys(priceArray);
+  console.log('\npriceNasdaqArray.txt  read, count=', keys.length)
+  if (print_textFiles) {
+    for (var i = 0; i < keys.length; i++)
+      console.log (JSON.stringify (priceArray[keys[i]]))
+  }
+  else {
+      var symbols = "";
+      for (var i = 0; i < keys.length; i++)
+        symbols += keys[i] + '  '
+      console.log(symbols)
+  }
+});
+
+
 
 // delete bad data
 // app.get('/priceDel', (req, res) => {
@@ -102,7 +104,7 @@ function priceNasdaq (req, res) {
   const start_date = '&start_date=' + req.query.year + '-' + req.query.mon + '-' + req.query.day
   const end_date = '&end_date=' + (Number(req.query.year)) + '-' + req.query.mon + '-' + req.query.day
   if (LOG)
-  console.log(req.query.stock, start_date, end_date)
+  console.log('\n', req.query.stock, start_date, end_date)
 
 
   const savedPrice = priceArray[req.query.stock];
@@ -125,7 +127,7 @@ function priceNasdaq (req, res) {
 //   url += '%2F' + req.query.year
   // url += '&x=28&y=18'
 
-    if (LOG)
+    if (LOG_EXTRA)
   console.log (url)
   const options = {
     "method": "GET",
@@ -133,31 +135,33 @@ function priceNasdaq (req, res) {
 
   axios.get (url)
   .then ((result) => {
+    if (LOG_EXTRA)
     console.log ('result.code: ', result.code, )
-    if (result.code !== undefined){
-        res.send (JSON.stringify(
-         {
-            stock: req.query.stock,
-            year: req.query.year,
-            mon: req.query.mon,
-            day: req.query.day,
-            close: -1,
-            open: -1,
-            updateMili: nowMili,
-            code: result.code
-         }   
-        ))
-        return;
-    }
-
+    if (LOG) console.log ('log 2')
+    // if (result.code !== undefined){
+    //     res.send (JSON.stringify(
+    //      {
+    //         stock: req.query.stock,
+    //         year: req.query.year,
+    //         mon: req.query.mon,
+    //         day: req.query.day,
+    //         close: -1,
+    //         open: -1,
+    //         updateMili: nowMili,
+    //         code: result.code
+    //      }   
+    //     ))
+    //     return;
+    // }
+    if (LOG) console.log ('\n', req.query.stock, 'raw', result.data.dataset_data)
     const res_date = result.data.dataset_data.data[0][0];
     const res_open = result.data.dataset_data.data[0][8].toFixed(2);
     const res_close = result.data.dataset_data.data[0][11].toFixed(2);
-    if(LOG)
+    if(LOG_EXTRA)
         console.log("\n",result.data.dataset_data.column_names, result.data.dataset_data.data,
         res_date, res_open, res_close)
 
-
+        if (LOG) console.log ('log 3')
     // console.log ("\n", getDate(), "pageSize: ", result.data.length, url)
     // Split Adjusted Price:</span> <span class="padded">26.0255</span>
     // <div class="acenter"><span class="understated">Split Adjusted Price:</span> <span class="padded">26.0255</span> <span class="understated">Adjustment Factor:</span> <span class="padded">20:1</span></div>'
@@ -166,9 +170,9 @@ function priceNasdaq (req, res) {
  
     var regex1 = new RegExp (pattern);
     var regExpResult = regex1.exec(result.data)
-    var saveValidData = false;
+    var saveValidData = true;
     var priceObject = undefined;
-
+    if (LOG) console.log ('log 4')
     // if (regExpResult !== null) {
       saveValidData= true;
       priceObject = {
@@ -182,12 +186,14 @@ function priceNasdaq (req, res) {
         // factor: Number(regExpResult[2]),
         updateMili: nowMili,
       };
-      res.send (JSON.stringify(priceObject))
+      if (LOG) console.log ('log 5')
+      // res.send (JSON.stringify(priceObject))
+      if (LOG)
       console.log ('nasdaqVerify: ', priceObject)
-      return;
+      // return;
     // }
 
-
+    if (LOG) console.log ('log 6')
 
     if (priceObject === undefined) {
       const filler = "[\\s]*";
@@ -210,37 +216,38 @@ function priceNasdaq (req, res) {
         };
       }
     }
+    if (LOG) console.log ('log 7')
 
-    if (priceObject === undefined) {
-      var pattern = '<div>No data for <span class="upper">'+ req.query.stock + '</span></div>'
-      // var pattern = 'No data for'
-      regex1 = new RegExp (pattern);
-      regExpResult = regex1.exec(result.data)      
-      if (regExpResult)
-        priceObject = {
-          stock: req.query.stock,
-          year: req.query.year,
-          mon: req.query.mon,
-          day: req.query.day,
-          close: Number(-1),
-          open: Number(-1),
-          updateMili: nowMili,
-          err: 'No data'
-        };
-    }
+    // if (priceObject === undefined) {
+    //   var pattern = '<div>No data for <span class="upper">'+ req.query.stock + '</span></div>'
+    //   // var pattern = 'No data for'
+    //   regex1 = new RegExp (pattern);
+    //   regExpResult = regex1.exec(result.data)      
+    //   if (regExpResult)
+    //     priceObject = {
+    //       stock: req.query.stock,
+    //       year: req.query.year,
+    //       mon: req.query.mon,
+    //       day: req.query.day,
+    //       close: Number(-1),
+    //       open: Number(-1),
+    //       updateMili: nowMili,
+    //       err: 'No data'
+    //     };
+    // }
+  if (LOG) console.log ('log 8')
+    // if (priceObject === undefined) {
+    //   priceObject = {
+    //     stock: req.query.stock,
+    //     year: req.query.year,
+    //     mon: req.query.mon,
+    //     day: req.query.day,
 
-    if (priceObject === undefined) {
-      priceObject = {
-        stock: req.query.stock,
-        year: req.query.year,
-        mon: req.query.mon,
-        day: req.query.day,
-
-        updateMili: nowMili,
-        err: 'noMatch'
-      }
-    }
-
+    //     updateMili: nowMili,
+    //     err: 'noMatch'
+    //   }
+    // }
+    if (LOG) console.log ('log 8')
     // save local price
     if (saveValidData)
       priceArray [req.query.stock] = priceObject;
@@ -251,11 +258,12 @@ function priceNasdaq (req, res) {
 
     }
     // console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
-    // console.dir (priceArray)
+    if (LOG) console.log ('log 9')
+    console.dir (priceArray)
 
     fs.writeFile ('priceNasdaqArray.txt', JSON.stringify (priceArray), err => {
       if (err) {
-        console.err('priceArray.txt write fail', err)
+        console.err('priceNasdaqArray.txt write fail', err)
       }
     })
 
@@ -276,8 +284,8 @@ function priceNasdaq (req, res) {
         err: err.message
       };
       res.send (JSON.stringify(priceObject))
-      console.log('err', JSON.stringify(priceObject))
-      console.log (url)
+      console.log('catch err', JSON.stringify(priceObject))
+      // console.log (url)
   })
 
 }
