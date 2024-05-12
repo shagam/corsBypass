@@ -16,21 +16,21 @@ const axios = require('axios')
 const cors = require('cors')
 //const detect = require ('detect-browser')
 
-const {vix} = require('./Vix')
-const {targetPrice} = require ('./Targetprice')
+const {vix} = require('./src/Vix')
+const {targetPrice} = require ('./src/Targetprice')
 
-const splitsGet = require('./SplitsGet')
-const { price, priceDel } = require('./HistoricPrice')
-const { priceNasdaq, priceNasdaqDel } = require('./HistoricPriceNasdaq')
-const appGet = require('./app-get')
+const splitsGet = require('./src/SplitsGet')
+const { price, priceDel } = require('./src/HistoricPrice')
+const { priceNasdaq, priceNasdaqDel } = require('./src/HistoricPriceNasdaq')
+const appGet = require('./src/app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
-const {holdingsMain} = require('./Holdings')
-const {holdingsSchMain} = require('./HoldingsSch')
+const {holdingsMain} = require('./src/Holdings')
+const {holdingsSchMain} = require('./src/HoldingsSch')
 
 
-const {gain} = require('./Gain')
-const {email} = require('./Email') 
+const {gain} = require('./src/Gain')
+const {email} = require('./src/Email') 
 
 const app = express()
 const router = express.Router();
