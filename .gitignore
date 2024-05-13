@@ -1,10 +1,4 @@
 node_modules
-priceArray.txt
-priceNasdaqArray.txt
-splitsArray.txt
-holdingsArray.txt
-holdingsArraySch.txt
-gainArray.txt
-vix.txt
+*.txt
 .env
 
