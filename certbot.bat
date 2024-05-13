@@ -37,5 +37,7 @@ ssh -i "aws.pem" ubuntu@ec2-13-50-136-35.eu-north-1.compute.amazonaws.com
 
 curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 
+sudo npm start 2>&1 >> log &
 
+suso pm2 start app.js -name 'corsBypass
 
