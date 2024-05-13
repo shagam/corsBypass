@@ -14,14 +14,14 @@ var removeCount = 0;
 var lastWriteMili;
 
 // read gain from local file once on startup
-fs.readFile('gainArray.txt', 'utf8', (err, data) => {
+fs.readFile('txt/gainArray.txt', 'utf8', (err, data) => {
   if (err) {
     gainArray = {};
   }
   if (data)
     gainArray = JSON.parse(data);
   const keys = Object.keys(gainArray);
-  console.log('\n', getDate(), 'gainArray.txt  read count=', keys.length)
+  console.log('\n', getDate(), 'txt/gainArray.txt  read count=', keys.length)
 
     var symbols = "";
     for (var i = 0; i < keys.length; i++)
@@ -84,12 +84,12 @@ function gain (app)  {
             if(LOG)
                 console.log (Object.keys(gainArray))
             if (Date.now() - lastWriteMili > 2000 || writeCount % 3 === 0) {
-                fs.writeFile ('gainArray.txt', JSON.stringify (gainArray), err => {
+                fs.writeFile ('txt/gainArray.txt', JSON.stringify (gainArray), err => {
                     if (err) {
-                        console.log('gainArray.txt write fail', err)
+                        console.log('txt/gainArray.txt write fail', err)
                     }
                     else
-                        console.log('gainArray.txt write, count=', Object.keys(gainArray).length)
+                        console.log('txt/gainArray.txt write, count=', Object.keys(gainArray).length)
                 })
                 lastWriteMili = Date.now()
             }

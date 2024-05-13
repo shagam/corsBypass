@@ -65,15 +65,15 @@ var priceArray = {};   // saved one obj per stock
 
 // read price from local file once on startup
 
-fs.readFile('priceNasdaqArray.txt', 'utf8', (err, data) => {
+fs.readFile('txt/priceNasdaqArray.txt', 'utf8', (err, data) => {
   if (err) {
-    console.error ('priceNasdaqArray.txt', err)
+    console.error ('txt/priceNasdaqArray.txt', err)
     return;
   }
 
   priceArray =  JSON.parse(data);
   const keys = Object.keys(priceArray);
-  console.log('\npriceNasdaqArray.txt  read, count=', keys.length)
+  console.log('\n',getDate(), 'txt/priceNasdaqArray.txt  read, count=', keys.length)
   if (print_textFiles) {
     for (var i = 0; i < keys.length; i++)
       console.log (JSON.stringify (priceArray[keys[i]]))
@@ -261,9 +261,9 @@ function priceNasdaq (req, res) {
     if (LOG) console.log ('log 9')
     console.dir (priceArray)
 
-    fs.writeFile ('priceNasdaqArray.txt', JSON.stringify (priceArray), err => {
+    fs.writeFile ('txt/priceNasdaqArray.txt', JSON.stringify (priceArray), err => {
       if (err) {
-        console.err('priceNasdaqArray.txt write fail', err)
+        console.err('txt/priceNasdaqArray.txt write fail', err)
       }
     })
 

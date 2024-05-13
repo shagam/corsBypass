@@ -9,14 +9,14 @@ const print_textFiles = false
 const miliInADay = 24 * 3600 * 1000;
 // read splitsArray from local file once on startup
 var splitsArray = {};    // saved one obj per stock
-fs.readFile('splitsArray.txt', 'utf8', (err, data) => {
+fs.readFile('txt/splitsArray.txt', 'utf8', (err, data) => {
   if (err) {
     console.error (err)
     return;
   }
   splitsArray = JSON.parse(data);
   const keys = Object.keys(splitsArray);
-  console.log('\nsplitArray.txt  read count=', keys.length)
+  console.log('\n', getDate(), 'txt/splitArray.txt  read count=', keys.length)
   if (print_textFiles)
     for (var i = 0; i < keys.length; i++)
       console.log ('\n', keys[i], JSON.stringify (splitsArray[keys[i]]))
@@ -130,9 +130,9 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
       splitsArray [req.query.stock] = splits;
       // console.dir (splitsArray)
   
-      fs.writeFile ('splitsArray.txt', JSON.stringify(splitsArray), err => {
+      fs.writeFile ('txt/splitsArray.txt', JSON.stringify(splitsArray), err => {
         if (err) {
-          console.err('splitsArray.txt write fail', err)
+          console.err('txt/splitsArray.txt write fail', err)
         }
       })
   

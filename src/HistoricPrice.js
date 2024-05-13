@@ -20,14 +20,14 @@ const print_textFiles = false
 var priceArray = {};   // saved one obj per stock
 
 // read price from local file once on startup
-fs.readFile('priceArray.txt', 'utf8', (err, data) => {
+fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
   if (err) {
     console.error (err)
     eturn;
   }
   priceArray = JSON.parse(data);
   const keys = Object.keys(priceArray);
-  console.log('\npriceArray.txt  read, count=', keys.length)
+  console.log('\n', getDate(), 'txt/priceArray.txt  read, count=', keys.length)
   if (print_textFiles) {
     for (var i = 0; i < keys.length; i++)
       console.log (JSON.stringify (priceArray[keys[i]]))
@@ -166,9 +166,9 @@ function price (req, res) {
     console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
     // console.dir (priceArray)
 
-    fs.writeFile ('priceArray.txt', JSON.stringify (priceArray), err => {
+    fs.writeFile ('txt/priceArray.txt', JSON.stringify (priceArray), err => {
       if (err) {
-        console.err('priceArray.txt write fail', err)
+        console.err('txt/priceArray.txt write fail', err)
       }
     })
 

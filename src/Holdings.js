@@ -9,7 +9,7 @@ const print_textFiles = false
 const miliInADay = 24 * 3600 * 1000;
 // read holdingArray from local file once on startup
 var holdingsArray = {};    // saved one obj per stock
-fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
+fs.readFile('txt/holdingsArray.txt', 'utf8', (err, data) => {
   if (err) {
     console.error (err)
     return;
@@ -20,7 +20,7 @@ fs.readFile('holdingsArray.txt', 'utf8', (err, data) => {
     holdingsArray = JSON.parse(data);
 
   const keys = Object.keys(holdingsArray);
-  console.log('\n', getDate(), 'holdingsArray.txt  read count=', keys.length)
+  console.log('\n', getDate(), 'txt/holdingsArray.txt  read count=', keys.length)
   if (print_textFiles)
     for (var i = 0; i < keys.length; i++)
       console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
@@ -166,9 +166,9 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    fs.writeFile ('holdingsArray.txt', JSON.stringify(holdingsArray), err => {
+    fs.writeFile ('txt/holdingsArray.txt', JSON.stringify(holdingsArray), err => {
       if (err) {
-        console.err(req.query.stock, updateDate, 'holdingsArray.txt write fail', err)
+        console.err(req.query.stock, updateDate, 'txt/holdingsArray.txt write fail', err)
       }
     })
 

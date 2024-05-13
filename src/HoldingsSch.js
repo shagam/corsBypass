@@ -9,7 +9,7 @@ const print_textFiles = false
 const miliInADay = 24 * 3600 * 1000;
 // read holdingArray from local file once on startup
 var holdingsArray = {};    // saved one obj per stock
-fs.readFile('holdingsArraySch.txt', 'utf8', (err, data) => {
+fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
   if (err) {
     console.error (err)
     return;
@@ -20,7 +20,7 @@ fs.readFile('holdingsArraySch.txt', 'utf8', (err, data) => {
     holdingsArray = JSON.parse(data);
 
   const keys = Object.keys(holdingsArray);
-  console.log('\n', getDate(), 'holdingsArraySch.txt  read count=', keys.length)
+  console.log('\n', getDate(), 'txt/holdingsArraySch.txt  read count=', keys.length)
   if (print_textFiles)
     for (var i = 0; i < keys.length; i++)
       console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
@@ -151,9 +151,9 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    fs.writeFile ('holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
+    fs.writeFile ('txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
       if (err) {
-        console.err('holdingsArraySch.txt write fail', err)
+        console.err('txt/holdingsArraySch.txt write fail', err)
       }
     })
 
@@ -162,15 +162,6 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
   .catch ((err) => {
     console.log(req.query.stock, updateDate, err.message)
     res.send(err.message)
-    const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: err.message}
-    holdingsArray [req.query.stock] = holdingsObg;
-
-    fs.writeFile ('holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
-      if (err) {
-        console.err('holdingsArraySch.txt write fail', err)
-      }
-    })
-
   })
 
 }

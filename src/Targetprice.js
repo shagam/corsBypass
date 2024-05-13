@@ -11,14 +11,14 @@ const date = getDate();
 var lastWriteMili;
 
 // read gain from local file once on startup
-fs.readFile('target.txt', 'utf8', (err, data) => {
+fs.readFile('txt/target.txt', 'utf8', (err, data) => {
   if (err) {
     target = {};
   }
   if (data)
     target = JSON.parse(data);
   const keys = Object.keys(target);
-  console.log('\n', getDate(), 'target.txt  read count=', keys.length)
+  console.log('\n', getDate(), 'txt/target.txt  read count=', keys.length)
 
     var symbols = "";
     for (var i = 0; i < keys.length; i++)
@@ -75,12 +75,12 @@ function targetPrice (app)  {
             if(LOG)
                 console.log (Object.keys(target))
             if (Date.now() - lastWriteMili > 2000 || writeCount % 3 === 0) {
-                fs.writeFile ('target.txt', JSON.stringify (target), err => {
+                fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
                     if (err) {
-                        console.log('target.txt write fail', err)
+                        console.log('txt/target.txt write fail', err)
                     }
                     else
-                        console.log('target.txt write, count=', Object.keys(target).length)
+                        console.log('txt/target.txt write, count=', Object.keys(target).length)
                 })
                 lastWriteMili = Date.now()
             }
