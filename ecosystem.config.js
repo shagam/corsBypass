@@ -4,7 +4,7 @@ module.exports = {
         name: "corsBypass",
         script: "./app.js",
         instances: 1,
-        max_memory_restart: "200M",
+        max_memory_restart: "100M",
         // Logging
         merge_logs: false,
         log_date_format: "YY-MM-DD HH:mm:ss Z",
