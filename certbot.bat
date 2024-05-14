@@ -50,6 +50,7 @@ pm2 show 0
 npm i pm2@5.1.2
 
 sudo netstat -nlp | grep 443
+pm2 start ecosystem.config.js --env production
 
 # https://mr-alien.medium.com/how-to-configure-pm2-the-right-way-11004871b5dc
 
