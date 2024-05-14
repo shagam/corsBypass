@@ -9,13 +9,13 @@ module.exports = {
         out_file: "./out.log",
         error_file: "./error.log",
         merge_logs: true,
-        log_date_format: "DD-MM HH:mm:ss Z",
+        log_date_format: "YY-MM-DD HH:mm:ss Z",
         log_type: "json",
         // Env Specific Config
         env_production: {
           NODE_ENV: "production",
           PORT: 443,
-          exec_mode: "cluster_mode",
+          exec_mode: "fork",
         },
         env_development: {
           NODE_ENV: "development",
