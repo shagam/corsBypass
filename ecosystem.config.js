@@ -3,7 +3,7 @@ module.exports = {
       {
         name: "corsBypass",
         script: "./app.js",
-        instances: 2,
+        instances: 1,
         max_memory_restart: "120M",
         // Logging
         out_file: "./out.log",
