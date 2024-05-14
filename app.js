@@ -42,9 +42,9 @@ var port;
 metadata.isEC2().then(function (onEC2) {
 
 
-// if (onEC2)
-//   port = 443
-// else
+if (onEC2)
+  port = 443
+else
   port = 5000
 
   console.log("\nRunning on EC2? " + onEC2 + ',  port=' + port + '\n');

@@ -53,6 +53,7 @@ pm2 delete 0
 sudo netstat -nlp | grep 443
 sudo netstat -nlp | grep 5000
 
+sudo npm start 2>&1 >> ~/log &
 pm2 start app.js --name 'corsBypass' 
 NODE_OPTIONS=--max-old-space-size=100; pm2 start app.js --name 'corsBypass'
 pm2 start ecosystem.config.js --env production
