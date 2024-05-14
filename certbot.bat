@@ -39,10 +39,14 @@ curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 
 sudo npm start 2>&1 >> log &
 
-NODE_OPTIONS=--max-old-space-size=4096; sudo pm2 start app.js --name 'corsBypass' 2>&1 >> log
-sudo pm2 start app.js --name 'corsBypass' 2>&1 >> log
+NODE_OPTIONS=--max-old-space-size=4096; sudo pm2 start app.js --name 'corsBypass'
+sudo pm2 start app.js --name 'corsBypass'
+--max-old-space-size=4096
+ 2>&1 >> log
+
 pm2 ls
 pm2 show 0
+npm i pm2@5.1.2
 
 sudo netstat -nlp | grep 443
 
