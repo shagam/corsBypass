@@ -40,7 +40,7 @@ curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo npm start 2>&1 >> log &
 
 NODE_OPTIONS=--max-old-space-size=4096; pm2 start app.js --name 'corsBypass'
-pm2 start app.js --name 'corsBypass'
+pm2 start app.js --name 'corsBypass' --ignore-watch
 
 --max-old-space-size=4096
  2>&1 >> log
@@ -51,4 +51,5 @@ npm i pm2@5.1.2
 
 sudo netstat -nlp | grep 443
 
+# https://mr-alien.medium.com/how-to-configure-pm2-the-right-way-11004871b5dc
 
