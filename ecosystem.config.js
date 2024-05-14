@@ -4,17 +4,14 @@ module.exports = {
         name: "corsBypass",
         script: "./app.js",
         instances: 1,
-        max_memory_restart: "120M",
+        max_memory_restart: "200M",
         // Logging
-        out_file: "./out.log",
-        error_file: "./error.log",
-        merge_logs: true,
+        merge_logs: false,
         log_date_format: "YY-MM-DD HH:mm:ss Z",
         log_type: "json",
         // Env Specific Config
         env_production: {
           NODE_ENV: "production",
-          PORT: 443,
           exec_mode: "fork",
         },
         env_development: {
