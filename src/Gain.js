@@ -68,10 +68,11 @@ function gain (app)  {
                 console.log ('w write ', req.query.dat)
             var dat = JSON.parse(req.query.dat)
 
-            if (Number(dat.year) < Number(gainArray['QQQ'].year / factor) ||
+            if ((stock != 'QQQ') &&
+            ((Number(dat.year) < Number(gainArray['QQQ'].year / factor)) ||
             (Number(dat.year2) < Number(gainArray['QQQ'].year2 / factor)) ||
             (Number(dat.year5) < Number(gainArray['QQQ'].year5 / factor)) ||
-            (Number(dat.year10) < Number(gainArray['QQQ'].year10 / factor))) 
+            (Number(dat.year10) < Number(gainArray['QQQ'].year10 / factor))))
            {
             console.log(stock, 'fail, abort write, gain too low')
             res.send ('fail, abort write, gain too low')
