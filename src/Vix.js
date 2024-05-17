@@ -42,6 +42,8 @@ function vix (app) {
        // pattern = '"BNeawe iBp4i AP7Wnd">13.49 <span dir="ltr" class="rQMQod lB8g7">-1.19 (8.11%)</span>'
           pattern = '"BNeawe iBp4i AP7Wnd">([0-9\\.]+) <span dir="ltr" class="rQMQod lB8g7">([\\-]?[0-9\\.]+) ([\\(]?[0-9\\.]+%[\\)]?)</span>'
 
+
+          
           var rx = new RegExp (pattern,'g');
           while ((rs = rx.exec(text)) !== null){
             const val = {'val': rs[1], 'diff': rs[2], 'perc': rs[3]}
@@ -54,6 +56,15 @@ function vix (app) {
           const failTxt = 'fail, vix data not found' ;
           res.send (failTxt)
           console.log (failTxt)
+
+          // parse fail writ file                                                                                                                                                                                          
+          console.log ('\nvix.txt')
+          fs.writeFile ('vix.txt', text, err => {
+            if (err) {
+              console.err('vix.txt write fail', err)
+            }
+          })
+
           return;
         })
         .catch ((err) => {
