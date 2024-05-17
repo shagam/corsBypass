@@ -19,21 +19,18 @@ sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net
 # @REM #_acme-challenge.dinagold.org
 
 # @REM HTDNSNgIUZ9xRgvR_yu2t0L_IXcJR29VnkubPYq7rNo
- 
+
+/etc/letsencrypt/live/dinagold.net/privkey.pem -> ../../archive/dinagold.net/privkey1.pem
+/etc/letsencrypt/archive/dinagold.net/privkey1.pem
+sudo chmod +r /etc/letsencrypt/archive/dinagold.net/privkey1.pem
+
+/etc/letsencrypt/archive/dinagold.net/fullchain1.pem
+
 /etc/letsencrypt/live/dinagold.org/cert.pem
 /etc/letsencrypt/live/dinagold.org/privkey.pem
 /etc/letsencrypt/live/dinagold.org/fullchain.pem
 /etc/letsencrypt/live/dinagold.org/chain.pem
-/etc/letsencrypt/live/dinagold.net/cert.pem
-/etc/letsencrypt/live/dinagold.net/privkey.pem
-/etc/letsencrypt/live/dinagold.net/fullchain.pem
-/etc/letsencrypt/live/dinagold.net/chain.pem
-/etc/letsencrypt/live/portfolio-chk.com/cert.pem
-/etc/letsencrypt/live/portfolio-chk.com/privkey.pem
-/etc/letsencrypt/live/portfolio-chk.com/fullchain.pem
-/etc/letsencrypt/live/portfolio-chk.com/chain.pem
 
-/etc/letsencrypt/archive/dinagold.org/privkey5.pem
 
 ssh -i "aws.pem" ubuntu@ec2-13-50-136-35.eu-north-1.compute.amazonaws.com
 
@@ -53,8 +50,9 @@ pm2 delete 0
 sudo netstat -nlp | grep 443
 sudo netstat -nlp | grep 5000
 
-sudo npm start 2>&1 >> ~/log &
-pm2 start app.js --name 'corsBypass' 
+npm start 2>&1 >> ~/.pm2/log &
+
+pm2 start app.js --name 'corsBypass'  
 NODE_OPTIONS=--max-old-space-size=100; pm2 start app.js --name 'corsBypass'
 pm2 start ecosystem.config.js --env production
 
