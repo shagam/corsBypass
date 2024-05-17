@@ -42,6 +42,9 @@ npm i pm2@5.1.2
 --max-old-space-size=4096
  2>&1 >> log
 
+NODE_OPTIONS=--max-old-space-size=100; pm2 start app.js --name 'corsBypass'
+pm2 start ecosystem.config.js --env production
+
 pm2 ls
 pm2 show 0
 pm2 stop 0
@@ -51,10 +54,9 @@ sudo netstat -nlp | grep 443
 sudo netstat -nlp | grep 5000
 
 npm start 2>&1 >> ~/.pm2/log &
-
+npm start
 pm2 start app.js --name 'corsBypass'  
-NODE_OPTIONS=--max-old-space-size=100; pm2 start app.js --name 'corsBypass'
-pm2 start ecosystem.config.js --env production
 
 dir ~/.pm2/logs/*
+tail  /home/eli/.pm2/logs/corsBypass-out.log
 
