@@ -16,7 +16,6 @@ const axios = require('axios')
 const cors = require('cors')
 //const detect = require ('detect-browser')
 
-const {vix} = require('./src/Vix')
 const {targetPrice} = require ('./src/Targetprice')
 
 const splitsGet = require('./src/SplitsGet')
@@ -164,8 +163,6 @@ holdingsSchMain (app)
 gain (app)
 
 email (app)
-
-vix (app)
 
 targetPrice (app)
 
