@@ -1,7 +1,6 @@
 const nodeMailer = require('nodemailer')
 const {getDate} = require ('./Utils')
-
-
+const fs = require ('fs')
 
 async function main (name, email, html) {
     const transporter = nodeMailer.createTransport({
@@ -35,12 +34,24 @@ function email (app)  {
         console.log (getDate(), 'email to be sent, name=', req.query.name, 'email=',
          req.query.email, 'message=', req.query.message)
  
+        const msg = {date: getDate(), name: req.query.name, email: req.query.email, txt: req.query.message}
+
+        
+
          const html = `
          <h1> ${req.query.message} </h1>
          `
 
-         main(req.query.name, req.query.email, html)
-         .catch(e => console.log('send fail', e))
+         fs.appendFile ('txt/contact.txt', '\n\n' + JSON.stringify (msg), err => {
+            if (err) {
+                console.log('txt/contact.txt write fail', err)
+            }
+            else
+                console.log('txt/contact.txt write, ')
+        })
+
+        //  main(req.query.name, req.query.email, html)
+        //  .catch(e => console.log('send fail', e))
          
         res.send ('ok')
     })
