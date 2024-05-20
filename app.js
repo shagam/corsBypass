@@ -42,7 +42,7 @@ metadata.isEC2().then(function (onEC2) {
 
 
 if (onEC2)
-  port = 443
+  port = 5000
 else
   port = 5000
 
