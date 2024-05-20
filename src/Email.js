@@ -39,7 +39,7 @@ function email (app)  {
              city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
             txt: req.query.message}
 
-        console.log (msg)
+        // console.log (msg)
 
          const html = `
          <h1> ${req.query.message} </h1>
