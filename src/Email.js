@@ -34,9 +34,12 @@ function email (app)  {
         console.log (getDate(), 'email to be sent, name=', req.query.name, 'email=',
          req.query.email, 'message=', req.query.message)
  
-        const msg = {date: getDate(), name: req.query.name, email: req.query.email, txt: req.query.message}
+        console.log('query:', req.query)
+        const msg = {date: getDate(), name: req.query.name, email: req.query.email, ip: req.query.ip,
+             city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
+            txt: req.query.message}
 
-        
+        console.log (msg)
 
          const html = `
          <h1> ${req.query.message} </h1>
