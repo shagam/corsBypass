@@ -28,15 +28,47 @@ async function main (name, email, html) {
 function email (app)  {
     // nowMili = Date.now();
 
-    
+    // filter file
+    app.get('/contactGet', (req, res) => {
+        console.log('query:', req.query)
+        
+        const all = req.query.all;
+        if (all) {
+            var msgArr = [];
+            var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
+            for(i in array) {
+                if (array[i]) {
+                    console.log(array[i]);
+                    const oneMsg = JSON.parse (oneMsg[i])
+                    msgArr.push(oneMsg)
+                }
+            }
+            res.send (msgArr)
+            return;
+        }
+
+
+        
+        // filter date
+        const date = req.query.date;
+        if (date) {
+            console.log (date, getDate())
+
+        }      
+    })
+
+
+
+
+
     app.get('/email', (req, res) => {
 
         console.log (getDate(), 'email to be sent, name=', req.query.name, 'email=',
          req.query.email, 'message=', req.query.message)
  
         console.log('query:', req.query)
-        const msg = {date: getDate(), name: req.query.name, email: req.query.email, ip: req.query.ip,
-             city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
+        const msg = {date: getDate(), name: req.query.name, email: req.query.email, 
+            // ip: req.query.ip, city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
             txt: req.query.message}
 
         // console.log (msg)
