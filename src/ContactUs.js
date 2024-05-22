@@ -3,11 +3,15 @@ const {getDate} = require ('./Utils')
 const fs = require ('fs')
 
 
-function email (app)  {
+
+function contact (app)  {
+    const LOG = true;
+
     // nowMili = Date.now();
 
     // filter file
     app.get('/contactGet', (req, res) => {
+        if (LOG)
         console.log('query:', req.query)
         
         var all = req.query.all;
@@ -17,6 +21,7 @@ function email (app)  {
 
         var msgArr = [];
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
+        if (LOG)
         console.log ('length', array.length)
         for(i in array) {
             if (! array[i])
@@ -25,8 +30,10 @@ function email (app)  {
                 continue;
             if (last && (array.length - i) / 2 < last)
                 continue;
-
+            
+            if (LOG)
             console.log(i, array[i]);
+            
             const oneMsg = JSON.parse (array[i])
             msgArr.push(oneMsg)
         }
@@ -49,10 +56,14 @@ function email (app)  {
 
 
     app.get('/contactUs', (req, res) => {
-
-        console.log (getDate(), 'email to be sent, name=', req.query.name, 'email=',
+        const LOG = true;
+        const txtArray = JSON.parse(req.query.message)
+        if (LOG)
+        console.log (getDate(), 'contactRequest name=', req.query.name, 'email=',
          req.query.email, 'message=', req.query.message)
- 
+        if (LOG)
+        console.log ('txtArray', txtArray)
+        if (LOG)
         console.log('query:', req.query)
         const msg = {date: getDate(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip, city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
@@ -81,4 +92,4 @@ function email (app)  {
 
 
 
-module.exports = {email}
+module.exports = {contact}
