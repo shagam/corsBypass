@@ -29,7 +29,7 @@ const {holdingsSchMain} = require('./src/HoldingsSch')
 
 
 const {gain} = require('./src/Gain')
-const {email} = require('./src/Email') 
+const {email} = require('./src/ContactUs') 
 
 const app = express()
 const router = express.Router();
