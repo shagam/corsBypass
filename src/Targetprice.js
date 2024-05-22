@@ -5,7 +5,7 @@ const {getDate} = require ('./Utils')
 
 var target = {};   // key is symbol saved one obj per stock
 
-const LOG = false;
+const LOG = true;
 const date = getDate();
 
 var lastWriteMili;
@@ -38,8 +38,8 @@ function targetPrice (app)  {
         const datNew = req.query.dat
 
         console.log ('\ntargetPrice ', stock, cmd, datNew)
-        res.send ('ok_')
-        return
+        // res.send ('ok_')
+        // return
 
 
         if (cmd === 'r') { // read one stock
@@ -71,6 +71,9 @@ function targetPrice (app)  {
                 target[stock]=[] // if missing - add empty array
 
             target[stock].push (dat); // add object
+
+            // if (LOG)
+                target[stock].forEach((d)=> {console.log(d)}) //print array
 
             if(LOG)
                 console.log (Object.keys(target))

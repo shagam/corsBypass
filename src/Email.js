@@ -32,29 +32,38 @@ function email (app)  {
     app.get('/contactGet', (req, res) => {
         console.log('query:', req.query)
         
-        const all = req.query.all;
-        if (all) {
-            var msgArr = [];
-            var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
-            for(i in array) {
-                if (array[i]) {
-                    console.log(array[i]);
-                    const oneMsg = JSON.parse (oneMsg[i])
-                    msgArr.push(oneMsg)
-                }
-            }
-            res.send (msgArr)
-            return;
+        var all = req.query.all;
+        const last = req.query.last;
+        const on = req.query.on;
+        const name = req.query.name;
+
+        var msgArr = [];
+        var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
+        console.log ('length', array.length)
+        for(i in array) {
+            if (! array[i])
+                continue;
+            if (name && ! array[i].contains (name))
+                continue;
+            if (last && (array.length - i) / 2 < last)
+                continue;
+
+            console.log(i, array[i]);
+            const oneMsg = JSON.parse (array[i])
+            msgArr.push(oneMsg)
         }
+        res.send (msgArr)
+        return;
+    
 
 
         
         // filter date
-        const date = req.query.date;
-        if (date) {
-            console.log (date, getDate())
+        // const date = req.query.date;
+        // if (date) {
+        //     console.log (date, getDate())
 
-        }      
+    
     })
 
 
