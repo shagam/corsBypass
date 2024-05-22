@@ -1,28 +1,6 @@
-const nodeMailer = require('nodemailer')
+
 const {getDate} = require ('./Utils')
 const fs = require ('fs')
-
-async function main (name, email, html) {
-    const transporter = nodeMailer.createTransport({
-        // host: 'mail.openjavascript.info',
-        host: 'mail.dinagold.org',
-        port: 465, // SMTP
-        secure: true,
-        auth: {
-            // user: 'eli@mail.dinagold.org',
-            user: 'eli',
-            pass: 'm'
-        }
-    })
-    const info = await transporter.sendMail({
-        from: 'OpenJavaScript <j32111@gmail.com>',
-        to: 'eli.shagam@gmail.com',
-        subject: 'Contact Us',
-        html: html
-    })
-    console.log ("Message sent: " + info.messageId)
-}
-
 
 
 function email (app)  {
@@ -70,7 +48,7 @@ function email (app)  {
 
 
 
-    app.get('/email', (req, res) => {
+    app.get('/contactUs', (req, res) => {
 
         console.log (getDate(), 'email to be sent, name=', req.query.name, 'email=',
          req.query.email, 'message=', req.query.message)
