@@ -31,15 +31,15 @@ function contact (app)  {
             //     continue;
 
             
-            if (LOG)
-            console.log(i, array[i]);
-            // const parsedTxt = JSON.parse (array[i].txt) 
+            // if (LOG)
+            // console.log(i, array[i]);
+            const parsed = JSON.parse (array[i]) 
 
             //  array[i].txt = parsedTxt;
-            msgArr.push(array[i])
+            msgArr.push(parsed)
         }
-        console.log (msgArr)
-        res.send (msgArr)
+        console.log ('arr',getDate(), msgArr)
+        res.send (JSON.stringify(msgArr))
         return; 
     })
 
