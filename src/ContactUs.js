@@ -1,5 +1,5 @@
 
-const { log } = require('util');
+// const { log } = require('util');
 const {getDate} = require ('./Utils')
 const fs = require ('fs')
 
@@ -16,7 +16,7 @@ function contact (app)  {
         console.log('query:', req.query)
         
         var all = req.query.all;
-        const last = req.query.last;
+        const last = Number(req.query.last);
         const on = req.query.on;
         const name = req.query.name;
 
@@ -24,32 +24,23 @@ function contact (app)  {
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
         if (LOG)
         console.log ('length', array.length)
-        for(i in array) {
+        for(let i = array.length - 2*last; i < array.length; i++) {
             if (! array[i])
                 continue;
-            if (name && ! array[i].contains (name))
-                continue;
-            if (last && (array.length - i) / 2 < last)
-                continue;
+            // if (name && ! array[i].contains (name))
+            //     continue;
+
             
             if (LOG)
             console.log(i, array[i]);
-            
-            const oneMsg = JSON.parse (array[i])
-            msgArr.push(oneMsg)
+            // const parsedTxt = JSON.parse (array[i].txt) 
+
+            //  array[i].txt = parsedTxt;
+            msgArr.push(array[i])
         }
+        console.log (msgArr)
         res.send (msgArr)
-        return;
-    
-
-
-        
-        // filter date
-        // const date = req.query.date;
-        // if (date) {
-        //     console.log (date, getDate())
-
-    
+        return; 
     })
 
 
@@ -58,7 +49,7 @@ function contact (app)  {
 
     app.get('/contactUs', (req, res) => {
         const LOG = true;
-        const txtArray = JSON.parse(req.query.text)
+        const txtArray = req.query.text
         if (LOG)
         console.log (getDate(), 'contactRequest name=', req.query.name, 'email=',
          req.query.email, 'text=', req.query.text)
@@ -71,9 +62,9 @@ function contact (app)  {
             txt: req.query.text}
 
         if (LOG)
-            console.log (msg)
+            console.log ('contactObj:', msg)
 
-         fs.appendFile ('txt/contact.txt', '\n\n' + JSON.stringify (msg), err => {
+         fs.appendFile ('txt/contact.txt', '\n\n' + JSON.stringify (req.query), err => {
             if (err) {
                 console.log('txt/contact.txt write fail', err)
             }
