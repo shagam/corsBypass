@@ -1,4 +1,5 @@
 
+const { log } = require('util');
 const {getDate} = require ('./Utils')
 const fs = require ('fs')
 
@@ -69,11 +70,8 @@ function contact (app)  {
             // ip: req.query.ip, city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
             txt: req.query.text}
 
-        // console.log (msg)
-
-         const html = `
-         <h1> ${req.query.text} </h1>
-         `
+        if (LOG)
+            console.log (msg)
 
          fs.appendFile ('txt/contact.txt', '\n\n' + JSON.stringify (msg), err => {
             if (err) {
