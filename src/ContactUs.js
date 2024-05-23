@@ -22,9 +22,12 @@ function contact (app)  {
 
         var msgArr = [];
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
+    
+        const loopStart = array.length - 2*last >= 0 ? array.length - 2*last : 0
         if (LOG)
         console.log ('length', array.length)
-        for(let i = array.length - 2*last; i < array.length; i++) {
+
+        for(let i = loopStart; i < array.length; i++) {
             if (! array[i])
                 continue;
             // if (name && ! array[i].contains (name))
