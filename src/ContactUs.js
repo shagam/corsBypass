@@ -57,22 +57,22 @@ function contact (app)  {
 
     app.get('/contactUs', (req, res) => {
         const LOG = true;
-        const txtArray = JSON.parse(req.query.message)
+        const txtArray = JSON.parse(req.query.text)
         if (LOG)
         console.log (getDate(), 'contactRequest name=', req.query.name, 'email=',
-         req.query.email, 'message=', req.query.message)
+         req.query.email, 'text=', req.query.text)
         if (LOG)
         console.log ('txtArray', txtArray)
         if (LOG)
         console.log('query:', req.query)
         const msg = {date: getDate(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip, city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
-            txt: req.query.message}
+            txt: req.query.text}
 
         // console.log (msg)
 
          const html = `
-         <h1> ${req.query.message} </h1>
+         <h1> ${req.query.text} </h1>
          `
 
          fs.appendFile ('txt/contact.txt', '\n\n' + JSON.stringify (msg), err => {
