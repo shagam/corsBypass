@@ -6,14 +6,14 @@ const fs = require ('fs')
 
 
 function contact (app)  {
-    const LOG = true;
+    const LOG = false;
 
     // nowMili = Date.now();
 
     // filter file
     app.get('/contactGet', (req, res) => {
-        if (LOG)
-        console.log('query:', req.query)
+        // if (LOG)
+        console.log(getDate(), 'query:', req.query)
         
         const name = req.query.name;
         const count = Number(req.query.count);
@@ -25,28 +25,28 @@ function contact (app)  {
     
         const loopStart = array.length - 2*count >= 0 ? array.length - 2*count : 0
         if (LOG)
-        console.log ('length', array.length)
+            console.log ('length', array.length)
 
         for(let i = loopStart; i < array.length; i++) {
-            if (LOG)
-                console.log(i, array.length, array[i]);
-
             if (! array[i])
                 continue;
-            if (name && array[i] && ! array[i].includes (name))
-                continue; // skip when name missing
-
-            if (mili < array[i].mili) 
-                continue // skip older recors
-
 
             const parsed = JSON.parse (array[i]) 
             // console.log (parsed)
 
+            if (name && array[i] && ! parsed.name.includes (name) && ! parsed.email.includes (name))
+                continue; // skip when name missing
+
+            // console.log ('query:', mili, 'item:', parsed.mili)
+            if (mili > parsed.mili) 
+                continue // skip older recors
+
             //  array[i].txt = parsedTxt;
             msgArr.push(parsed)
         }
-        console.log ('arr',getDate(), msgArr)
+        if (LOG)
+            console.log (getDate(), 'Arrey to be sent', msgArr)
+        console.log (getDate(), 'sent count:', msgArr.length)
         res.send (JSON.stringify(msgArr))
         return; 
     })
