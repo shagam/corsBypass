@@ -17,9 +17,8 @@ function contact (app)  {
         
         const name = req.query.name;
         const count = Number(req.query.count);
-        const year = Number(req.query.year);
-        const mon = Number(req.query.mon);
-        const day = Number(req.query.day);
+        const mili = Number(req.query.mili);
+
 
         var msgArr = [];
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
@@ -35,9 +34,10 @@ function contact (app)  {
             if (! array[i])
                 continue;
             if (name && array[i] && ! array[i].includes (name))
-                continue;
+                continue; // skip when name missing
 
-            
+            if (mili < array[i].mili) 
+                continue // skip older recors
 
 
             const parsed = JSON.parse (array[i]) 
@@ -65,7 +65,7 @@ function contact (app)  {
         console.log ('txtArray', txtArray)
         if (LOG)
         console.log('query:', req.query)
-        const msg = {date: getDate(), name: req.query.name, email: req.query.email, 
+        const msg = {date: getDate(), mili: Date.now(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip, city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
             text: req.query.text}
 
