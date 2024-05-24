@@ -32,8 +32,17 @@ fs.readFile('txt/splitsArray.txt', 'utf8', (err, data) => {
 
 
 
+// 7 day delay
 // main body allow multipple
-function splitsGet (req, res, daysDelay, ignoreSaved) {
+function splitsGet (app) {
+
+  app.get('/splits', (req, res) => {
+    var nowMili = Date.now();
+    splitsGet(req, res, 7, false)
+    console.log ('splits delay=', Date.now() - nowMili)
+
+    const daysDelay = 7;
+    const ignoreSaved = false
 
     // search saved splits retrieved lately
     nowMili = Date.now();
@@ -146,6 +155,6 @@ function splitsGet (req, res, daysDelay, ignoreSaved) {
       res.send('')
     })
   
-  }
-  
+  })
+}
   module.exports = splitsGet

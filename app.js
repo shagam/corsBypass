@@ -166,12 +166,9 @@ contact (app)
 
 targetPrice (app)
 
-// 7 day delay
-app.get('/splits', (req, res) => {
-  var nowMili = Date.now();
-  splitsGet(req, res, 7, false)
-  console.log ('splits delay=', Date.now() - nowMili)
-})
+splitsGet(app)
+
+
 
 // 1 day delay
 // app.get('/splitsDay', (req, res) => {
