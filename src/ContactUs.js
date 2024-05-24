@@ -41,7 +41,7 @@ function contact (app)  {
 
 
             const parsed = JSON.parse (array[i]) 
-            console.log (parsed)
+            // console.log (parsed)
 
             //  array[i].txt = parsedTxt;
             msgArr.push(parsed)
@@ -67,12 +67,12 @@ function contact (app)  {
         console.log('query:', req.query)
         const msg = {date: getDate(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip, city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
-            txt: req.query.text}
+            text: req.query.text}
 
         if (LOG)
             console.log ('contactObj:', msg)
 
-         fs.appendFile ('txt/contact.txt', '\n\n' + JSON.stringify (req.query), err => {
+         fs.appendFile ('txt/contact.txt', '\n\n' + JSON.stringify (msg), err => {
             if (err) {
                 console.log('txt/contact.txt write fail', err)
             }
