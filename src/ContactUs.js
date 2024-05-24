@@ -15,28 +15,33 @@ function contact (app)  {
         if (LOG)
         console.log('query:', req.query)
         
-        var all = req.query.all;
-        const last = Number(req.query.last);
-        const on = req.query.on;
         const name = req.query.name;
+        const count = Number(req.query.count);
+        const year = Number(req.query.year);
+        const mon = Number(req.query.mon);
+        const day = Number(req.query.day);
 
         var msgArr = [];
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
     
-        const loopStart = array.length - 2*last >= 0 ? array.length - 2*last : 0
+        const loopStart = array.length - 2*count >= 0 ? array.length - 2*count : 0
         if (LOG)
         console.log ('length', array.length)
 
         for(let i = loopStart; i < array.length; i++) {
+            if (LOG)
+                console.log(i, array.length, array[i]);
+
             if (! array[i])
                 continue;
-            // if (name && ! array[i].contains (name))
-            //     continue;
+            if (name && array[i] && ! array[i].includes (name))
+                continue;
 
             
-            // if (LOG)
-            // console.log(i, array[i]);
+
+
             const parsed = JSON.parse (array[i]) 
+            console.log (parsed)
 
             //  array[i].txt = parsedTxt;
             msgArr.push(parsed)
