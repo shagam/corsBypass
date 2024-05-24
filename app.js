@@ -191,28 +191,11 @@ splitsGet(app)
 
 //============================================================================
 
-// delete bad data
-// app.get('/priceDel', (req, res) => {
-//   priceDel(req, res)
-// })
-
-app.get('/price', (req, res) => {
-  price(req, res)
-  // console.log (getDate(), req.query)
-  // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
-
-})
 
 
-// app.get('/priceNasdaqDel', (req, res) => {
-//   priceNasdaqDel(req, res)
-// })
+  price(app)
 
-app.get('/priceNasdaq', (req, res) => {
-  priceNasdaq(req, res)
-  // console.log (getDate(), req.query)
-  // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
+  priceNasdaq(app)
 
-})
 
 }); // onEC2

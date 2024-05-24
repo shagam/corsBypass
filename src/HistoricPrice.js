@@ -40,19 +40,29 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
   }
 });
 
-// delete bad data
-// app.get('/priceDel', (req, res) => {
-function priceDel (req, res) {
-  console.log (req.query.stock, 'priceDel')
-  priceArray[req.query.stock] = undefined;
-  res.send('price deleted')
-}
+
 
 // app.get('/price', (req, res) => {
   // console.log (getDate(), req.query)
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
-function price (req, res) {
+function price (app) {
   nowMili = Date.now();
+
+  // delete bad data
+  app.get('/priceDel', (req, res) => {
+    console.log (req.query.stock, 'priceDel')
+    priceArray[req.query.stock] = undefined;
+    res.send('price deleted')
+  })
+
+
+
+  app.get('/price', (req, res) => {
+    // price(req, res)
+    // console.log (getDate(), req.query)
+    // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
+  
+
 
   const savedPrice = priceArray[req.query.stock];
   if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
@@ -179,10 +189,10 @@ function price (req, res) {
     console.log(err)
     res.send('')
   })
-
+})
 }
 
-module.exports = {price, priceDel}
+module.exports = {price}
 
 //               <tr>\r\n' +
 // '                <td colspan="2" class="shouldbecaption">\r\n' +

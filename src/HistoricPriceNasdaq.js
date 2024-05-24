@@ -90,16 +90,19 @@ fs.readFile('txt/priceNasdaqArray.txt', 'utf8', (err, data) => {
 
 // delete bad data
 // app.get('/priceDel', (req, res) => {
-function priceNasdaqDel (req, res) {
-  console.log (req.query.stock, 'priceDel')
-  priceArray[req.query.stock] = undefined;
-  res.send('price deleted')
-}
+  
 
 // app.get('/price', (req, res) => {
   // console.log (getDate(), req.query)
   // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
-function priceNasdaq (req, res) {
+function priceNasdaq (app) {
+
+  app.get('/priceNasdaqDel', (req, res) => {
+    priceArray[req.query.stock] = undefined;
+    res.send('price deleted')
+  })
+
+  app.get('/priceNasdaq', (req, res) => {
   nowMili = Date.now();
   const start_date = '&start_date=' + req.query.year + '-' + req.query.mon + '-' + req.query.day
   const end_date = '&end_date=' + (Number(req.query.year)) + '-' + req.query.mon + '-' + req.query.day
@@ -287,10 +290,10 @@ function priceNasdaq (req, res) {
       console.log('catch err', JSON.stringify(priceObject))
       // console.log (url)
   })
-
+})
 }
 
-module.exports = {priceNasdaq, priceNasdaqDel}
+module.exports = {priceNasdaq}
 
 
 
