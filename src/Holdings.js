@@ -66,6 +66,7 @@ function parse_0 (stocks, percent, text) {
 
 function holdings (req, res, daysDelay, ignoreSaved) {
     // console.log ('holdings', req.query.stock)
+    const MAX_MISMATCH = 3;
   const sym = req.query.stock;
    // search saved holdings retrieved lately
    const updateMili = Date.now();
@@ -79,7 +80,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
 
      if (savedHoldings && savedHoldings.updateMili
        && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay
-       && Math.abs(savedHoldings.holdArr[0].sym - savedHoldings.holdArr[0].perc) < 2) // if mismatch get new
+       && Math.abs(savedHoldings.holdArr[0].sym - savedHoldings.holdArr[0].perc) < 3) // if mismatch get new
        {
        console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved holdings found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
@@ -146,7 +147,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     var holdingArray = [];
     holdingArray.push ({sym: stocks.length, perc: percent.length})
 
-    if (Math.abs(holdingArray[0].sym - holdingArray[0].perc) >= 2 
+    if (Math.abs(holdingArray[0].sym - holdingArray[0].perc) >= MAX_MISMATCH
       || holdingArray[0].sym === 0) {
       const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
       console.log (sym, 'parse mismatch', 'sym:', stocks.length, 'perc:', percent.length, holdingsObg)
