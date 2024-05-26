@@ -38,16 +38,22 @@ function targetPrice (app)  {
         const cmd = req.query.cmd; // R, W, F
         const datNew = req.query.dat
 
-        console.log ('\n',getDate(), ' targetPrice ', stock, cmd, datNew)
+        console.log ('\n',getDate(), ' targetPrice query', stock, cmd, datNew, req.query)
         // res.send ('ok_')
         // return
 
 
-        if (cmd === 'r') { // read one stock
+        if (cmd === 'readOne') { // read one stock targetPriceArray
             readCount++;
             const dat = target[stock]
-            if (LOG)
-                console.log ('r', stock, req.query.dat)
+
+
+            if (LOG|true) {
+                console.log ('records:', dat.length)
+                for (let i = 0; i < dat.length; i++ )
+                    console.log (dat[i])
+            }
+
             if (dat) 
                 res.send (JSON.stringify(dat))
             else
