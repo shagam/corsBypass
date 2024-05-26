@@ -61,6 +61,23 @@ function targetPrice (app)  {
             return;     
         }
 
+        if (cmd === 'readAll') { 
+            readCount++;
+            // const dat = target[stock]
+            // if (LOG|true) {
+            //     console.log ('records:', dat.length)
+            //     for (let i = 0; i < dat.length; i++ )
+            //         console.log (dat[i])
+            // }
+            console.log (getDate(), 'TargetPrice read All',  Object.keys(target))
+
+            res.send (JSON.stringify(target))
+   
+            return;     
+        }
+
+
+
         else if (cmd === 'writeOne') {  // write one stock
             if (! stock) {
                 res.send ('fail, missing stock') 
