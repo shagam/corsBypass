@@ -23,21 +23,22 @@ fs.readFile('txt/target.txt', 'utf8', (err, data) => {
     var symbols = "";
     for (var i = 0; i < keys.length; i++)
     //   console.log (JSON.stringify (target[keys[i]]))
-        symbols += keys[i] + '  '
+        symbols += keys[i] + ' (' + target[keys[i]].length + ')  '
     console.log(symbols)
 });
 
+var readCount, writeCount;
 
 function targetPrice (app)  {
     // nowMili = Date.now();
-    console.log ('targetP')
+    // console.log ('targetP')
     app.get('/target', (req, res) => {
 
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
         const datNew = req.query.dat
 
-        console.log ('\ntargetPrice ', stock, cmd, datNew)
+        console.log ('\n',getDate(), ' targetPrice ', stock, cmd, datNew)
         // res.send ('ok_')
         // return
 
@@ -54,35 +55,61 @@ function targetPrice (app)  {
             return;     
         }
 
-        else if (cmd === 'w') {  // write one stock
+        else if (cmd === 'writeOne') {  // write one stock
             if (! stock) {
                 res.send ('fail, missing stock') 
-                console.log ('fail, missing stock')  
+                console.log (getDate(), stock, 'fail, missing stock')  
                 return
             }
 
             writeCount++;
             if (LOG)
-                console.log ('w write ', req.query.dat)
+                console.log ('writeOne ', stock, req.query.dat)
             var dat = JSON.parse(req.query.dat)
+            // console.log (getDate(), stock, 'targetPrice new', dat)
 
-            // console.log (dat)
             if (!target[stock])
                 target[stock]=[] // if missing - add empty array
 
+            // remove adjacent dulicates
+            for (let i = 0; i < target[stock].length - 1; i++) {
+                if (target[stock][i].target === target[stock][i + 1].target){
+                    console.log (i, 'duplicate', target[stock][i].target,target[stock][i+1].target)
+                    target[stock].splice(i)
+                    i--; // remain on same
+                }
+            }
+
+            // print
+            // console.log(getDate(), stock, 'list', target[stock].length)
+            // for (let i = 0; i < target[stock].length; i++) {
+            //     console.log (getDate(), stock, i, target[stock][i]) 
+            // }
+
+            // if close to last target quit
+            if (target[stock].length > 0) {
+                const last = target[stock][target[stock].length - 1] // last entry
+                if (dat.target / last.target > 0.95 && dat.target / last.target < 1.05) {
+                    res.send ('ok');
+                    console.log (getDate(), stock, 'target close to last ', dat.target, last.target)
+                    return 
+                }
+            }
+
             target[stock].push (dat); // add object
+            console.log (getDate(), stock, 'new', dat)
+
 
             // if (LOG)
-                target[stock].forEach((d)=> {console.log(d)}) //print array
+                // target[stock].forEach((d)=> {console.log(d)}) //print array
+            console.log (getDate(), stock, 'target length ', target[stock].length)
 
-            if(LOG)
-                console.log (Object.keys(target))
-            if (Date.now() - lastWriteMili > 2000 || writeCount % 3 === 0) {
+            if (true || Date.now() - lastWriteMili > 200) {
                 fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
                     if (err) {
                         console.log('txt/target.txt write fail', err)
                     }
-                    else
+                     
                         console.log('txt/target.txt write, count=', Object.keys(target).length)
                 })
                 lastWriteMili = Date.now()
@@ -145,7 +172,7 @@ function targetPrice (app)  {
         }
 
         else
-            res.send ('fail cmd invalid')
+            res.send (getDate(), cmd, 'fail cmd invalid')
 
     })
 }
