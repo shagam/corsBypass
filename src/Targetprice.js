@@ -123,60 +123,7 @@ function targetPrice (app)  {
             res.send ('ok')
             return;           
         }
-        else if (cmd === 'a') { // get all 
-            filterCount ++;
-            const keys=Object.keys(target)
-            
-            console.log ('a  gainAll (', keys.length, ') ', keys, '')
-            const filterdObj = {}; 
-            if (symOnly) {
-                const keys = Object.keys(target)
-                keys.map((sym) => {
-                    filterdObj[sym] = '';
-                })
-                res.send (JSON.stringify(filterdObj))
-                return;                
-            }       
-            res.send (JSON.stringify(target))
-            return;
-        }
-
      
-        else if (cmd === 'd') {//get list for remove gain 1,2,5,10
-            filterCount ++;
-            if (! target['QQQ']) {
-                res.send ('fail missing needed QQQ')
-                return;
-            }
-            const factor = req.query.factor; // overRide 
-            if (Number(factor) < 1.05) {
-                console.log ('fail, factor too small:', factor)
-                res.send ('fail, del bad factor. need to be above 1.05')
-                return;
-            }
-            console.log ('d  list of bad_1_2_5_10  factor=', factor)
-            const filterdObj = {};
-            Object.keys(target).forEach ((sym) => {
-
-            })
-            const keys=Object.keys(filterdObj)
-            console.log(getDate(), keys.length, keys)
-            res.send (JSON.stringify(filterdObj))
-        }
-
-        else if (cmd === 'p') { // remove list
-            removeCount++;
-            var dat = JSON.parse(req.query.dat)
-            console.log('stocks for remove', dat.length, dat)
-            dat.forEach ((sym) => {
-            if (LOG)
-                console.log (sym, 'remove')
-                delete target[sym]
-            })
-            // console.log(getDate())
-            res.send ('ok')
-        }
-
         else
             res.send (getDate(), cmd, 'fail cmd invalid')
 
