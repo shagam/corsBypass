@@ -132,7 +132,7 @@ function targetPrice (app)  {
                     if (err) {
                         console.log('txt/target.txt write fail', err)
                     }
-                     
+                    else
                         console.log('txt/target.txt write, count=', Object.keys(target).length)
                 })
                 lastWriteMili = Date.now()
@@ -140,7 +140,28 @@ function targetPrice (app)  {
             res.send ('ok')
             return;           
         }
-     
+        else if (cmd === 'moveAll') {  // firbase data replace all for symbol
+            if (! stock) {
+                res.send ('fail, missing stock') 
+                console.log (getDate(), stock, 'fail, missing stock')  
+                return
+            }
+            writeCount++;
+            var dat = JSON.parse(req.query.dat)
+            if (LOG)
+                console.log (getDate(), stock, 'move from firebase', dat)
+            target[stock] = dat // data from firebase replace one sym
+            fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
+                if (err) {
+                    console.log('txt/target.txt write fail', err)
+                }
+                else           
+                    console.log('txt/target.txt write, count=', Object.keys(target).length)
+            })
+            lastWriteMili = Date.now()
+            res.send ('ok')
+            return;           
+        }
         else
             res.send (getDate(), cmd, 'fail cmd invalid')
 
