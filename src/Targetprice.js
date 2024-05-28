@@ -46,6 +46,10 @@ function targetPrice (app)  {
         if (cmd === 'readOne') { // read one stock targetPriceArray
             readCount++;
             const dat = target[stock]
+            if (! dat) {
+                res.send ('fail, no target price history for sym')
+                return;          
+            }
 
 
             if (LOG|true) {
