@@ -197,15 +197,19 @@ splitsGet(app)
 
   priceNasdaq(app)
 
-
-app.get('/flushAll', (req, res) => {
-  console.log('\n', getDate(), 'flushAll', req.query)
+ function flush() {
   targetPriceFlush()
   gainFlush()
   historicPriceFlush()
   holdingArrayFlush()
   holdingsSchFlush()
   splitArrayFlush()
+ }
+
+
+app.get('/flushAll', (req, res) => {
+  console.log('\n', getDate(), 'flushAll', req.query)
+  flush()
   res.send('ok' + JSON.stringify(req.query))
 })
 
