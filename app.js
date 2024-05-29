@@ -25,7 +25,7 @@ const appGet = require('./src/app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
 const {holdingsMain, holdingArrayFlush} = require('./src/Holdings')
-const {holdingsSchMain} = require('./src/HoldingsSch')
+const {holdingsSchMain, holdingsSchFlush} = require('./src/HoldingsSch')
 
 
 const {gain, gainFlush} = require('./src/Gain')
@@ -204,6 +204,7 @@ app.get('/flushAll', (req, res) => {
   gainFlush()
   historicPriceFlush()
   holdingArrayFlush()
+  holdingsSchFlush()
   splitArrayFlush()
   res.send('ok' + JSON.stringify(req.query))
 })

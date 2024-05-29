@@ -36,7 +36,18 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
 
 
 
+function holdingsSchFlush() {
+  fs.writeFile ('txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
 
+  // fs.writeFile (getDate(), 'txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
+    if (err) {
+      console.log(getDate(), 'txt/holdingsArraySch.txt write fail', err.message)
+    }
+    else
+    console.log(getDate(), 'txt/holdingsArraySch.txt write, count', Object.keys(holdingsArray).length)
+
+  })
+}
 
 
 // http://localhost:5000/holdings?stock=AAPL
@@ -151,12 +162,8 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    fs.writeFile ('txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
-      if (err) {
-        console.err('txt/holdingsArraySch.txt write fail', err)
-      }
-    })
-
+    holdingsSchFlush() 
+   
     res.send(JSON.stringify(holdingsObg))
   })
   .catch ((err) => {
@@ -178,7 +185,7 @@ function holdingsSchMain (app) {
     console.log ('holdingsSch delay=', Date.now() - nowMili)
   })
 } 
-module.exports = {holdingsSchMain}
+module.exports = {holdingsSchMain, holdingsSchFlush}
 
 
 
