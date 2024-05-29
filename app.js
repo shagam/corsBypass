@@ -19,7 +19,7 @@ const cors = require('cors')
 const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
 
 const splitsGet = require('./src/SplitsGet')
-const { price, priceDel } = require('./src/HistoricPrice')
+const { price, priceDel, historicPriceFlush } = require('./src/HistoricPrice')
 const { priceNasdaq, priceNasdaqDel } = require('./src/HistoricPriceNasdaq')
 const appGet = require('./src/app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
@@ -202,6 +202,7 @@ app.get('/flushAll', (req, res) => {
   console.log('\n', getDate(), 'flushAll', req.query)
   targetPriceFlush()
   gainFlush()
+  historicPriceFlush()
   res.send('ok' + JSON.stringify(req.query))
 })
 

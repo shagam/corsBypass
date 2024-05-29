@@ -40,7 +40,15 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
   }
 });
 
-
+function historicPriceFlush () {
+  fs.writeFile ('txt/priceArray.txt', JSON.stringify (priceArray), err => {
+    if (err) {
+      console.log('txt/priceArray.txt write fail', err)
+    }
+    else
+      console.log('txt/priceArray.txt write count:', Object.keys(priceArray).length)
+  })
+}
 
 // app.get('/price', (req, res) => {
   // console.log (getDate(), req.query)
@@ -176,12 +184,7 @@ function price (app) {
     console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
     // console.dir (priceArray)
 
-    fs.writeFile ('txt/priceArray.txt', JSON.stringify (priceArray), err => {
-      if (err) {
-        console.err('txt/priceArray.txt write fail', err)
-      }
-    })
-
+    historicPriceFlush()
 
     res.send (JSON.stringify(priceObject))
   })
@@ -192,7 +195,7 @@ function price (app) {
 })
 }
 
-module.exports = {price}
+module.exports = {price, historicPriceFlush}
 
 //               <tr>\r\n' +
 // '                <td colspan="2" class="shouldbecaption">\r\n' +
