@@ -29,6 +29,19 @@ fs.readFile('txt/target.txt', 'utf8', (err, data) => {
 
 var readCount, writeCount;
 
+// write all to disk
+function targetPriceFlush () {
+    fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
+        if (err) {
+            console.log('txt/target.txt write fail', err)
+        }
+        else
+            console.log('txt/target.txt write, count=', Object.keys(target).length)
+    })
+
+}
+
+
 function targetPrice (app)  {
     // nowMili = Date.now();
     // console.log ('targetP')
@@ -132,13 +145,7 @@ function targetPrice (app)  {
             console.log (getDate(), stock, 'target length ', target[stock].length)
 
             if (true || Date.now() - lastWriteMili > 200) {
-                fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
-                    if (err) {
-                        console.log('txt/target.txt write fail', err)
-                    }
-                    else
-                        console.log('txt/target.txt write, count=', Object.keys(target).length)
-                })
+                targetPriceFlush()
                 lastWriteMili = Date.now()
             }
             res.send ('ok')
@@ -173,4 +180,4 @@ function targetPrice (app)  {
 }
 
 
-module.exports = {targetPrice}
+module.exports = {targetPrice, targetPriceFlush}

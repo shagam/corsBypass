@@ -30,6 +30,15 @@ fs.readFile('txt/gainArray.txt', 'utf8', (err, data) => {
     console.log(symbols)
 });
 
+function gainFlush() {
+  fs.writeFile ('txt/gainArray.txt', JSON.stringify (gainArray), err => {
+    if (err) {
+        console.log('txt/gainArray.txt write fail', err)
+    }
+    else
+        console.log('txt/gainArray.txt write, count=', Object.keys(gainArray).length)
+  })
+}
 
 function gain (app)  {
     // nowMili = Date.now();
@@ -85,14 +94,8 @@ function gain (app)  {
             if(LOG)
                 console.log (Object.keys(gainArray))
             if (Date.now() - lastWriteMili > 2000 || writeCount % 3 === 0) {
-                fs.writeFile ('txt/gainArray.txt', JSON.stringify (gainArray), err => {
-                    if (err) {
-                        console.log('txt/gainArray.txt write fail', err)
-                    }
-                    else
-                        console.log('txt/gainArray.txt write, count=', Object.keys(gainArray).length)
-                })
-                lastWriteMili = Date.now()
+              gainFlush()
+              lastWriteMili = Date.now()
             }
             res.send ('ok')
             return;           
@@ -256,4 +259,5 @@ function gain (app)  {
 }
 
 
-module.exports = {gain}
+module.exports = {gain, gainFlush}
+   

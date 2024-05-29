@@ -16,7 +16,7 @@ const axios = require('axios')
 const cors = require('cors')
 //const detect = require ('detect-browser')
 
-const {targetPrice} = require ('./src/Targetprice')
+const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
 
 const splitsGet = require('./src/SplitsGet')
 const { price, priceDel } = require('./src/HistoricPrice')
@@ -28,7 +28,7 @@ const {holdingsMain} = require('./src/Holdings')
 const {holdingsSchMain} = require('./src/HoldingsSch')
 
 
-const {gain} = require('./src/Gain')
+const {gain, gainFlush} = require('./src/Gain')
 const {contact} = require('./src/ContactUs') 
 
 const app = express()
@@ -196,6 +196,14 @@ splitsGet(app)
   price(app)
 
   priceNasdaq(app)
+
+
+app.get('/flushAll', (req, res) => {
+  console.log('\n', getDate(), 'flushAll', req.query)
+  targetPriceFlush()
+  gainFlush()
+  res.send('ok' + JSON.stringify(req.query))
+})
 
 
 }); // onEC2
