@@ -33,10 +33,10 @@ fs.readFile('txt/gainArray.txt', 'utf8', (err, data) => {
 function gainFlush() {
   fs.writeFile ('txt/gainArray.txt', JSON.stringify (gainArray), err => {
     if (err) {
-        console.log('txt/gainArray.txt write fail', err)
+        console.log (getDate(), 'txt/gainArray.txt write fail', err)
     }
     else
-        console.log('txt/gainArray.txt write, count=', Object.keys(gainArray).length)
+        console.log (getDate(), 'txt/gainArray.txt write, count=', Object.keys(gainArray).length)
   })
 }
 

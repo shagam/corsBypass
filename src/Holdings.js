@@ -61,7 +61,15 @@ function parse_0 (stocks, percent, text) {
   console.log ('stock', stocks.length, 'percent', percent.length)
 }
 
-
+function holdingArrayFlush () {
+  fs.writeFile ('txt/holdingsArray.txt', JSON.stringify(holdingsArray), err => {
+    if (err) {
+      console.err(getDate(), 'txt/holdingsArray.txt write fail', err)
+    }
+    else
+    console.log(getDate(), 'txt/holdingsArray.txt write, count=', Object.keys(holdingsArray).length)
+  })
+}
 // http://localhost:5000/holdings?stock=AAPL
 
 function holdings (req, res, daysDelay, ignoreSaved) {
@@ -167,11 +175,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    fs.writeFile ('txt/holdingsArray.txt', JSON.stringify(holdingsArray), err => {
-      if (err) {
-        console.err(req.query.stock, updateDate, 'txt/holdingsArray.txt write fail', err)
-      }
-    })
+    holdingArrayFlush()
 
     res.send(JSON.stringify(holdingsObg))
   })
@@ -191,7 +195,7 @@ function holdingsMain (app) {
   })
 }
 
-module.exports = {holdingsMain}
+module.exports = {holdingsMain, holdingArrayFlush}
 
 
 

@@ -43,10 +43,10 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
 function historicPriceFlush () {
   fs.writeFile ('txt/priceArray.txt', JSON.stringify (priceArray), err => {
     if (err) {
-      console.log('txt/priceArray.txt write fail', err)
+      console.log (getDate(), 'txt/priceArray.txt write fail', err)
     }
     else
-      console.log('txt/priceArray.txt write count:', Object.keys(priceArray).length)
+      console.log (getDate(), 'txt/priceArray.txt write count:', Object.keys(priceArray).length)
   })
 }
 

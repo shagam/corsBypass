@@ -33,10 +33,10 @@ var readCount, writeCount;
 function targetPriceFlush () {
     fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
         if (err) {
-            console.log('txt/target.txt write fail', err)
+            console.log(getDate(), 'txt/target.txt write fail', err)
         }
         else
-            console.log('txt/target.txt write, count=', Object.keys(target).length)
+            console.log(getDate(), 'txt/target.txt write, count=', Object.keys(target).length)
     })
 
 }

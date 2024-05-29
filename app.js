@@ -18,13 +18,13 @@ const cors = require('cors')
 
 const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
 
-const splitsGet = require('./src/SplitsGet')
+const {splitsGet, splitArrayFlush} = require('./src/SplitsGet')
 const { price, priceDel, historicPriceFlush } = require('./src/HistoricPrice')
 const { priceNasdaq, priceNasdaqDel } = require('./src/HistoricPriceNasdaq')
 const appGet = require('./src/app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
-const {holdingsMain} = require('./src/Holdings')
+const {holdingsMain, holdingArrayFlush} = require('./src/Holdings')
 const {holdingsSchMain} = require('./src/HoldingsSch')
 
 
@@ -203,6 +203,8 @@ app.get('/flushAll', (req, res) => {
   targetPriceFlush()
   gainFlush()
   historicPriceFlush()
+  holdingArrayFlush()
+  splitArrayFlush()
   res.send('ok' + JSON.stringify(req.query))
 })
 

@@ -30,7 +30,17 @@ fs.readFile('txt/splitsArray.txt', 'utf8', (err, data) => {
   //   console.log (keys[i])
 });
 
+function splitArrayFlush() {
+  fs.writeFile ('txt/splitsArray.txt', JSON.stringify(splitsArray), err => {
+    if (err) {
+      console.log (getDate(), 'txt/splitsArray.txt write fail', err)
+    }
+    else
+      console.log (getDate(), 'txt/splitsArray.txt write, count=', Object.keys(splitsArray).length)
+  })
 
+   
+}
 
 // 7 day delay
 // main body allow multipple
@@ -134,17 +144,13 @@ function splitsGet (app) {
       }
       else
         console.log ('\n', req.query.stock, getDate(), 'splits:', Object.keys(splitsArray).length, splits)
-  
+      
       // save local split
       splitsArray [req.query.stock] = splits;
       // console.dir (splitsArray)
   
-      fs.writeFile ('txt/splitsArray.txt', JSON.stringify(splitsArray), err => {
-        if (err) {
-          console.err('txt/splitsArray.txt write fail', err)
-        }
-      })
-  
+      splitArrayFlush()
+
       if (splits.length == 1)
         res.send ('')
       else
@@ -157,4 +163,4 @@ function splitsGet (app) {
   
   })
 }
-  module.exports = splitsGet
+  module.exports = {splitsGet, splitArrayFlush}
