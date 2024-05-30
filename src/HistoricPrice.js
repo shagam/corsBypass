@@ -42,6 +42,8 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
 
 var writeCount = 0
 function historicPriceFlush () {
+  if (Object.keys(priceArray).length === 0) // avoid write of empty
+    return;
   fs.writeFile ('txt/priceArray.txt', JSON.stringify (priceArray), err => {
     if (err) {
       console.log (getDate(), 'txt/priceArray.txt write fail', err)

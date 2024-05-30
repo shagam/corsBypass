@@ -3,7 +3,7 @@ const fs = require ('fs')
 
 const {getDate} = require ('./Utils')
 
-var target = {};   // key is symbol saved one obj per stock
+var targetArray = {};   // key is symbol saved one obj per stock
 
 const LOG = true;
 const date = getDate();
@@ -13,17 +13,17 @@ var lastWriteMili;
 // read gain from local file once on startup
 fs.readFile('txt/target.txt', 'utf8', (err, data) => {
   if (err) {
-    target = {};
+    targetArray = {};
   }
   if (data)
-    target = JSON.parse(data);
-  const keys = Object.keys(target);
+    targetArray = JSON.parse(data);
+  const keys = Object.keys(targetArray);
   console.log('\n', getDate(), 'txt/target.txt  read count=', keys.length)
 
     var symbols = "";
     for (var i = 0; i < keys.length; i++)
     //   console.log (JSON.stringify (target[keys[i]]))
-        symbols += keys[i] + ' (' + target[keys[i]].length + ')  '
+        symbols += keys[i] + ' (' + targetArray[keys[i]].length + ')  '
     console.log(symbols)
 });
 
@@ -32,12 +32,15 @@ var readCount, writeCounter;
 // write all to disk
 var writeCount = 0
 function targetPriceFlush () {
-    fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
+    if (Object.keys(targetArray).length === 0) // avoid write of empty
+        return;
+
+    fs.writeFile ('txt/target.txt', JSON.stringify (targetArray), err => {
         if (err) {
             console.log(getDate(), 'txt/target.txt write fail', err)
         }
         else
-            console.log(getDate(), 'txt/target.txt write, sym count=', Object.keys(target).length, 'writeCount=', writeCount )
+            console.log(getDate(), 'txt/target.txt write, sym count=', Object.keys(targetArray).length, 'writeCount=', writeCount )
     })
     writeCount++
 }
@@ -59,7 +62,7 @@ function targetPrice (app)  {
 
         if (cmd === 'readOne') { // read one stock targetPriceArray
             readCount++;
-            const dat = target[stock]
+            const dat = targetArray[stock]
             if (! dat) {
                 res.send ('fail, no target price history for sym')
                 return;          
@@ -87,9 +90,9 @@ function targetPrice (app)  {
             //     for (let i = 0; i < dat.length; i++ )
             //         console.log (dat[i])
             // }
-            console.log (getDate(), 'TargetPrice read All',  Object.keys(target))
+            console.log (getDate(), 'TargetPrice read All',  Object.keys(targetArray))
 
-            res.send (JSON.stringify(target))
+            res.send (JSON.stringify(targetArray))
    
             return;     
         }
@@ -109,14 +112,14 @@ function targetPrice (app)  {
             var dat = JSON.parse(req.query.dat)
             // console.log (getDate(), stock, 'targetPrice new', dat)
 
-            if (!target[stock])
-                target[stock]=[] // if missing - add empty array
+            if (!targetArray[stock])
+                targetArray[stock]=[] // if missing - add empty array
 
             // remove adjacent dulicates
-            for (let i = 0; i < target[stock].length - 1; i++) {
-                if (target[stock][i].target === target[stock][i + 1].target){
-                    console.log (i, 'duplicate', target[stock][i].target,target[stock][i+1].target)
-                    target[stock].splice(i)
+            for (let i = 0; i < targetArray[stock].length - 1; i++) {
+                if (targetArray[stock][i].target === targetArray[stock][i + 1].target){
+                    console.log (i, 'duplicate', targetArray[stock][i].target,targetArray[stock][i+1].target)
+                    targetArray[stock].splice(i)
                     i--; // remain on same
                 }
             }
@@ -128,8 +131,8 @@ function targetPrice (app)  {
             // }
 
             // if close to last target quit
-            if (target[stock].length > 0) {
-                const last = target[stock][target[stock].length - 1] // last entry
+            if (targetArray[stock].length > 0) {
+                const last = targetArray[stock][targetArray[stock].length - 1] // last entry
                 if (dat.target / last.target > 0.95 && dat.target / last.target < 1.05) {
                     res.send ('ok');
                     console.log (getDate(), stock, 'target close to last ', dat.target, last.target)
@@ -137,13 +140,13 @@ function targetPrice (app)  {
                 }
             }
 
-            target[stock].push (dat); // add object
+            targetArray[stock].push (dat); // add object
             console.log (getDate(), stock, 'new', dat)
 
 
             // if (LOG)
                 // target[stock].forEach((d)=> {console.log(d)}) //print array
-            console.log (getDate(), stock, 'target length ', target[stock].length)
+            console.log (getDate(), stock, 'target length ', targetArray[stock].length)
 
             if (true || Date.now() - lastWriteMili > 200) {
                 targetPriceFlush()
@@ -162,13 +165,13 @@ function targetPrice (app)  {
             var dat = JSON.parse(req.query.dat)
             if (LOG)
                 console.log (getDate(), stock, 'move from firebase', dat)
-            target[stock] = dat // data from firebase replace one sym
-            fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
+            targetArray[stock] = dat // data from firebase replace one sym
+            fs.writeFile ('txt/target.txt', JSON.stringify (targetArray), err => {
                 if (err) {
                     console.log('txt/target.txt write fail', err)
                 }
                 else           
-                    console.log('txt/target.txt write, count=', Object.keys(target).length)
+                    console.log('txt/target.txt write, count=', Object.keys(targetArray).length)
             })
             lastWriteMili = Date.now()
             res.send ('ok')

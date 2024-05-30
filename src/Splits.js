@@ -32,6 +32,9 @@ fs.readFile('txt/splitsArray.txt', 'utf8', (err, data) => {
 
 var writeCount = 0;
 function splitArrayFlush() {
+  if (Object.keys(splitsArray).length === 0) // avoid write of empty
+    return;
+
   fs.writeFile ('txt/splitsArray.txt', JSON.stringify(splitsArray), err => {
     if (err) {
       console.log (getDate(), 'txt/splitsArray.txt write fail', err)

@@ -37,6 +37,8 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
 
 var writeCount = 0;
 function holdingsSchFlush() {
+  if (Object.keys(holdingsArray).length === 0) // avoid write of empty
+    return;
   fs.writeFile ('txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
     if (err) {
       console.log(getDate(), 'txt/holdingsArraySch.txt write fail', err.message)

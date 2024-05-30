@@ -88,6 +88,8 @@ fs.readFile('txt/priceNasdaqArray.txt', 'utf8', (err, data) => {
 
 var writeCount = 0
 function historicPriceNasdaqFlush () {
+  if (Object.keys(priceArray).length === 0) // avoid write of empty
+    return;
     fs.writeFile ('txt/priceNasdaqArray.txt', JSON.stringify (priceArray), err => {
       if (err) {
         console.log(getDate(), 'txt/priceNasdaqArray.txt write fail', err)

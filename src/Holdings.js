@@ -63,6 +63,8 @@ function parse_0 (stocks, percent, text) {
 
 var writeCount = 0
 function holdingArrayFlush () {
+  if (Object.keys(holdingsArray).length === 0) // avoid write of empty
+    return;
   fs.writeFile ('txt/holdingsArray.txt', JSON.stringify(holdingsArray), err => {
     if (err) {
       console.err(getDate(), 'txt/holdingsArray.txt write fail', err)
