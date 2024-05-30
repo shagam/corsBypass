@@ -3,7 +3,7 @@
 
 const cors = require ('cors')
 
-const splitsGet = require ('./SplitsGet')
+const splitsGet = require ('./Splits')
 const {price, priceDel} = require ('./HistoricPrice')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 

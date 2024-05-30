@@ -30,16 +30,17 @@ fs.readFile('txt/splitsArray.txt', 'utf8', (err, data) => {
   //   console.log (keys[i])
 });
 
+var writeCount = 0;
 function splitArrayFlush() {
   fs.writeFile ('txt/splitsArray.txt', JSON.stringify(splitsArray), err => {
     if (err) {
       console.log (getDate(), 'txt/splitsArray.txt write fail', err)
     }
     else
-      console.log (getDate(), 'txt/splitsArray.txt write, count=', Object.keys(splitsArray).length)
+      console.log (getDate(), 'txt/splitsArray.txt sym write, sym count=', Object.keys(splitsArray).length,
+        'writeCount=', writeCount)
   })
-
-   
+  writeCount ++;   
 }
 
 // 7 day delay
@@ -149,7 +150,8 @@ function splitsGet (app) {
       splitsArray [req.query.stock] = splits;
       // console.dir (splitsArray)
   
-      splitArrayFlush()
+      if (writeArray % 5 === 0)
+        splitArrayFlush()
 
       if (splits.length == 1)
         res.send ('')

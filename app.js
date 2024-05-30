@@ -18,7 +18,7 @@ const cors = require('cors')
 
 const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
 
-const {splitsGet, splitArrayFlush} = require('./src/SplitsGet')
+const {splitsGet, splitArrayFlush} = require('./src/Splits')
 const { price, priceDel, historicPriceFlush } = require('./src/HistoricPrice')
 const { priceNasdaq, priceNasdaqDel, historicPriceNasdaqFlush } = require('./src/HistoricPriceNasdaq')
 const appGet = require('./src/app-get')
