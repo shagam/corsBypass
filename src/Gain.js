@@ -78,11 +78,13 @@ function gain (app)  {
             }
 
             writeCounter++;
-            if (LOG)
-                console.log ('w write ', req.query.dat)
-            var dat = JSON.parse(req.query.dat)
 
-            if ((stock != 'QQQ') &&
+
+            var dat = JSON.parse(req.query.dat)
+            if (LOG)
+                console.log ('w write ', dat)
+
+            if ((stock != 'QQQ') && gainArray['QQQ'] && 
             ((Number(dat.year) < Number(gainArray['QQQ'].year / factor)) ||
             (Number(dat.year2) < Number(gainArray['QQQ'].year2 / factor)) ||
             (Number(dat.year5) < Number(gainArray['QQQ'].year5 / factor)) ||
