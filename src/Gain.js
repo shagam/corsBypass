@@ -7,7 +7,7 @@ var gainArray = {};   // key is symbol saved one obj per stock
 
 const LOG = false;
 const date = getDate();
-var writeCount = 0;
+var writeCounter = 0;
 var readCount = 0;
 var filterCount = 0;
 var removeCount = 0;
@@ -30,14 +30,17 @@ fs.readFile('txt/gainArray.txt', 'utf8', (err, data) => {
     console.log(symbols)
 });
 
+var writeCount = 0;
 function gainFlush() {
   fs.writeFile ('txt/gainArray.txt', JSON.stringify (gainArray), err => {
     if (err) {
         console.log (getDate(), 'txt/gainArray.txt write fail', err)
     }
     else
-        console.log (getDate(), 'txt/gainArray.txt write, count=', Object.keys(gainArray).length)
+        console.log (getDate(), 'txt/gainArray.txt write, sym count=', Object.keys(gainArray).length,
+        'writeCount=', writeCount)
   })
+  writeCount ++;
 }
 
 function gain (app)  {
@@ -50,7 +53,7 @@ function gain (app)  {
         const symOnly = req.query.symOnly;
         const factor = req.query.factor;
 
-        console.log ('\n', date, 'gain cmd=', cmd, 'stock=', stock, 'factor=', factor, 'write=', writeCount, 'read=', readCount,
+        console.log ('\n', date, 'gain cmd=', cmd, 'stock=', stock, 'factor=', factor, 'write=', writeCounter, 'read=', readCount,
          'filterCount=', filterCount, 'removeCount=', removeCount, 'symOnly=', symOnly)
 
         if (cmd === 'r') { // read one stock
@@ -72,7 +75,7 @@ function gain (app)  {
                 return
             }
 
-            writeCount++;
+            writeCounter++;
             if (LOG)
                 console.log ('w write ', req.query.dat)
             var dat = JSON.parse(req.query.dat)
@@ -93,7 +96,9 @@ function gain (app)  {
 
             if(LOG)
                 console.log (Object.keys(gainArray))
-            if (Date.now() - lastWriteMili > 2000 || writeCount % 3 === 0) {
+
+
+            if (writeCount % 5 === 0) {
               gainFlush()
               lastWriteMili = Date.now()
             }
