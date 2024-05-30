@@ -116,7 +116,7 @@ function gain (app)  {
         else if (cmd === 'delOneSym') { // delete one sym
             if (! gainArray[stock]) {
                 console.log ('\n\n', getDate(), stock, ' gain delete missing')
-                res.send ('fail, symbol missing')
+                res.send ('fail, gain delete symbol missing')
             }
             else {
                 gainArray[stock] = null; // remove sym

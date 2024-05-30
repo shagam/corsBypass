@@ -72,7 +72,19 @@ function price (app) {
     // price(req, res)
     // console.log (getDate(), req.query)
     // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
-  
+    const stock = req.query.stock
+    if (req.query.cmd === 'delOneSym') { // delete one sym
+      if (! priceArray[stock]) {
+          console.log ('\n\n', getDate(), stock, ' price delete missing')
+          res.send ('fail, symbol missing')
+      }
+      else {
+        priceArray[stock] = null; // remove sym
+          console.log ('\n\n', getDate(), stock, ' price delete done')
+          res.send ('ok')
+      }
+      return;   
+  }
 
 
   const savedPrice = priceArray[req.query.stock];
