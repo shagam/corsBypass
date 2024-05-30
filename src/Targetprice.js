@@ -148,7 +148,7 @@ function targetPrice (app)  {
                 // target[stock].forEach((d)=> {console.log(d)}) //print array
             console.log (getDate(), stock, 'target length ', targetArray[stock].length)
 
-            if (true || Date.now() - lastWriteMili > 200) {
+            if (writeCount === 0) {
                 targetPriceFlush()
                 lastWriteMili = Date.now()
             }
