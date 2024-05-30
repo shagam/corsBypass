@@ -58,8 +58,20 @@ function targetPrice (app)  {
         // res.send ('ok_')
         // return
 
-
-        if (cmd === 'readOne') { // read one stock targetPriceArray
+        if (req.query.cmd === 'delOneSym') { // delete one sym
+          if (! targetArray[stock]) {
+              console.log ('\n\n', getDate(), stock, ' targetPrice delete missing')
+              res.send ('fail, splits symbol missing')
+          }
+          else {
+            targetArray[stock] = null; // remove sym
+              console.log ('\n\n', getDate(), stock, ' targetPrice delete done')
+              res.send ('ok')
+          }
+          return;   
+       }    
+    
+        else if (cmd === 'readOne') { // read one stock targetPriceArray
             readCount++;
             const dat = targetArray[stock]
             if (! dat) {
