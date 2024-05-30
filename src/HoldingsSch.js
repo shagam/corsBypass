@@ -58,6 +58,21 @@ function holdingsSchFlush() {
 function holdingsSch (req, res, daysDelay, ignoreSaved) {
     // console.log ('\nholdings', req.query.stock)
 
+    const stock = req.query.stock;
+    if (req.query.cmd === 'delOneSym') { // delete one sym
+      if (! holdingsArray[stock]) {
+          console.log ('\n\n', getDate(), stock, ' holdingsSch delete missing')
+          res.send ('fail, symbol missing')
+      }
+      else {
+        holdingsArray[stock] = null; // remove sym
+          console.log ('\n\n', getDate(), stock, ' holdingsSch delete done')
+          res.send ('ok')
+      }
+      return;   
+   }    
+  
+
    // search saved holdings retrieved lately
    const updateMili = Date.now();
    const updateDate = getDate()
@@ -184,8 +199,8 @@ function holdingsSchMain (app) {
 // holdings of a stock
   app.get('/holdingsSch', (req, res) => {
 
-    const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    console.log (req.query.stock, getDate(), ipAddress)
+    // const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    // console.log (req.query.stock, getDate(), ipAddress)
   
     var nowMili = Date.now();
     holdingsSch (req, res, 7, false)
