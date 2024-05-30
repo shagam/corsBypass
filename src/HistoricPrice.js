@@ -76,7 +76,7 @@ function price (app) {
     if (req.query.cmd === 'delOneSym') { // delete one sym
       if (! priceArray[stock]) {
           console.log ('\n\n', getDate(), stock, ' price delete missing')
-          res.send ('fail, symbol missing')
+          res.send ('fail, price symbol missing')
       }
       else {
         priceArray[stock] = null; // remove sym

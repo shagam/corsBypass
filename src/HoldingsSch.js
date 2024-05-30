@@ -62,7 +62,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     if (req.query.cmd === 'delOneSym') { // delete one sym
       if (! holdingsArray[stock]) {
           console.log ('\n\n', getDate(), stock, ' holdingsSch delete missing')
-          res.send ('fail, symbol missing')
+          res.send ('fail, holdingsSch symbol missing')
       }
       else {
         holdingsArray[stock] = null; // remove sym

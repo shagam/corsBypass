@@ -58,7 +58,7 @@ function splitsGet (app) {
     if (req.query.cmd === 'delOneSym') { // delete one sym
       if (! splitsArray[stock]) {
           console.log ('\n\n', getDate(), stock, ' split delete missing')
-          res.send ('fail, symbol missing')
+          res.send ('fail, splits symbol missing')
       }
       else {
         splitsArray[stock] = null; // remove sym

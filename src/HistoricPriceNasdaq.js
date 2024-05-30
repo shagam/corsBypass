@@ -124,7 +124,7 @@ function priceNasdaq (app) {
   if (req.query.cmd === 'delOneSym') { // delete one sym
     if (! priceArray[stock]) {
         console.log ('\n\n', getDate(), stock, ' priceNasdaq delete missing')
-        res.send ('fail, symbol missing')
+        res.send ('fail, priceNasdaq symbol missing')
     }
     else {
       priceArray[stock] = null; // remove sym
