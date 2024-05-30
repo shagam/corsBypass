@@ -167,6 +167,9 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
 
     if (writeCount % 5 === 0)
       holdingsSchFlush() 
+    else
+      console.log ('skip too frequent writes, writescount', writeCount)
+    writeCount ++ 
 
     res.send(JSON.stringify(holdingsObg))
   })

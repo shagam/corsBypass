@@ -43,7 +43,6 @@ function gainFlush() {
         console.log (getDate(), 'txt/gainArray.txt write, sym count=', Object.keys(gainArray).length,
         'writeCount=', writeCount)
   })
-  writeCount ++;
 }
 
 function gain (app)  {
@@ -105,6 +104,10 @@ function gain (app)  {
               gainFlush()
               lastWriteMili = Date.now()
             }
+            else
+                console.log ('skip too frequent Writes count', writeCount)
+            writeCount ++;
+
             res.send ('ok')
             return;           
         }

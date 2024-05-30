@@ -73,7 +73,6 @@ function holdingArrayFlush () {
       console.log(getDate(), 'txt/holdingsArray.txt write, sym count=',
        Object.keys(holdingsArray).length, 'writeCount=', writeCount)
   })
-  writeCount++;
 }
 // http://localhost:5000/holdings?stock=AAPL
 
@@ -180,8 +179,11 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    if (writeCount % 5 === 1)
+    if (writeCount % 5 === 0)
       holdingArrayFlush()
+    else
+      console.log ('skip too frequent Writes, writeCount', writeCount);
+    writeCount++
 
     res.send(JSON.stringify(holdingsObg))
   })

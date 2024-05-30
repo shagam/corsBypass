@@ -42,8 +42,7 @@ function splitArrayFlush() {
     else
       console.log (getDate(), 'txt/splitsArray.txt sym write, sym count=', Object.keys(splitsArray).length,
         'writeCount=', writeCount)
-  })
-  writeCount ++;   
+  }) 
 }
 
 // 7 day delay
@@ -153,8 +152,11 @@ function splitsGet (app) {
       splitsArray [req.query.stock] = splits;
       // console.dir (splitsArray)
   
-      if (writeArray % 5 === 0)
+      if (writeCount % 5 === 0)
         splitArrayFlush()
+      else
+        console.log ('skip too frequent Writes, writeCount=', writeCount)
+      writeCount++;
 
       if (splits.length == 1)
         res.send ('')

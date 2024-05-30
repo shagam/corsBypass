@@ -42,7 +42,6 @@ function targetPriceFlush () {
         else
             console.log(getDate(), 'txt/target.txt write, sym count=', Object.keys(targetArray).length, 'writeCount=', writeCount )
     })
-    writeCount++
 }
 
 
@@ -148,10 +147,14 @@ function targetPrice (app)  {
                 // target[stock].forEach((d)=> {console.log(d)}) //print array
             console.log (getDate(), stock, 'target length ', targetArray[stock].length)
 
-            if (writeCount === 0) {
+            if (writeCount % 5 === 0) {
                 targetPriceFlush()
                 lastWriteMili = Date.now()
             }
+            else
+                console.log ('skip too frequent Writes, writeCount=', writeCount)
+            writeCount++;
+
             res.send ('ok')
             return;           
         }

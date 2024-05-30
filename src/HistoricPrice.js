@@ -51,7 +51,6 @@ function historicPriceFlush () {
     else
       console.log (getDate(), 'txt/priceArray.txt sym count:', Object.keys(priceArray).length, 'writeCount=', writeCount)
   })
-  writeCount ++
 }
 
 // app.get('/price', (req, res) => {
@@ -190,7 +189,9 @@ function price (app) {
 
     if (writeCount % 5 === 0)
       historicPriceFlush()
-
+    else
+      console.log ('skip too frequent Writes, writeCount=', writeCount)
+    writeCount++
 
 
     res.send (JSON.stringify(priceObject))
