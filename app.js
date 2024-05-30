@@ -20,7 +20,7 @@ const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
 
 const {splitsGet, splitArrayFlush} = require('./src/SplitsGet')
 const { price, priceDel, historicPriceFlush } = require('./src/HistoricPrice')
-const { priceNasdaq, priceNasdaqDel } = require('./src/HistoricPriceNasdaq')
+const { priceNasdaq, priceNasdaqDel, historicPriceNasdaqFlush } = require('./src/HistoricPriceNasdaq')
 const appGet = require('./src/app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
@@ -199,6 +199,7 @@ splitsGet(app)
 
  function flush() {
   targetPriceFlush()
+  historicPriceNasdaqFlush()
   gainFlush()
   historicPriceFlush()
   holdingArrayFlush()

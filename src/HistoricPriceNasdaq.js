@@ -86,7 +86,19 @@ fs.readFile('txt/priceNasdaqArray.txt', 'utf8', (err, data) => {
   }
 });
 
+var writeCount = 0
+function historicPriceNasdaqFlush () {
+    fs.writeFile ('txt/priceNasdaqArray.txt', JSON.stringify (priceArray), err => {
+      if (err) {
+        console.log(getDate(), 'txt/priceNasdaqArray.txt write fail', err)
+      }
+      else
+        console.log(getDate(), 'txt/priceNasdaqArray.txt write sym count=', Object.keys(priceArray).length,
+          'writeCount=', writeCount)
 
+    })
+    writeCount++;
+}
 
 // delete bad data
 // app.get('/priceDel', (req, res) => {
@@ -101,6 +113,7 @@ function priceNasdaq (app) {
     priceArray[req.query.stock] = undefined;
     res.send('price deleted')
   })
+
 
   app.get('/priceNasdaq', (req, res) => {
   nowMili = Date.now();
@@ -264,11 +277,10 @@ function priceNasdaq (app) {
     if (LOG) console.log ('log 9')
     console.dir (priceArray)
 
-    fs.writeFile ('txt/priceNasdaqArray.txt', JSON.stringify (priceArray), err => {
-      if (err) {
-        console.err('txt/priceNasdaqArray.txt write fail', err)
-      }
-    })
+    if (writeCount % 5 === 0)
+      historicPriceNasdaqFlush()
+
+
 
 
     res.send (JSON.stringify(priceObject))
@@ -293,7 +305,7 @@ function priceNasdaq (app) {
 })
 }
 
-module.exports = {priceNasdaq}
+module.exports = {priceNasdaq, historicPriceNasdaqFlush}
 
 
 
