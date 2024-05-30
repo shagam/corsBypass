@@ -118,11 +118,28 @@ function priceNasdaq (app) {
 
   app.get('/priceNasdaq', (req, res) => {
   nowMili = Date.now();
+
+  // del one stock
+  const stock = req.query.stock;
+  if (req.query.cmd === 'delOneSym') { // delete one sym
+    if (! priceArray[stock]) {
+        console.log ('\n\n', getDate(), stock, ' priceNasdaq delete missing')
+        res.send ('fail, symbol missing')
+    }
+    else {
+      priceArray[stock] = null; // remove sym
+        console.log ('\n\n', getDate(), stock, ' priceNasdaq delete done')
+        res.send ('ok')
+    }
+    return;   
+ }    
+  
+  
+  
   const start_date = '&start_date=' + req.query.year + '-' + req.query.mon + '-' + req.query.day
   const end_date = '&end_date=' + (Number(req.query.year)) + '-' + req.query.mon + '-' + req.query.day
   if (LOG)
   console.log('\n', req.query.stock, start_date, end_date)
-
 
   const savedPrice = priceArray[req.query.stock];
   if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
