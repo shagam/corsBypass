@@ -77,6 +77,22 @@ function holdingArrayFlush () {
 // http://localhost:5000/holdings?stock=AAPL
 
 function holdings (req, res, daysDelay, ignoreSaved) {
+
+  const stock = req.query.stock;
+  if (req.query.cmd === 'delOneSym') { // delete one sym
+    if (! holdingsArray[stock]) {
+        console.log ('\n\n', getDate(), stock, ' holdings delete missing')
+        res.send ('fail, symbol missing')
+    }
+    else {
+      holdingsArray[stock] = null; // remove sym
+        console.log ('\n\n', getDate(), stock, ' holdings delete done')
+        res.send ('ok')
+    }
+    return;   
+ }    
+
+
     // console.log ('holdings', req.query.stock)
     const MAX_MISMATCH = 3;
   const sym = req.query.stock;

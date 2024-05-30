@@ -66,7 +66,7 @@ function splitsGet (app) {
           res.send ('ok')
       }
       return;   
-  }    
+   }    
     
     
     const daysDelay = 7;
