@@ -35,19 +35,20 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
 });
 
 
-
+var writeCount = 0;
 function holdingsSchFlush() {
   fs.writeFile ('txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
-
-  // fs.writeFile (getDate(), 'txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
     if (err) {
       console.log(getDate(), 'txt/holdingsArraySch.txt write fail', err.message)
     }
     else
-    console.log(getDate(), 'txt/holdingsArraySch.txt write, count', Object.keys(holdingsArray).length)
+      console.log(getDate(), 'txt/holdingsArraySch.txt write, sym count',
+    Object.keys(holdingsArray).length, 'writeCount=', writeCount)
 
   })
+  writeCount++
 }
+
 
 
 // http://localhost:5000/holdings?stock=AAPL
@@ -162,8 +163,9 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    holdingsSchFlush() 
-   
+    if (writeCount % 5 === 0)
+      holdingsSchFlush() 
+
     res.send(JSON.stringify(holdingsObg))
   })
   .catch ((err) => {

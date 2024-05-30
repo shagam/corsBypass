@@ -27,18 +27,19 @@ fs.readFile('txt/target.txt', 'utf8', (err, data) => {
     console.log(symbols)
 });
 
-var readCount, writeCount;
+var readCount, writeCounter;
 
 // write all to disk
+var writeCount = 0
 function targetPriceFlush () {
     fs.writeFile ('txt/target.txt', JSON.stringify (target), err => {
         if (err) {
             console.log(getDate(), 'txt/target.txt write fail', err)
         }
         else
-            console.log(getDate(), 'txt/target.txt write, count=', Object.keys(target).length)
+            console.log(getDate(), 'txt/target.txt write, sym count=', Object.keys(target).length, 'writeCount=', writeCount )
     })
-
+    writeCount++
 }
 
 
@@ -102,7 +103,7 @@ function targetPrice (app)  {
                 return
             }
 
-            writeCount++;
+            writeCounter++;
             if (LOG)
                 console.log ('writeOne ', stock, req.query.dat)
             var dat = JSON.parse(req.query.dat)
@@ -157,7 +158,7 @@ function targetPrice (app)  {
                 console.log (getDate(), stock, 'fail, missing stock')  
                 return
             }
-            writeCount++;
+            writeCounter++;
             var dat = JSON.parse(req.query.dat)
             if (LOG)
                 console.log (getDate(), stock, 'move from firebase', dat)

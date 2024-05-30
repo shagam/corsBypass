@@ -47,7 +47,7 @@ function historicPriceFlush () {
       console.log (getDate(), 'txt/priceArray.txt write fail', err)
     }
     else
-      console.log (getDate(), 'txt/priceArray.txt write count:', Object.keys(priceArray).length)
+      console.log (getDate(), 'txt/priceArray.txt sym count:', Object.keys(priceArray).length, 'writeCount=', writeCount)
   })
   writeCount ++
 }
