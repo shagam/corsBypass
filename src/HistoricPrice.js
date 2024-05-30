@@ -40,6 +40,7 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
   }
 });
 
+var writeCount = 0
 function historicPriceFlush () {
   fs.writeFile ('txt/priceArray.txt', JSON.stringify (priceArray), err => {
     if (err) {
@@ -48,6 +49,7 @@ function historicPriceFlush () {
     else
       console.log (getDate(), 'txt/priceArray.txt write count:', Object.keys(priceArray).length)
   })
+  writeCount ++
 }
 
 // app.get('/price', (req, res) => {
@@ -184,7 +186,10 @@ function price (app) {
     console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
     // console.dir (priceArray)
 
-    historicPriceFlush()
+    if (writeCount % 5 === 0)
+      historicPriceFlush()
+
+
 
     res.send (JSON.stringify(priceObject))
   })
