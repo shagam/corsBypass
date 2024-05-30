@@ -55,7 +55,7 @@ function gain (app)  {
         const symOnly = req.query.symOnly;
         const factor = req.query.factor;
 
-        console.log ('\n', date, 'gain cmd=', cmd, 'stock=', stock, 'factor=', factor, 'write=', writeCounter, 'read=', readCount,
+        console.log ('\n\n', getDate(), 'gain cmd=', cmd, 'stock=', stock, 'factor=', factor, 'write=', writeCounter, 'read=', readCount,
          'filterCount=', filterCount, 'removeCount=', removeCount, 'symOnly=', symOnly)
 
         if (cmd === 'r') { // read one stock
@@ -123,9 +123,9 @@ function gain (app)  {
                 console.log ('\n\n', getDate(), stock, ' gain delete done')
                 res.send ('ok')
             }
-            return;   
+            return;           
         }
-        else if (cmd === 'a') { // get all 
+              else if (cmd === 'a') { // get all 
             filterCount ++;
             const keys=Object.keys(gainArray)
             
