@@ -54,6 +54,21 @@ function splitsGet (app) {
     splitsGet(req, res, 7, false)
     console.log ('splits delay=', Date.now() - nowMili)
 
+    const stock = req.query.stock;
+    if (req.query.cmd === 'delOneSym') { // delete one sym
+      if (! splitsArray[stock]) {
+          console.log ('\n\n', getDate(), stock, ' split delete missing')
+          res.send ('fail, symbol missing')
+      }
+      else {
+        splitsArray[stock] = null; // remove sym
+          console.log ('\n\n', getDate(), stock, ' split delete done')
+          res.send ('ok')
+      }
+      return;   
+  }    
+    
+    
     const daysDelay = 7;
     const ignoreSaved = false
 
