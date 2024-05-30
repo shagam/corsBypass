@@ -113,6 +113,18 @@ function gain (app)  {
             res.send ('ok')
             return;           
         }
+        else if (cmd === 'delOneSym') { // delete one sym
+            if (! gainArray[stock]) {
+                console.log ('\n\n', getDate(), stock, 'missing')
+                res.send ('fail, symbol missing')
+            }
+            else {
+                gainArray[stock] = null; // remove sym
+                console.log ('\n\n', getDate(), stock, 'delete')
+                res.send ('ok')
+            }
+            return;   
+        }
         else if (cmd === 'a') { // get all 
             filterCount ++;
             const keys=Object.keys(gainArray)
