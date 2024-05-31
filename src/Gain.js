@@ -188,11 +188,12 @@ function gain (app)  {
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
                 if (! gainArray[sym] || ! gainArray[sym].year) {
-                    res.send ('fail, missing year' + sym + ' ' + gainArray[sym])
+                    res.send ('fail, missing year ' + sym + ' ' + gainArray[sym])
                     return
                 }
                 console.log ('verify QQQ exists', gainArray['QQQ']) // 
-                if (Number(gainArray[sym].year * factor) < Number(gainArray['QQQ'].year) &&
+                if (
+                 (Number(gainArray[sym].year * factor) < Number(gainArray['QQQ'].year)) &&
                  (Number(gainArray[sym].year2 * factor) < Number(gainArray['QQQ'].year2)) &&
                  (Number(gainArray[sym].year5 * factor) < Number(gainArray['QQQ'].year5)) &&
                  (Number(gainArray[sym].year10 * factor) < Number(gainArray['QQQ'].year10))) 
