@@ -214,5 +214,17 @@ app.get('/flushAll', (req, res) => {
   res.send('ok' + JSON.stringify(req.query))
 })
 
+function timeout(delay) {
+  return new Promise (res => setTimeout(res, delay))
+}
+
+process.on('SIGINT', function() {
+  console.log ('  SIGINT ^C')
+  timeout (20000)
+
+  console.log ('delay end')
+  process.exit()
+})
+
 
 }); // onEC2
