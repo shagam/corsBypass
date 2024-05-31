@@ -187,7 +187,7 @@ function gain (app)  {
             console.log ('d  list of bad_1_2_5_10  factor=', factor)
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
-
+                console.log ('verify fields', gainArray[sym]) // 
                 if (Number(gainArray[sym].year * factor) < Number(gainArray['QQQ'].year) &&
                  (Number(gainArray[sym].year2 * factor) < Number(gainArray['QQQ'].year2)) &&
                  (Number(gainArray[sym].year5 * factor) < Number(gainArray['QQQ'].year5)) &&
