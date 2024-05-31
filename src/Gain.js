@@ -173,7 +173,7 @@ function gain (app)  {
 
         else if (cmd === 'd') {//get list for remove gain 1,2,5,10
             filterCount ++;
-            if (! gainArray['QQQ']) {
+            if (! gainArray['QQQ'] || ! gainArray['QQQ'].year) {
                 res.send ('fail missing needed QQQ')
                 return;
             }
@@ -187,7 +187,7 @@ function gain (app)  {
             console.log ('d  list of bad_1_2_5_10  factor=', factor)
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
-                if (! gainArray[sym].year) {
+                if (! gainArray[sym] || ! gainArray[sym].year) {
                     res.send ('fail, missing year' + sym + ' ' + gainArray[sym])
                     return
                 }
