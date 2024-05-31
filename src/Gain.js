@@ -177,6 +177,7 @@ function gain (app)  {
                 res.send ('fail missing needed QQQ')
                 return;
             }
+            console.log ('verify QQQ exists', gainArray['QQQ']) // 
             const factor = req.query.factor; // overRide 
             if (Number(factor) < 1.05) {
                 console.log ('fail, factor too small:', factor)
