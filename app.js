@@ -214,6 +214,14 @@ app.get('/flushAll', (req, res) => {
   res.send('ok' + JSON.stringify(req.query))
 })
 
+// test response time
+app.get('/ping', (req, res) => {
+  console.log ('ping query', req.query)
+
+  res.send('ok')
+})
+
+
 function timeout(delay) {
   return new Promise (res => setTimeout(res, delay))
 }
