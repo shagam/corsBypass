@@ -202,7 +202,7 @@ function price (app) {
     if (writeCount % 5 === 0)
       historicPriceFlush()
     else
-      console.log ('skip too frequent Writes, writeCount=', writeCount)
+      console.log ('Historic price write skip too frequent, writeCount=', writeCount)
     writeCount++
 
 

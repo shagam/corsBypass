@@ -298,7 +298,7 @@ function priceNasdaq (app) {
     if (writeCount % 5 === 0)
       historicPriceNasdaqFlush()
     else
-      console.log ('skip too frequent Writes, writeCount=', writeCount)
+      console.log ('HistoricPriceNasdaq skip, too frequent Writes, writeCount=', writeCount)
     writeCount++;
 
 

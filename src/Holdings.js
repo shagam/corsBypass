@@ -198,7 +198,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     if (writeCount % 5 === 0)
       holdingArrayFlush()
     else
-      console.log ('skip too frequent Writes, writeCount', writeCount);
+      console.log ('Holding write skip too frequent, writeCount', writeCount);
     writeCount++
 
     res.send(JSON.stringify(holdingsObg))

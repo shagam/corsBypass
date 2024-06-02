@@ -107,7 +107,7 @@ function gain (app)  {
               lastWriteMili = Date.now()
             }
             else
-                console.log ('skip too frequent Writes count', writeCount)
+                console.log ('gain write, skip too frequent WritesCount', writeCount)
             writeCount ++;
 
             res.send ('ok')

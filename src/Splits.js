@@ -23,7 +23,10 @@ fs.readFile('txt/splitsArray.txt', 'utf8', (err, data) => {
   else {
     var symbols ="";
     for (var i = 0; i < keys.length; i++)
+      if (splitsArray[keys[i]])
       symbols += keys[i] + ' (' + splitsArray[keys[i]].length + ')  ';
+      else 
+        console.log ('splitsArray mismatch', keys[i]) 
     console.log (symbols)
   }
   // for (var i = 0; i < keys.length; i++)
@@ -167,10 +170,10 @@ function splitsGet (app) {
       splitsArray [req.query.stock] = splits;
       // console.dir (splitsArray)
   
-      if (writeCount % 5 === 0)
+      if (writeCount % 1 === 0)
         splitArrayFlush()
       else
-        console.log ('skip too frequent Writes, writeCount=', writeCount)
+        console.log ('splits write skip too frequent Writes, writeCount=', writeCount)
       writeCount++;
 
       if (splits.length == 1)

@@ -21,15 +21,18 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
 
   const keys = Object.keys(holdingsArray);
   console.log('\n', getDate(), 'txt/holdingsArraySch.txt  read count=', keys.length)
-  if (print_textFiles)
-    for (var i = 0; i < keys.length; i++)
-      console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
-  else {
+  // if (print_textFiles)
+  //   for (var i = 0; i < keys.length; i++)
+  //     console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
+  // else {
     var symbols ="";
     for (var i = 0; i < keys.length; i++)
-      symbols += keys[i] +' (' + JSON.stringify (holdingsArray[keys[i]]).length + ')  '
+      if (holdingsArray[keys[i]])
+        symbols += keys[i] +' (' + JSON.stringify (holdingsArray[keys[i]]).length + ')  '
+      else
+        console.log(' holdingsSch mismatch', keys[i])
     console.log (symbols)
-  }
+  // }
   // for (var i = 0; i < keys.length; i++)
   //   console.log (keys[i])
 });
@@ -183,7 +186,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
     if (writeCount % 5 === 0)
       holdingsSchFlush() 
     else
-      console.log ('skip too frequent writes, writescount', writeCount)
+      console.log ('Holdings skip write too frequent, writescount', writeCount)
     writeCount ++ 
 
     res.send(JSON.stringify(holdingsObg))
