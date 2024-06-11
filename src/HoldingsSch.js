@@ -58,7 +58,7 @@ function holdingsSchFlush() {
 
 // http://localhost:5000/holdings?stock=AAPL
 
-function holdingsSch (req, res, daysDelay, ignoreSaved) {
+function holdingsSch (req, res, daysDelay) {
     // console.log ('\nholdings', req.query.stock)
 
     const stock = req.query.stock;
@@ -80,14 +80,14 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
    const updateMili = Date.now();
    const updateDate = getDate()
    var diff;
-   if (! ignoreSaved) {
+   if (!req.query.ignoreSaved) {
      var savedHoldings = holdingsArray [req.query.stock];
 
      if (savedHoldings && savedHoldings.updateMili)
        diff = updateMili - savedHoldings.updateMili
 
      if (savedHoldings && savedHoldings.updateMili && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay) {
-       console.log ("\n", req.query.stock, updateDate, 'holdingsSch', '\x1b[36m Saved found\x1b[0m,',
+       console.log (updateDate, 'holdingsSch', req.query.stock, '\x1b[36m Saved found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
       
      if (savedHoldings.holdArr === FAIL)
@@ -106,7 +106,7 @@ function holdingsSch (req, res, daysDelay, ignoreSaved) {
 
    
      // avoid getting from url if any holdings is recent
-     if (savedHoldings) {
+     if (req.query.savedHoldings) {
        for (var i = 0; i < savedHoldings.length; i++) {
          const oneHoldings = savedHoldings[i];
          if (oneHoldings.year === undefined)
@@ -203,11 +203,10 @@ function holdingsSchMain (app) {
   app.get('/holdingsSch', (req, res) => {
 
     // const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-    // console.log (req.query.stock, getDate(), ipAddress)
-  
+    console.log ('\n', getDate(), 'holdingsSch', req.query)
     var nowMili = Date.now();
-    holdingsSch (req, res, 7, false)
-    console.log ('holdingsSch delay=', Date.now() - nowMili)
+    holdingsSch (req, res, 7)
+    console.log (getDate(), 'holdingsSch delay=', Date.now() - nowMili)
   })
 } 
 module.exports = {holdingsSchMain, holdingsSchFlush}

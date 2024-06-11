@@ -58,7 +58,7 @@ function parse_0 (stocks, percent, text) {
     while ((rs = rx.exec(text)) !== null){
       percent.push(rs[1]);
   };
-  console.log ('stock', stocks.length, 'percent', percent.length)
+  // console.log ('stock', stocks.length, 'percent', percent.length)
 }
 
 var writeCount = 0
@@ -76,7 +76,7 @@ function holdingArrayFlush () {
 }
 // http://localhost:5000/holdings?stock=AAPL
 
-function holdings (req, res, daysDelay, ignoreSaved) {
+function holdings (req, res, daysDelay) {
 
   const stock = req.query.stock;
   if (req.query.cmd === 'delOneSym') { // delete one sym
@@ -100,7 +100,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
    const updateMili = Date.now();
    const updateDate = getDate()
    var diff;
-   if (! ignoreSaved) {
+   if (! req.query.ignoreSaved) {
      var savedHoldings = holdingsArray [req.query.stock];
 
      if (savedHoldings && savedHoldings.updateMili)
@@ -110,7 +110,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
        && (updateMili - savedHoldings.updateMili)  < daysDelay * miliInADay
        && Math.abs(savedHoldings.holdArr[0].sym - savedHoldings.holdArr[0].perc) < 3) // if mismatch get new
        {
-       console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved holdings found\x1b[0m,',
+       console.log (getDate(), 'holdings ', req.query.stock, '\x1b[36m Saved found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
       
      if (savedHoldings.holdArr === FAIL)
@@ -154,7 +154,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     // return;
 // https://stockanalysis.com/etf/xlk/holdings/
   var url = 'https://stockanalysis.com/etf/'+req.query.stock+'/holdings/'   
-   console.log (req.query.stock, updateDate, url)
+   console.log (updateDate, req.query.stock, url)
   // console.log (url)
   const options = {
     "method": "GET",
@@ -163,7 +163,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
   axios.get (url)
   .then ((result) => {
     const text = result.data;
-    console.log ('response length=', text.length)
+
 
     var stocks=[];
     var percent = [];
@@ -188,7 +188,7 @@ function holdings (req, res, daysDelay, ignoreSaved) {
     for (let i = 0; i < stocks.length; i++)
         holdingArray.push ({sym: stocks[i], perc: percent[i]})
 
-    console.log (req.query.stock, updateDate, 'sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
+    // console.log (req.query.stock, updateDate, 'sym=', stocks.length, 'percent=', percent.length, 'combined-records=', holdingArray.length)
 
     // save local holdings
     const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
@@ -214,8 +214,9 @@ function holdings (req, res, daysDelay, ignoreSaved) {
 function holdingsMain (app) {
   app.get('/holdings', (req, res) => {
     var nowMili = Date.now();
-    holdings (req, res, 7, false)
-    console.log (req.query.stock, getDate(), 'holdings delay=', Date.now() - nowMili)
+    console.log ('\n', getDate(), 'holdings', req.query)
+    holdings (req, res, 7)
+    console.log (getDate(), 'holdings delay=', Date.now() - nowMili)
   })
 }
 
