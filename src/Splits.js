@@ -53,6 +53,7 @@ function splitArrayFlush() {
 function splitsGet (app) {
 
   app.get('/splits', (req, res) => {
+    console.log (getDate(), req.query)
     var nowMili = Date.now();
     splitsGet(req, res, 7, false)
     console.log ('splits delay=', Date.now() - nowMili)
@@ -73,12 +74,11 @@ function splitsGet (app) {
     
     
     const daysDelay = 7;
-    const ignoreSaved = false
 
     // search saved splits retrieved lately
     nowMili = Date.now();
     var diff;
-    if (! ignoreSaved) {
+    if (! req.query.ignoreSaved) {
       var savedSplit = splitsArray [req.query.stock];
       if (savedSplit && savedSplit[0].updateMili)
         diff = nowMili - savedSplit[0].updateMili

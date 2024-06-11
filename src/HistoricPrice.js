@@ -70,7 +70,7 @@ function price (app) {
 
   app.get('/price', (req, res) => {
     // price(req, res)
-    // console.log (getDate(), req.query)
+    console.log (getDate(), req.query)
     // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
     const stock = req.query.stock
     if (req.query.cmd === 'delOneSym') { // delete one sym
@@ -88,7 +88,7 @@ function price (app) {
 
 
   const savedPrice = priceArray[req.query.stock];
-  if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
+  if (! req.query.ignoreSaved && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
   req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
     console.log ('\n' + req.query.stock, getDate() + '\x1b[36m Saved price found\x1b[0m',
      'saveCount=' + Object.keys(priceArray).length)
