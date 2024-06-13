@@ -134,7 +134,16 @@ function targetPrice (app)  {
                     i--; // remain on same
                 }
             }
-
+           
+            // if too many remove some
+            const LIMIT = 9;
+            if (targetArray[stock].length > LIMIT) {
+                // thin too many
+                for (let i = 1; i < LIMIT - 2; i += 3) {
+                    console.log (stock, 'x', '\x1b[36m remove extra \x1b[0m,', i, targetArray[stock][i])
+                    targetArray[stock].splice(i)
+                }
+            }
             // print
             // console.log(getDate(), stock, 'list', target[stock].length)
             // for (let i = 0; i < target[stock].length; i++) {
