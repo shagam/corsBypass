@@ -133,8 +133,8 @@ function targetPrice (app)  {
                     targetArray[stock].splice(i)
                     i--; // remain on same
                 }
-                if (targetArray[stock][i].tar === NaN) {
-                    console.log (i, 'remove NaN', targetArray[stock][i].target,targetArray[stock][i].tar)
+                if (isNaN(targetArray[stock][i].tar)) {
+                    console.log (i, 'remove NaN records', targetArray[stock][i].target,targetArray[stock][i].tar)
                     targetArray[stock].splice(i)
                 }
             }
