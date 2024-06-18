@@ -62,6 +62,8 @@ function holdingsSch (req, res, daysDelay) {
     // console.log ('\nholdings', req.query.stock)
 
     const stock = req.query.stock;
+    const LOG = req.query.LOG
+
     if (req.query.cmd === 'delOneSym') { // delete one sym
       if (! holdingsArray[stock]) {
           console.log ('\n\n', getDate(), stock, ' holdingsSch delete missing')
@@ -90,7 +92,8 @@ function holdingsSch (req, res, daysDelay) {
        console.log (updateDate, 'holdingsSch', req.query.stock, '\x1b[36m Saved found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
       
-     if (savedHoldings.holdArr === FAIL)
+     if (savedHoldings.holdArr === FAIL || true)
+      if (LOG)
       console.log (req.query.stock, updateDate, savedHoldings )
        if (savedHoldings.length == 1)
          res.send ('')

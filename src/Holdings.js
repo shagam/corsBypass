@@ -79,6 +79,7 @@ function holdingArrayFlush () {
 function holdings (req, res, daysDelay) {
 
   const stock = req.query.stock;
+  const LOG = req.query.LOG
   if (req.query.cmd === 'delOneSym') { // delete one sym
     if (! holdingsArray[stock]) {
         console.log ('\n\n', getDate(), stock, ' holdings delete missing')
@@ -113,7 +114,8 @@ function holdings (req, res, daysDelay) {
        console.log (getDate(), 'holdings ', req.query.stock, '\x1b[36m Saved found\x1b[0m,',
        ' saveCount=', Object.keys(holdingsArray).length)
       
-     if (savedHoldings.holdArr === FAIL)
+     if (savedHoldings.holdArr === FAIL || true)
+      if (LOG)
       console.log (req.query.stock, updateDate, savedHoldings)
        if (savedHoldings.length == 1)
          res.send ('')
@@ -123,6 +125,7 @@ function holdings (req, res, daysDelay) {
      }
      else {  // delete old wrong saved format
        holdingsArray [req.query.stock] = undefined;
+       if (LOG)
        console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdings missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
        savedHoldings = undefined;
      }
