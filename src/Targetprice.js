@@ -53,8 +53,9 @@ function targetPrice (app)  {
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
         const datNew = req.query.dat
+        const LOG = req.query.LOG
 
-        console.log ('\n',getDate(), ' targetPrice query', stock, cmd, datNew, req.query)
+        console.log ('\n',getDate(), ' targetPrice stock=', stock, 'cmd=', cmd, datNew, 'query=', req.query)
         // res.send ('ok_')
         // return
 
@@ -80,7 +81,7 @@ function targetPrice (app)  {
             }
 
 
-            if (LOG|true) {
+            if (LOG) {
                 console.log ('records:', dat.length)
                 for (let i = 0; i < dat.length; i++ )
                     console.log (dat[i])
@@ -101,6 +102,7 @@ function targetPrice (app)  {
             //     for (let i = 0; i < dat.length; i++ )
             //         console.log (dat[i])
             // }
+            if (LOG)
             console.log (getDate(), 'TargetPrice read All',  Object.keys(targetArray))
 
             res.send (JSON.stringify(targetArray))

@@ -53,11 +53,11 @@ function splitArrayFlush() {
 function splitsGet (app) {
 
   app.get('/splits', (req, res) => {
-    console.log (getDate(), req.query)
+    console.log ('\n', getDate(), 'getSplits', req.query)
     const DAYS_DELAY = 3;
     var nowMili = Date.now();
     splitsGet(req, res, DAYS_DELAY, false)
-    console.log ('splits delay=', Date.now() - nowMili)
+    // console.log ('splits delay=', Date.now() - nowMili) fail to get correct time in javaScript
 
     const stock = req.query.stock;
     const LOG = req.query.LOG
@@ -87,7 +87,7 @@ function splitsGet (app) {
         diff = nowMili - savedSplit[0].updateMili
 
       if (savedSplit && savedSplit[0].updateMili && (nowMili - savedSplit[0].updateMili)  < daysDelay * miliInADay) {
-        console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved split found\x1b[0m,',
+        console.log (req.query.stock, getDate(), '\x1b[36m Saved split found\x1b[0m,',
         ' saveCount=', Object.keys(splitsArray).length)
         if (LOG)
         console.dir (savedSplit)
