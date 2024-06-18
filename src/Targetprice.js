@@ -55,7 +55,7 @@ function targetPrice (app)  {
         const datNew = req.query.dat
         const LOG = req.query.LOG
 
-        console.log ('\n',getDate(), ' targetPrice stock=', stock, 'cmd=', cmd, datNew, 'query=', req.query)
+        console.log ('\n',getDate(), ' targetPrice stock=', stock, 'cmd=', cmd, 'datNew=', datNew, 'query=', req.query)
         // res.send ('ok_')
         // return
 
