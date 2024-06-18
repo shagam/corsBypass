@@ -60,6 +60,8 @@ function splitsGet (app) {
     console.log ('splits delay=', Date.now() - nowMili)
 
     const stock = req.query.stock;
+    const LOG = req.query.LOG
+
     if (req.query.cmd === 'delOneSym') { // delete one sym
       if (! splitsArray[stock]) {
           console.log ('\n\n', getDate(), stock, ' split delete missing')
@@ -87,6 +89,7 @@ function splitsGet (app) {
       if (savedSplit && savedSplit[0].updateMili && (nowMili - savedSplit[0].updateMili)  < daysDelay * miliInADay) {
         console.log ("\n", req.query.stock, getDate(), '\x1b[36m Saved split found\x1b[0m,',
         ' saveCount=', Object.keys(splitsArray).length)
+        if (LOG)
         console.dir (savedSplit)
         if (savedSplit.length == 1)
           res.send ('')
@@ -165,6 +168,7 @@ function splitsGet (app) {
         console.log ('\n', req.query.stock, getDate(), '\x1b[33m no splits\x1b[0m count=', Object.keys(splitsArray).length) 
       }
       else
+        if (LOG)
         console.log ('\n', req.query.stock, getDate(), 'splits:', Object.keys(splitsArray).length, splits)
       
       // save local split
