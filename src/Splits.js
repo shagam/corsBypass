@@ -54,8 +54,9 @@ function splitsGet (app) {
 
   app.get('/splits', (req, res) => {
     console.log (getDate(), req.query)
+    const DAYS_DELAY = 3;
     var nowMili = Date.now();
-    splitsGet(req, res, 7, false)
+    splitsGet(req, res, DAYS_DELAY, false)
     console.log ('splits delay=', Date.now() - nowMili)
 
     const stock = req.query.stock;

@@ -86,9 +86,9 @@ function price (app) {
       return;   
   }
 
-
+  const DAYS_DELAY = 3;
   const savedPrice = priceArray[req.query.stock];
-  if (! req.query.ignoreSaved && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
+  if (! req.query.ignoreSaved && (nowMili - savedPrice.updateMili < DAYS_DELAY * 24 * 3600 * 1000) && // 3 days
   req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
     console.log ('\n' + req.query.stock, getDate() + '\x1b[36m Saved price found\x1b[0m',
      'saveCount=' + Object.keys(priceArray).length)

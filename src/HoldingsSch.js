@@ -200,12 +200,13 @@ function holdingsSch (req, res, daysDelay) {
 
 function holdingsSchMain (app) {
 // holdings of a stock
+  const DAYS_DELAY = 3;
   app.get('/holdingsSch', (req, res) => {
 
     // const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
     console.log ('\n', getDate(), 'holdingsSch', req.query)
     var nowMili = Date.now();
-    holdingsSch (req, res, 7)
+    holdingsSch (req, res, DAYS_DELAY)
     console.log (getDate(), 'holdingsSch delay=', Date.now() - nowMili)
   })
 } 

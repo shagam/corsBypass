@@ -212,10 +212,11 @@ function holdings (req, res, daysDelay) {
 }
 
 function holdingsMain (app) {
+  const DAYS_DELAY = 3;
   app.get('/holdings', (req, res) => {
     var nowMili = Date.now();
     console.log ('\n', getDate(), 'holdings', req.query)
-    holdings (req, res, 7)
+    holdings (req, res, DAYS_DELAY)
     console.log (getDate(), 'holdings delay=', Date.now() - nowMili)
   })
 }

@@ -140,9 +140,9 @@ function priceNasdaq (app) {
   const end_date = '&end_date=' + (Number(req.query.year)) + '-' + req.query.mon + '-' + req.query.day
   if (LOG)
   console.log('\n', req.query.stock, start_date, end_date)
-
+  const DAYS_DELAY = 3;
   const savedPrice = priceArray[req.query.stock];
-  if (savedPrice && (nowMili - savedPrice.updateMili < 3 * 24 * 3600 * 1000) && // 3 days
+  if (savedPrice && (nowMili - savedPrice.updateMili < DAYS_DELAY * 24 * 3600 * 1000) && // 3 days
   req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
     console.log ('\n' + req.query.stock, getDate() + '\x1b[36m Saved price found\x1b[0m',
      'saveCount=' + Object.keys(priceArray).length)
