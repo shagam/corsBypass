@@ -28,7 +28,7 @@ const {holdingsMain, holdingArrayFlush} = require('./src/Holdings')
 const {holdingsSchMain, holdingsSchFlush} = require('./src/HoldingsSch')
 
 
-const {gain, gainFlush} = require('./src/Gain')
+const {gainVerify, gainVerifyFlush} = require('./src/GainVerify')
 const {contact} = require('./src/ContactUs') 
 
 const app = express()
@@ -160,7 +160,7 @@ holdingsSchMain (app)
 // holdingsYahooMain (app)
 // holdingsMarketwatchMain(app)
 
-gain (app)
+gainVerify (app)
 
 contact (app)
 
@@ -200,7 +200,7 @@ splitsGet(app)
  function flush() {
   targetPriceFlush()
   historicPriceNasdaqFlush()
-  gainFlush()
+  gainVerifyFlush()
   historicPriceFlush()
   holdingArrayFlush()
   holdingsSchFlush()

@@ -31,7 +31,7 @@ fs.readFile('txt/gainArray.txt', 'utf8', (err, data) => {
 });
 
 var writeCount = 0;
-function gainFlush() {
+function gainVerifyFlush() {
     if (Object.keys(gainArray).length === 0) // avoid write of empty
         return;
     
@@ -45,7 +45,7 @@ function gainFlush() {
   })
 }
 
-function gain (app)  {
+function gainVerify (app)  {
     // nowMili = Date.now();
 
     app.get('/gain', (req, res) => {
@@ -103,7 +103,7 @@ function gain (app)  {
 
 
             if (writeCount % 5 === 0) {
-              gainFlush()
+              gainVerifyFlush()
               lastWriteMili = Date.now()
             }
             else
@@ -290,5 +290,5 @@ function gain (app)  {
 }
 
 
-module.exports = {gain, gainFlush}
+module.exports = {gainVerify, gainVerifyFlush}
    
