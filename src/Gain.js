@@ -97,6 +97,7 @@ function gain (app)  {
 
             // console.log (dat)
             gainArray[stock] = dat; // readable format
+            console.log (getDate(), dat)
 
             if(LOG)
                 console.log (Object.keys(gainArray))
