@@ -47,6 +47,19 @@ function userArrayFlush() {
   }) 
 }
 
+function userList (app) {
+  app.get('/users', (req, res) => {
+    console.log ('\n', getDate(), 'users', req.query)
+
+    const LOG = req.query.LOG
+
+    console.log (usersArray)
+    res.send ('ok')
+    
+   } )   
+
+} 
+
 
 function userAccess (sym, ip, city, countryName, countryCode) {
 
@@ -63,4 +76,4 @@ function userAccess (sym, ip, city, countryName, countryCode) {
     }
     userArrayFlush();
 }
-  module.exports = {userAccess, userArrayFlush}
+  module.exports = {userAccess, userArrayFlush, userList}
