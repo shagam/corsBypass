@@ -2,7 +2,7 @@ const fs = require ('fs')
 
 
 const {getDate} = require ('./Utils')
-
+const {userAccess} = require ('./Users') 
 var gainArray = {};   // key is symbol saved one obj per stock
 
 const LOG = false;
@@ -49,7 +49,7 @@ function gain (app)  {
     // nowMili = Date.now();
 
     app.get('/gain', (req, res) => {
-
+        // console.log (req.query)
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
         const symOnly = req.query.symOnly;
@@ -79,6 +79,8 @@ function gain (app)  {
 
             writeCounter++;
 
+            userAccess (req.query.stock, req.query.ip, req.query.city, req.query.countryName, req.query.countryCode)
+            
 
             var dat = JSON.parse(req.query.dat)
             if (LOG)
