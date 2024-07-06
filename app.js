@@ -208,6 +208,7 @@ splitsGet(app)
   holdingArrayFlush()
   holdingsSchFlush()
   splitArrayFlush()
+  userArrayFlush()
  }
 
 
