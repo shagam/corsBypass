@@ -173,8 +173,8 @@ function holdings (req, res, daysDelay) {
 
     // save for debug
     if (req.query.saveInFile) {
-      const choppedTxt = text.replace('<', '<')
-      fs.writeFile ('txt/holdingsRaw.txt', JSON.stringify(choppedTxt), err => {
+      const choppedTxt = JSON.stringify(text).replaceAll('<', '\n\a<')
+      fs.writeFile ('txt/holdingsRaw.txt', choppedTxt, err => {
         if (err) {
           console.err(getDate(), 'txt/holdingsRaw.txt write fail', err)
         }
