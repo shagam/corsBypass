@@ -167,6 +167,16 @@ function holdings (req, res, daysDelay) {
   .then ((result) => {
     const text = result.data;
 
+    // save for debug
+    if (req.query.saveInFile) {
+      fs.writeFile ('txt/holdingsRaw.txt', JSON.stringify(text), err => {
+        if (err) {
+          console.err(getDate(), 'txt/holdingsRaw.txt write fail', err)
+        }
+        else
+          console.log(getDate(), 'txt/holdingsRaw.txt write')
+      })  
+    }
 
     var stocks=[];
     var percent = [];
@@ -217,10 +227,10 @@ function holdings (req, res, daysDelay) {
 function holdingsMain (app) {
   const DAYS_DELAY = 3;
   app.get('/holdings', (req, res) => {
-    var nowMili = Date.now();
+    // var nowMili = Date.now();
     console.log ('\n', getDate(), 'holdings', req.query)
     holdings (req, res, DAYS_DELAY)
-    console.log (getDate(), 'holdings delay=', Date.now() - nowMili)
+    // console.log (getDate(), 'holdings delay=', Date.now() - nowMili)
   })
 }
 

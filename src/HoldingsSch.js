@@ -144,6 +144,18 @@ function holdingsSch (req, res, daysDelay) {
     const text = result.data;
     // console.log (text)
 
+    // save for debug
+    if (req.query.saveInFile) {
+      fs.writeFile ('txt/holdingsSchRaw.txt', JSON.stringify(text), err => {
+        if (err) {
+          console.err(getDate(), 'txt/holdingsSchRaw.txt write fail', err)
+        }
+        else
+          console.log(getDate(), 'txt/holdingsSchRaw.txt write')
+      })
+    
+    }
+
 
     // get stock array
     var pattern='<td class="symbol firstColumn" tsraw="QCOM">QCOM'
@@ -208,9 +220,9 @@ function holdingsSchMain (app) {
 
     // const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
     console.log ('\n', getDate(), 'holdingsSch', req.query)
-    var nowMili = Date.now();
+    // var nowMili = Date.now();
     holdingsSch (req, res, DAYS_DELAY)
-    console.log (getDate(), 'holdingsSch delay=', Date.now() - nowMili)
+    // console.log (getDate(), 'holdingsSch delay=', Date.now() - nowMili)
   })
 } 
 module.exports = {holdingsSchMain, holdingsSchFlush}
