@@ -53,7 +53,11 @@ function parse_0 (stocks, percent, text) {
 
   //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
   // <td class="svelte-1yyv6eq">2.29%</td>
-  pattern = '<td class="svelte-1yyv6eq">([0-9.]+)%</td>'
+  // pattern = '<td class="svelte-1yyv6eq">([0-9.]+)%</td>'
+
+  // <td class="svelte-172ru7t">5.25%</td> 2024 Jul 6
+  pattern = '<td class="svelte-172ru7t">([0-9.]+)%</td>'
+
   rx = new RegExp (pattern,'g');
     while ((rs = rx.exec(text)) !== null){
       percent.push(rs[1]);
@@ -169,7 +173,8 @@ function holdings (req, res, daysDelay) {
 
     // save for debug
     if (req.query.saveInFile) {
-      fs.writeFile ('txt/holdingsRaw.txt', JSON.stringify(text), err => {
+      const choppedTxt = text.replace('<', '<')
+      fs.writeFile ('txt/holdingsRaw.txt', JSON.stringify(choppedTxt), err => {
         if (err) {
           console.err(getDate(), 'txt/holdingsRaw.txt write fail', err)
         }
