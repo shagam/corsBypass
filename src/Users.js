@@ -87,14 +87,18 @@ function userAccess (sym, ip, city, countryName, countryCode) {
 
     // console.log (sym, ip, city, countryName, countryCode)
 
+    const obj = {sym: sym, date: getDate(),  ip: ip, city: city, countryName: countryName,
+       countryCode: countryCode, count: 0}
+
     if (usersArray[ip]) {
         usersArray[ip].count++
-        usersArray[ip].date = getDate()
+        const count = usersArray[ip].count;
+        usersArray[ip] = obj; // replace old by new sym, new date
+        usersArray[ip].count = count; // copy count
         console.log (usersArray[ip])
     }
     else {
-        const obj = {sym: sym, date: getDate(),  ip: ip, city: city, countryName: countryName, countryCode: countryCode, count: 0}
-        usersArray[ip] = obj;
+          usersArray[ip] = obj;
     }
     userArrayFlush();
 }
