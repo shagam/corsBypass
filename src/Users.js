@@ -95,7 +95,7 @@ function userAccess (sym, ip, city, countryName, countryCode) {
         const count = usersArray[ip].count;
         usersArray[ip] = obj; // replace old by new sym, new date
         usersArray[ip].count = count; // copy count
-        console.log (usersArray[ip])
+        console.log ('userAccess:', usersArray[ip])
     }
     else {
           usersArray[ip] = obj;
