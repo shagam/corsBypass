@@ -128,7 +128,23 @@ function gain (app)  {
             }
             return;           
         }
-              else if (cmd === 'a') { // get all 
+
+        else if (cmd === 'searchName') { // delete one sym
+            const stocks = Object.keys(gainArray)
+            var foundList = [];
+            for (let i = 0; i < stocks.length; i++) {
+                const str = stocks[i]
+                // console.log ('includes', str, stock)
+                if (str.includes (stock))
+                    foundList.push(str)
+            }
+            res.send (foundList)
+            console.log ('\n\n', getDate(), stock, foundList)
+
+            return;           
+        }
+
+        else if (cmd === 'a') { // get all 
             filterCount ++;
             const keys=Object.keys(gainArray)
             
