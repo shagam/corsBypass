@@ -199,7 +199,7 @@ function holdingsSch (req, res, daysDelay) {
     holdingsArray [req.query.stock] = holdingsObg;
     // console.dir (holdingsArray)
 
-    if (writeCount % 5 === 0)
+    if (writeCount % 1 === 0)  // write every time
       holdingsSchFlush() 
     else
       console.log ('Holdings skip write too frequent, writescount', writeCount)

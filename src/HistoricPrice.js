@@ -199,7 +199,7 @@ function price (app) {
     console.log ('\n', req.query.stock, getDate(), 'priceObj', Object.keys(priceArray).length, JSON.stringify(priceObject), 'length:', result.data.length)
     // console.dir (priceArray)
 
-    if (writeCount % 5 === 0)
+    if (writeCount % 1 === 0) // write every time
       historicPriceFlush()
     else
       console.log ('Historic price write skip too frequent, writeCount=', writeCount)

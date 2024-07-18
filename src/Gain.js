@@ -109,7 +109,7 @@ function gain (app)  {
                 console.log (Object.keys(gainArray))
 
 
-            if (writeCount % 5 === 0) {
+            if (writeCount % 1 === 0) { // write every update
               gainFlush()
               lastWriteMili = Date.now()
             }

@@ -295,7 +295,7 @@ function priceNasdaq (app) {
     if (LOG) console.log ('log 9')
     console.dir (priceArray)
 
-    if (writeCount % 5 === 0)
+    if (writeCount % 1 === 0)  // write every time
       historicPriceNasdaqFlush()
     else
       console.log ('HistoricPriceNasdaq skip, too frequent Writes, writeCount=', writeCount)

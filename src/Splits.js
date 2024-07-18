@@ -175,7 +175,7 @@ function splitsGet (app) {
       splitsArray [req.query.stock] = splits;
       // console.dir (splitsArray)
   
-      if (writeCount % 1 === 0)
+      if (writeCount % 1 === 0)  // write every time
         splitArrayFlush()
       else
         console.log ('splits write skip too frequent Writes, writeCount=', writeCount)
