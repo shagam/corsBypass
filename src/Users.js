@@ -53,20 +53,20 @@ function userList (app) {
 
     const LOG = req.query.LOG
     const ipList = Object.keys (usersArray);
-    if (LOG)
-      console.log (usersArray)
+    // if (LOG)
+    //   console.log (usersArray)
     // collect for count
     var cityObj = {};
     var countryObj = {}
     var ipObj = {};
 
     for (let i = 0; i <  ipList.length; i++) {
+      if (LOG)
+        console.log ('users', JSON.stringify(usersArray[ipList[i]]))
       const ip = ipList[i]
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
       countryObj[usersArray[ip].countryName] = 1;
-      // if (LOG)
-      //   console.log ('iploop:', ipObj, cityObj, countryObj)
     }
     const obj = {
       ipCount:  Object.keys(ipObj).length,
@@ -74,7 +74,7 @@ function userList (app) {
       countryCount: Object.keys(countryObj).length
     }
 
-    console.log (obj)
+    console.log ('\nCounters:', obj)
 
     res.send (obj)
 
