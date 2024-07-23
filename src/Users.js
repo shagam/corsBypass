@@ -88,18 +88,37 @@ function userAccess (sym, ip, city, countryName, countryCode) {
     // console.log (sym, ip, city, countryName, countryCode)
 
     const obj = {sym: sym, date: getDate(),  ip: ip, city: city, countryName: countryName,
-       countryCode: countryCode, count: 0}
+       countryCode: countryCode, count: 1}
 
     if (usersArray[ip]) {
-        usersArray[ip].count++
-        const count = usersArray[ip].count;
-        usersArray[ip] = obj; // replace old by new sym, new date
-        usersArray[ip].count = count; // copy count
-        console.log ('userAccess:', usersArray[ip])
+      usersArray[ip].sym = sym;
+      usersArray[ip].date = getDate()
+      usersArray[ip].ip = ip;
+      if (! usersArray[ip].countryName || usersArray[ip].countryName === '')
+        usersArray[ip].countryName = countryName;
+      if (! usersArray[ip].city || usersArray[ip].city === '')
+        usersArray[ip].city = city;
+      if (! usersArray[ip].countryCode)
+        usersArray[ip].countryCode = countryCode 
+      usersArray[ip].count++
+
+
     }
     else {
-          usersArray[ip] = obj;
+      usersArray[ip] = obj;
+      // if (sym)
+      //   usersArray[ip].sym = sym;
+      // // usersArray[ip].date = getDate()
+      // usersArray[ip].ip = ip;
+      // if (countryName)
+      //   usersArray[ip].countryName = countryName;
+      // if (city)
+      //   usersArray[ip].city = city;
+      // if (countryCode)
+      //   usersArray[ip].countryCode = countryCode 
+      //     usersArray[ip] = obj;
     }
+    console.log ('userAccess:', usersArray[ip])
     userArrayFlush();
 }
   module.exports = {userAccess, userArrayFlush, userList}
