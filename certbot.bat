@@ -10,7 +10,7 @@
 
 sudo certbot certonly --manual -d dinagold.org --preferred-challenges=dns
 
-# sudo certbot -nginx -d dinagold.net
+# sudo certbot --nginx -d dinagold.net
 
 sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net 
 #sudo certbot --manual --preferred-challenges dns certonly -d dinagold.org 
