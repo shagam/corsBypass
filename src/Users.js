@@ -88,7 +88,7 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
     // console.log (sym, ip, city, countryName, countryCode)
 
     const obj = {sym: sym, date: getDate(),  ip: ip, city: city, countryName: countryName,
-       countryCode: countryCode, count: 1}
+       countryCode: countryCode, egionName: regionName, count: 1}
 
     if (usersArray[ip]) {
       usersArray[ip].sym = sym;
