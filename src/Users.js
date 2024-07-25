@@ -83,7 +83,7 @@ function userList (app) {
 } 
 
 
-function userAccess (sym, ip, city, countryName, countryCode) {
+function userAccess (sym, ip, city, countryName, countryCode, regionName) {
 
     // console.log (sym, ip, city, countryName, countryCode)
 
@@ -99,7 +99,9 @@ function userAccess (sym, ip, city, countryName, countryCode) {
       if (! usersArray[ip].city || usersArray[ip].city === '')
         usersArray[ip].city = city;
       if (! usersArray[ip].countryCode)
-        usersArray[ip].countryCode = countryCode 
+        usersArray[ip].countryCode = countryCode;    
+      if (! usersArray[ip].regionName)
+        usersArray[ip].regionName = regionName;
       usersArray[ip].count++
 
 

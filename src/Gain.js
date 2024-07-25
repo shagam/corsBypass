@@ -79,7 +79,7 @@ function gain (app)  {
 
             writeCounter++;
 
-            userAccess (req.query.stock, req.query.ip, req.query.city, req.query.countryName, req.query.countryCode)
+            userAccess (req.query.stock, req.query.ip, req.query.city, req.query.countryName, req.query.countryCode, req.query.regionName)
             
 
             var dat = JSON.parse(req.query.dat)
