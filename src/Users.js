@@ -120,6 +120,7 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
         usersArray[ip].countryCode = countryCode 
       if (regionName)
          usersArray[ip].regionName = regionName;
+      usersArray[ip].count = 1;
       //     usersArray[ip] = obj;
     }
     console.log ('userAccess:', usersArray[ip])
