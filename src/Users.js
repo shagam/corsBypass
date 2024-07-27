@@ -94,13 +94,13 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
       usersArray[ip].sym = sym;
       usersArray[ip].date = getDate()
       usersArray[ip].ip = ip;
-      if (! usersArray[ip].countryName || usersArray[ip].countryName === '')
+      if (countryName)
         usersArray[ip].countryName = countryName;
-      if (! usersArray[ip].city || usersArray[ip].city === '')
+      if (city)
         usersArray[ip].city = city;
       // if (! usersArray[ip].countryCode)
       //   usersArray[ip].countryCode = countryCode;    
-      if (! usersArray[ip].regionName)
+      if (regionName)
         usersArray[ip].regionName = regionName;
       usersArray[ip].count++
 
@@ -116,8 +116,8 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
         usersArray[ip].countryName = countryName;
       if (city)
         usersArray[ip].city = city;
-      if (countryCode)
-        usersArray[ip].countryCode = countryCode 
+      // if (countryCode)
+      //   usersArray[ip].countryCode = countryCode 
       if (regionName)
          usersArray[ip].regionName = regionName;
       usersArray[ip].count = 1;
