@@ -77,6 +77,7 @@ function userList (app) {
       if (days > lastDays) {
         lastDays = days;
         lastIp = ip;
+
       }
 
       // console.log (dateArr)
