@@ -1,7 +1,8 @@
 const fs = require ('fs')
 
 
-const {getDate} = require ('./Utils')
+const {getDate} = require ('./Utils');
+const JSONTransport = require('nodemailer/lib/json-transport');
 
 
 const print_textFiles = false
@@ -60,6 +61,8 @@ function userList (app) {
     var countryObj = {}
     var ipObj = {};
 
+    var lastIp 
+    var lastDays = 0;
     for (let i = 0; i <  ipList.length; i++) {
       if (LOG)
         console.log ('users', JSON.stringify(usersArray[ipList[i]]))
@@ -67,6 +70,16 @@ function userList (app) {
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
       countryObj[usersArray[ip].countryName] = 1;
+
+      // find last access
+      const dateArr = usersArray[ip].date.split(/[-: ]/)
+      const days = ((dateArr[0] * 12) + dateArr[1]) * 30 + dateArr[2];
+      if (days > lastDays) {
+        lastDays = days;
+        lastIp = ip;
+      }
+
+      // console.log (dateArr)
     }
     const obj = {
       ipCount:  Object.keys(ipObj).length,
@@ -74,8 +87,13 @@ function userList (app) {
       countryCount: Object.keys(countryObj).length
     }
 
-    console.log ('\nCounters:', obj)
+    // console.log ('\nCounters:', obj)
 
+    obj['lastDate'] = usersArray[lastIp].date
+    obj['lastSym'] = usersArray[lastIp].sym
+    if (LOG)
+      console.log ('\nCounters:', obj)
+  
     res.send (obj)
 
    } )   
