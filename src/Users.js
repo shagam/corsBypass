@@ -89,6 +89,7 @@ function userList (app) {
 
     // console.log ('\nCounters:', obj)
 
+    obj['lastIP'] = lastIp
     obj['lastDate'] = usersArray[lastIp].date
     obj['lastSym'] = usersArray[lastIp].sym
     if (LOG)
