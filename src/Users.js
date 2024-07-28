@@ -23,7 +23,7 @@ fs.readFile('txt/userArray.txt', 'utf8', (err, data) => {
     var symbols ="";
     for (var i = 0; i < keys.length; i++)
       if (usersArray[keys[i]])
-      symbols += keys[i] + '  ';
+      symbols += keys[i] + ' (' + usersArray[keys[i]].count +') ';
       else 
         console.log ('splitsArray mismatch', keys[i]) 
     console.log (symbols)
