@@ -64,9 +64,11 @@ function userList (app) {
     var lastIp 
     var lastDays = 0;
     for (let i = 0; i <  ipList.length; i++) {
-      if (LOG)
-        console.log ('users', JSON.stringify(usersArray[ipList[i]]))
       const ip = ipList[i]
+      if (ip === '62.0.92.49') // skip developer ip
+        continue;
+      if (LOG )
+        console.log ('users', JSON.stringify(usersArray[ipList[i]]))
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
       countryObj[usersArray[ip].countryName] = 1;
@@ -88,6 +90,10 @@ function userList (app) {
       countryCount: Object.keys(countryObj).length
     }
 
+    if (! lastIp){
+      res.send('none')
+      return;
+    }
     // console.log ('\nCounters:', obj)
 
     obj['lastIP'] = lastIp
