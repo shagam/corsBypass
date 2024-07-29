@@ -65,10 +65,14 @@ function userList (app) {
     var lastDays = 0;
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
-      if (ip === '62.0.92.49') // skip developer ip
-        continue;
       if (LOG )
         console.log ('users', JSON.stringify(usersArray[ipList[i]]))
+      if (ip === '62.0.92.49') // skip developer ip
+      continue;
+
+      // skip my ip when searching for last
+
+      // collect statistics
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
       countryObj[usersArray[ip].countryName] = 1;
@@ -84,13 +88,15 @@ function userList (app) {
 
       // console.log (dateArr)
     }
+
+    // build report obj
     const obj = {
       ipCount:  Object.keys(ipObj).length,
       cityCount:  Object.keys(cityObj).length,
       countryCount: Object.keys(countryObj).length
     }
 
-    if (! lastIp){
+    if (! lastIp){ // if none (except mine) found
       res.send('none')
       return;
     }
