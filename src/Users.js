@@ -117,41 +117,29 @@ function userList (app) {
 
 
 function userAccess (sym, ip, city, countryName, countryCode, regionName) {
-
-    // console.log (sym, ip, city, countryName, countryCode)
-
-    const obj = {sym: sym, date: getDate(),  ip: ip, city: city, countryName: countryName,
-       regionName: regionName, count: 1}
+    //    regionName: regionName, count: 1}
+    // console.log ('params', sym, ip, 'city=', city, 'countryName=', countryName, 'countryCode=', countryCode, 'regionName=', regionName)
 
     if (usersArray[ip]) {
       usersArray[ip].sym = sym;
       usersArray[ip].date = getDate()
       usersArray[ip].ip = ip;
-      if (countryName)
-        usersArray[ip].countryName = countryName;
-      if (city)
-        usersArray[ip].city = city;
-      // if (! usersArray[ip].countryCode)
-      //   usersArray[ip].countryCode = countryCode;    
-      if (regionName)
-        usersArray[ip].regionName = regionName;
       usersArray[ip].count++
-
-
     }
-    else {
-      // usersArray[ip] = obj;
+    else 
       usersArray[ip] = {sym: sym, date: getDate(), ip: ip, count: 1}
 
-      if (countryName)
-        usersArray[ip].countryName = countryName;
-      if (city)
-        usersArray[ip].city = city;
-      if (regionName)
-         usersArray[ip].regionName = regionName;
 
-      //     usersArray[ip] = obj;
-    }
+    if (countryName)
+      usersArray[ip].countryName = countryName;
+    if (city)
+      usersArray[ip].city = city;
+    if (regionName)
+        usersArray[ip].regionName = regionName;
+    if (regionName)
+      usersArray[ip].regionName = regionName;
+
+    
     console.log ('userAccess:', usersArray[ip])
     userArrayFlush();
 }
