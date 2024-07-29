@@ -134,19 +134,15 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
     }
     else {
       // usersArray[ip] = obj;
-      if (sym)
-        usersArray[ip].sym = sym;
-      usersArray[ip].date = getDate()
-      usersArray[ip].ip = ip;
+      usersArray[ip] = {sym: sym, date: getDate(), ip: ip, count: 1}
+
       if (countryName)
         usersArray[ip].countryName = countryName;
       if (city)
         usersArray[ip].city = city;
-      // if (countryCode)
-      //   usersArray[ip].countryCode = countryCode 
       if (regionName)
          usersArray[ip].regionName = regionName;
-      usersArray[ip].count = 1;
+
       //     usersArray[ip] = obj;
     }
     console.log ('userAccess:', usersArray[ip])
