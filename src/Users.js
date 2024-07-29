@@ -50,10 +50,11 @@ function userArrayFlush() {
 
 function userList (app) {
   app.get('/users', (req, res) => {
-    console.log ('\n', getDate(), 'users arguments', req.query)
+
 
     const LOG = req.query.LOG
     const ipList = Object.keys (usersArray);
+    console.log ('\n', getDate(), 'users arguments', req.query, 'count=', ipList.length)
     // if (LOG)
     //   console.log (usersArray)
     // collect for count
