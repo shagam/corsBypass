@@ -65,12 +65,15 @@ function userList (app) {
     var lastDays = 0;
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
+      const dateArr = usersArray[ip].date.split(/[-: ]/)
+      const days = ((dateArr[0] * 12) + dateArr[1]) * 30 + dateArr[2];
+
       if (LOG )
-        console.log ('users', JSON.stringify(usersArray[ipList[i]]))
-      if (ip === '62.0.92.49') // skip developer ip
-      continue;
+        console.log ('users', JSON.stringify(usersArray[ipList[i]]), days)
 
       // skip my ip when searching for last
+      if (ip === '62.0.92.49') // skip developer ip
+        continue;
 
       // collect statistics
       ipObj[usersArray[ip].ip] = 1;
@@ -78,8 +81,6 @@ function userList (app) {
       countryObj[usersArray[ip].countryName] = 1;
 
       // find last access
-      const dateArr = usersArray[ip].date.split(/[-: ]/)
-      const days = ((dateArr[0] * 12) + dateArr[1]) * 30 + dateArr[2];
       if (days > lastDays) {
         lastDays = days;
         lastIp = ip;
