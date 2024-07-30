@@ -49,7 +49,7 @@ function gain (app)  {
     // nowMili = Date.now();
 
     app.get('/gain', (req, res) => {
-        // console.log (req.query)
+        // console.log ('query params', req.query)
         const stock = req.query.stock
         const cmd = req.query.cmd; // R, W, F
         const symOnly = req.query.symOnly;
