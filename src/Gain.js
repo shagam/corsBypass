@@ -40,7 +40,7 @@ function gainFlush() {
         console.log (getDate(), 'txt/gainArray.txt write fail', err)
     }
     else
-        console.log (getDate(), 'txt/gainArray.txt write, sym count=', Object.keys(gainArray).length,
+        console.log (getDate(), 'txt/gainArray.txt gain-write, sym-count=', Object.keys(gainArray).length,
         'writeCount=', writeCount)
   })
 }
@@ -103,7 +103,7 @@ function gain (app)  {
 
             // console.log (dat)
             gainArray[stock] = dat; // readable format
-            console.log (getDate(), dat)
+            console.log (getDate(), 'gainWrite', dat)
 
             if(LOG)
                 console.log (Object.keys(gainArray))

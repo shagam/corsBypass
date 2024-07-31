@@ -63,14 +63,14 @@ function userList (app) {
     var ipObj = {};
 
     var lastIp 
-    var lastDays = 0;
+    var lastSeconds = 0;
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
       const dateArr = usersArray[ip].date.split(/[-: ]/)
-      const days = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2])) * 24 + Number(dateArr[3])) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
+      const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2])) * 24 + Number(dateArr[3])) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
       // console.log (dateArr)
       if (LOG )
-        console.log ('users', JSON.stringify(usersArray[ipList[i]])) //, days)
+        console.log ('users', JSON.stringify(usersArray[ipList[i]]), seconds)
 
       // skip my ip when searching for last
       if (ip === '62.0.92.49') // skip developer ip
@@ -82,8 +82,8 @@ function userList (app) {
       countryObj[usersArray[ip].countryName] = 1;
 
       // find last access
-      if (days > lastDays) {
-        lastDays = days;
+      if (seconds > lastSeconds) {
+        lastSeconds = seconds;
         lastIp = ip;
 
       }
@@ -127,7 +127,7 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
       usersArray[ip].ip = ip;
       usersArray[ip].count++
     }
-    else 
+    else // new
       usersArray[ip] = {sym: sym, date: getDate(), ip: ip, count: 1}
 
 
