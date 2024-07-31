@@ -66,7 +66,7 @@ function userList (app) {
     var lastSeconds = 0;
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
-      if (! usersArray[ip].ip)
+      if (! usersArray[ip].ip || usersArray[ip].ip === '')
         usersArray[ip].ip = ip;
       const dateArr = usersArray[ip].date.split(/[-: ]/)
       const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2])) * 24 + Number(dateArr[3])) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
