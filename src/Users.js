@@ -118,7 +118,7 @@ function userList (app) {
       countryCount: Object.keys(countryObj).length
     }
 
-    if (! lastIp){ // if none (except mine) found
+    if (! lastSeconds){ // if none (except mine) found
       res.send('none')
       return;
     }
