@@ -69,13 +69,15 @@ function userList (app) {
       const dateArr = usersArray[ip].date.split(/[-: ]/)
       const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2])) * 24 + Number(dateArr[3])) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
       // console.log (dateArr)
-      if (LOG )
-        console.log ('users', JSON.stringify(usersArray[ipList[i]]), seconds)
+      usersArray[ip].sec =  seconds;
+      // if (LOG )
+      //   console.log ('users', JSON.stringify(usersArray[ipList[i]]))
 
       // skip my ip when searching for last
-      if (ip === '62.0.92.49') // skip developer ip
+      if (ip === '62.0.92.49') { // skip developer ip
+        console.log ('homeIP', ip )
         continue;
-
+      }
       // collect statistics
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
@@ -85,11 +87,29 @@ function userList (app) {
       if (seconds > lastSeconds) {
         lastSeconds = seconds;
         lastIp = ip;
-
       }
 
       // console.log (dateArr)
     }
+
+    // highlight last and LOG
+    if (LOG )
+    for (let i = 0; i <  ipList.length; i++) {
+      const ip = ipList[i]
+      const LAST = usersArray[ip].sec === lastSeconds;
+      delete usersArray[ip].sec // not needed anymore
+
+      var txt =  JSON.stringify(usersArray[ipList[i]])
+      if (LAST)
+        txt = '* ' + txt;
+      else if (ip === '62.0.92.49')
+        txt = '^ ' + txt;
+      else        
+        txt = '  ' + txt;
+
+      console.log (txt)
+    }
+
 
     // build report obj
     const obj = {
