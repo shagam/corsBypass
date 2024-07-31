@@ -144,7 +144,7 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
     // console.log ('params', sym, ip, 'city=', city, 'countryName=', countryName, 'countryCode=', countryCode, 'regionName=', regionName)
 
     if (! ip) {
-      console.log ('error, missing ip)
+      console.log ('error, missing ip')
       return;
     }
 
