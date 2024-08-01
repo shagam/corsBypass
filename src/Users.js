@@ -93,9 +93,8 @@ function userList (app) {
       const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2])) * 24 + Number(dateArr[3])) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
       // console.log (dateArr)
       usersArray[ip].sec =  seconds;
-      // if (LOG )
-      //   console.log ('users', JSON.stringify(usersArray[ipList[i]]))
 
+      usersArr.push (usersArray[ipList[i]]) // ptrepare array
       // skip my ip when searching for last
       if (ip === '62.0.92.49') { // skip developer ip
         // console.log ('homeIP', ip )
@@ -112,7 +111,7 @@ function userList (app) {
         lastIp = ip;
       }
 
-      usersArr.push (usersArray[ipList[i]])
+
       // console.log (dateArr)
     }
 
@@ -125,15 +124,11 @@ function userList (app) {
     
     if (LOG )
     for (let i = 0; i <  usersArr.length; i++) {
-      const ip = ipList[i]
+      const ip = usersArr[i].ip
       if (! ip)
         continue;
-      // const LAST = usersArray[ip].sec === lastSeconds;
 
-
-
-
-      delete usersArray[ip].sec // not needed anymore
+      delete usersArr[i].sec // not needed anymore
       var txt =  JSON.stringify(usersArr[i])
       if (i === usersArr.length -1)
         txt = '* ' + txt;
