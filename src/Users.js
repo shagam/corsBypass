@@ -157,8 +157,8 @@ function userList (app) {
     obj['lastIP'] = lastIp
     obj['lastDate'] = usersArray[lastIp].date
     obj['lastSym'] = usersArray[lastIp].sym
-    if (LOG)
-      console.log ('\nCounters:', obj)
+
+      console.log ('\nUsers info:', obj)
   
     res.send (obj)
 
