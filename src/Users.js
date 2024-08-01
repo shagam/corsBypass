@@ -79,7 +79,7 @@ function userList (app) {
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
       if (! ip) {
-        console.log ('ip null')
+        console.log ('ip null', i, usersArray[ip])
         continue
       }
       // remove invalid ip
@@ -130,7 +130,7 @@ function userList (app) {
 
       delete usersArr[i].sec // not needed anymore
       var txt =  JSON.stringify(usersArr[i])
-      if (i === usersArr.length -1)
+      if (usersArr[i].ip === lastIp)
         txt = '* ' + txt;
       else if (ip === '62.0.92.49')
         txt = '^ ' + txt;
