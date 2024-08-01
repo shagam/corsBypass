@@ -90,7 +90,7 @@ function userList (app) {
         continue;
       }
       const dateArr = usersArray[ip].date.split(/[-: ]/)
-      const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2])) * 24 + Number(dateArr[3])) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
+      const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2]) -1) * 24 + Number(dateArr[3]) -1) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
       // console.log (dateArr)
       usersArray[ip].sec =  seconds;
 
