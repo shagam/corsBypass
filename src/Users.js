@@ -66,6 +66,7 @@ function userList (app) {
     var lastSeconds = 0;
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
+
       if (! usersArray[ip].ip || usersArray[ip].ip === '')
         usersArray[ip].ip = ip;
       const dateArr = usersArray[ip].date.split(/[-: ]/)
@@ -109,7 +110,7 @@ function userList (app) {
       else        
         txt = '  ' + txt;
 
-      console.log (txt)
+      console.log (ip, txt)
     }
 
 
