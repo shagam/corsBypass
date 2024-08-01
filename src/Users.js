@@ -67,10 +67,11 @@ function userList (app) {
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
 
-      
+      // remove invalid ip
       if (! usersArray[ip].ip || usersArray[ip].ip === '') {
         console.log ('remove invalid', ip, usersArray[ip])
         usersArray[ip]= null; // remove invalid
+        continue;
       }
       const dateArr = usersArray[ip].date.split(/[-: ]/)
       const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2])) * 24 + Number(dateArr[3])) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
