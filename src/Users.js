@@ -120,22 +120,22 @@ function userList (app) {
     // highlight last and LOG
 
     usersArr.sort(compare)
-    console.log ('arr', usersArr)
+    // console.log ('arr', usersArr)
 
     
     if (LOG )
-    for (let i = 0; i <  ipList.length; i++) {
+    for (let i = 0; i <  usersArr.length; i++) {
       const ip = ipList[i]
       if (! ip)
         continue;
-      const LAST = usersArray[ip].sec === lastSeconds;
+      // const LAST = usersArray[ip].sec === lastSeconds;
 
 
 
 
       delete usersArray[ip].sec // not needed anymore
-      var txt =  JSON.stringify(usersArray[ipList[i]])
-      if (LAST)
+      var txt =  JSON.stringify(usersArr[i])
+      if (i === usersArr.length -1)
         txt = '* ' + txt;
       else if (ip === '62.0.92.49')
         txt = '^ ' + txt;
