@@ -107,6 +107,8 @@ function userList (app) {
     if (LOG )
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
+      if (! ip)
+        continue;
       const LAST = usersArray[ip].sec === lastSeconds;
       delete usersArray[ip].sec // not needed anymore
 
