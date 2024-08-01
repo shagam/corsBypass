@@ -137,8 +137,8 @@ function userList (app) {
       else        
         txt = '  ' + txt;
       const DISPLAY_LIMIT = 20
-      if (i > usersArr.length - DISPLAY_LIMIT)
-      console.log (i, txt)
+      if (i > usersArr.length - DISPLAY_LIMIT - 1)
+        console.log (i, txt)
     }
 
 
