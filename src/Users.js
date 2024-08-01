@@ -65,6 +65,7 @@ function userList (app) {
 
 
     const LOG = req.query.LOG
+    const LOG_EXTRA = req.query.LOG_EXTRA
     const ipList = Object.keys (usersArray);
     console.log ('\n', getDate(), 'users arguments', req.query, 'count=', ipList.length)
     // if (LOG)
@@ -89,8 +90,10 @@ function userList (app) {
         userArrayFlush()
         continue;
       }
+      
+      
       const dateArr = usersArray[ip].date.split(/[-: ]/)
-      const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 30 + Number(dateArr[2]) -1) * 24 + Number(dateArr[3]) -1) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
+      const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 31 + Number(dateArr[2]) -1) * 24 + Number(dateArr[3]) -1) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
       // console.log (dateArr)
       usersArray[ip].sec =  seconds;
 
@@ -100,6 +103,7 @@ function userList (app) {
         // console.log ('homeIP', ip )
         continue;
       }
+      
       // collect statistics
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
@@ -128,7 +132,8 @@ function userList (app) {
       if (! ip)
         continue;
 
-      delete usersArr[i].sec // not needed anymore
+      if (! LOG_EXTRA)
+        delete usersArr[i].sec // not needed anymore
       var txt =  JSON.stringify(usersArr[i])
       if (usersArr[i].ip === lastIp)
         txt = '* ' + txt;
