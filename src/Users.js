@@ -33,6 +33,18 @@ fs.readFile('txt/userArray.txt', 'utf8', (err, data) => {
   //   console.log (keys[i])
 });
 
+// use for sort array
+function compare( a, b ) {
+  if ( a.sec < b.sec ){
+    return -1;
+  }
+  if ( a.sec > b.sec ){
+    return 1;
+  }
+  return 0;
+}
+
+
 var writeCount = 0;
 function userArrayFlush() {
   if (Object.keys(usersArray).length === 0) // avoid write of empty
@@ -61,7 +73,7 @@ function userList (app) {
     var cityObj = {};
     var countryObj = {}
     var ipObj = {};
-
+    const usersArr = []
     var lastIp 
     var lastSeconds = 0;
     for (let i = 0; i <  ipList.length; i++) {
@@ -100,18 +112,28 @@ function userList (app) {
         lastIp = ip;
       }
 
+      usersArr.push (usersArray[ipList[i]])
       // console.log (dateArr)
     }
 
+
     // highlight last and LOG
+
+    usersArr.sort(compare)
+    console.log ('arr', usersArr)
+
+    
     if (LOG )
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
       if (! ip)
         continue;
       const LAST = usersArray[ip].sec === lastSeconds;
-      delete usersArray[ip].sec // not needed anymore
 
+
+
+
+      delete usersArray[ip].sec // not needed anymore
       var txt =  JSON.stringify(usersArray[ipList[i]])
       if (LAST)
         txt = '* ' + txt;
