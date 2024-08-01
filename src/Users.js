@@ -71,6 +71,7 @@ function userList (app) {
       if (! usersArray[ip].ip || usersArray[ip].ip === '') {
         console.log ('remove invalid', ip, usersArray[ip])
         usersArray[ip]= null; // remove invalid
+        userArrayFlush()
         continue;
       }
       const dateArr = usersArray[ip].date.split(/[-: ]/)
