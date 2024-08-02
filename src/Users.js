@@ -208,7 +208,7 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
       usersArray[ip].regionName = regionName;
 
     
-    console.log ('userAccess:', usersArray[ip])
+    console.log ('ip collect:', usersArray[ip])
     userArrayFlush();
 } //* end of collection
 
