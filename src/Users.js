@@ -174,9 +174,11 @@ function userList (app) {
       obj.country = usersArray[lastIp].country
     if (usersArray[lastIp].region)
       obj.region = usersArray[lastIp].region
-
-
-      console.log ('\nUsers info:', obj)
+    delete usersArray[lastIp].countryName; // clear old
+    delete usersArray[lastIp].regionName;  // clear old
+    delete usersArray[lastIp].countryCode;  // clear old
+    userArrayFlush();  //* write removed fields
+    console.log ('\nUsers info:', obj)
   
     res.send (obj)
 
