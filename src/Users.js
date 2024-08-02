@@ -165,9 +165,16 @@ function userList (app) {
 
     // console.log ('\nCounters:', obj)
 
-    obj['lastIP'] = lastIp
-    obj['lastDate'] = usersArray[lastIp].date
-    obj['lastSym'] = usersArray[lastIp].sym
+    obj.ip = lastIp
+    obj.date = usersArray[lastIp].date
+    obj.sym = usersArray[lastIp].sym
+    if (usersArray[lastIp].city)
+      obj.city = usersArray[lastIp].city
+    if (usersArray[lastIp].country)
+      obj.country = usersArray[lastIp].country
+    if (usersArray[lastIp].region)
+      obj.region = usersArray[lastIp].region
+
 
       console.log ('\nUsers info:', obj)
   
@@ -179,7 +186,7 @@ function userList (app) {
 
 
 //*  collect ip of users called from gain request
-function userAccess (sym, ip, city, countryName, countryCode, regionName) {
+function userAccess (sym, ip, city, country, region) {
     //    regionName: regionName, count: 1}
     // console.log ('params', sym, ip, 'city=', city, 'countryName=', countryName, 'countryCode=', countryCode, 'regionName=', regionName)
 
@@ -198,15 +205,17 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
       usersArray[ip] = {sym: sym, date: getDate(), ip: ip, count: 1}
 
 
-    if (countryName)
-      usersArray[ip].countryName = countryName;
+    if (country)
+      usersArray[ip].country = country;
     if (city)
       usersArray[ip].city = city;
-    if (regionName)
-        usersArray[ip].regionName = regionName;
-    if (regionName)
-      usersArray[ip].regionName = regionName;
+    if (region)
+        usersArray[ip].region = region;
+    if (region)
+      usersArray[ip].region = region;
 
+    delete usersArray[ip].countryName; // clear old
+    delete usersArray[ip].regionName;  // clear old
     
     console.log ('ip collect:', usersArray[ip])
     userArrayFlush();

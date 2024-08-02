@@ -79,9 +79,9 @@ function gain (app)  {
 
             writeCounter++;
 
-            userAccess (req.query.stock, req.query.ip, req.query.city, req.query.countryName, req.query.countryCode, req.query.regionName)
-            
-
+            userAccess (req.query.stock, req.query.ip, req.query.city, req.query.country, req.query.region)
+            // if (LOG)
+                console.log ('gainWrite', req.query)
             var dat = JSON.parse(req.query.dat)
             if (LOG)
                 console.log ('w write ', dat)
