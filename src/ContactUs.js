@@ -13,7 +13,7 @@ function contact (app)  {
     // filter file
     app.get('/contactGet', (req, res) => {
         // if (LOG)
-        console.log(getDate(), 'query:', req.query)
+        console.log(getDate(), 'cantactGet query:', req.query)
         
         const name = req.query.name;
         const count = Number(req.query.count);
@@ -57,6 +57,7 @@ function contact (app)  {
 
     app.get('/contactUs', (req, res) => {
         const LOG = true;
+        console.log(getDate(), 'cantactGet query:', req.query)
         const txtArray = req.query.text
         if (LOG)
         console.log (getDate(), 'contactRequest name=', req.query.name, 'email=',
@@ -67,7 +68,7 @@ function contact (app)  {
         console.log('query:', req.query)
         const msg = {date: getDate(), mili: Date.now(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip,
-             city: req.query.city, countryName: req.query.countryName, countryCode: req.query.countryCode,
+             city: req.query.city, country: req.query.country, region: req.query.region,
             text: req.query.text}
 
         if (LOG)
