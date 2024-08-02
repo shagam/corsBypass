@@ -5,6 +5,7 @@ const {getDate} = require ('./Utils');
 const JSONTransport = require('nodemailer/lib/json-transport');
 
 
+//*  read data from disk
 const print_textFiles = false
 const miliInADay = 24 * 3600 * 1000;
 // read splitsArray from local file once on startup
@@ -33,7 +34,7 @@ fs.readFile('txt/userArray.txt', 'utf8', (err, data) => {
   //   console.log (keys[i])
 });
 
-// use for sort array
+//* use for sort array
 function compare( a, b ) {
   if ( a.sec < b.sec ){
     return -1;
@@ -60,6 +61,8 @@ function userArrayFlush() {
   }) 
 }
 
+
+//*   get user ip of gain 
 function userList (app) {
   app.get('/users', (req, res) => {
 
@@ -91,7 +94,8 @@ function userList (app) {
         continue;
       }
       
-      
+     
+      //*  date for sort list
       const dateArr = usersArray[ip].date.split(/[-: ]/)
       const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 31 + Number(dateArr[2]) -1) * 24 + Number(dateArr[3]) -1) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
       // console.log (dateArr)
@@ -104,28 +108,27 @@ function userList (app) {
         continue;
       }
       
-      // collect statistics
+      //* find last access
+      if (seconds > lastSeconds) {
+        lastSeconds = seconds;
+        lastIp = ip;
+      }      
+      
+      
+      //* collect statistics
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
       countryObj[usersArray[ip].countryName] = 1;
 
-      // find last access
-      if (seconds > lastSeconds) {
-        lastSeconds = seconds;
-        lastIp = ip;
-      }
-
-
-      // console.log (dateArr)
     }
 
 
-    // highlight last and LOG
-
-    usersArr.sort(compare)
+    usersArr.sort(compare)  //* sort according to date
     // console.log ('arr', usersArr)
 
-    
+
+    //* highlight last and LOG
+
     if (LOG )
     for (let i = 0; i <  usersArr.length; i++) {
       const ip = usersArr[i].ip
@@ -147,17 +150,19 @@ function userList (app) {
     }
 
 
-    // build report obj
+    //* build report obj
     const obj = {
       ipCount:  Object.keys(ipObj).length,
       cityCount:  Object.keys(cityObj).length,
       countryCount: Object.keys(countryObj).length
     }
 
-    if (! lastSeconds){ // if none (except mine) found
+    //* if none (except mine) found
+    if (! lastSeconds){
       res.send('none')
       return;
     }
+
     // console.log ('\nCounters:', obj)
 
     obj['lastIP'] = lastIp
@@ -168,11 +173,12 @@ function userList (app) {
   
     res.send (obj)
 
-   } )   
+   } )   //* end of ip report
 
 } 
 
 
+//*  collect ip of users called from gain request
 function userAccess (sym, ip, city, countryName, countryCode, regionName) {
     //    regionName: regionName, count: 1}
     // console.log ('params', sym, ip, 'city=', city, 'countryName=', countryName, 'countryCode=', countryCode, 'regionName=', regionName)
@@ -182,7 +188,7 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
       return;
     }
 
-    if (usersArray[ip]) {
+    if (usersArray[ip]) { //* already exist: update data
       usersArray[ip].sym = sym;
       usersArray[ip].date = getDate()
       usersArray[ip].ip = ip;
@@ -204,5 +210,7 @@ function userAccess (sym, ip, city, countryName, countryCode, regionName) {
     
     console.log ('userAccess:', usersArray[ip])
     userArrayFlush();
-}
+} //* end of collection
+
+
   module.exports = {userAccess, userArrayFlush, userList}
