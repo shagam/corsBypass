@@ -68,7 +68,7 @@ function contact (app)  {
         console.log('query:', req.query)
         const msg = {date: getDate(), mili: Date.now(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip,
-             city: req.query.city, country: req.query.country, region: req.query.region,
+             city: req.query.city, region: req.query.region, country: req.query.country,
             text: req.query.text}
 
         if (LOG)
