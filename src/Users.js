@@ -62,7 +62,7 @@ function userArrayFlush() {
 }
 
 
-//*   get user ip of gain 
+//** collect statistics and display user ip of gain  */   
 function userList (app) {
   app.get('/users', (req, res) => {
 
@@ -94,8 +94,21 @@ function userList (app) {
         continue;
       }
       
-     
-      //*  date for sort list
+      /** clear bad fields */
+      if (LOG_EXTRA) {
+        // console.log ('before', usersArray[ip])
+        if (usersArray[ip].regionName === 'umdefined')
+          delete usersArray[ip].regionName
+        if (usersArray[ip].countryName === '')
+          delete usersArray[ip].countryName
+        if (usersArray[ip].countryCode === '')
+          delete usersArray[ip].countryCode
+        if (usersArray[ip].city === '')
+          delete usersArray[ip].city
+        // console.log ('after', usersArray[ip])
+      }
+
+      //** date for sort list */  
       const dateArr = usersArray[ip].date.split(/[-: ]/)
       const seconds = ((((Number(dateArr[0]) * 12 + Number(dateArr[1])) * 31 + Number(dateArr[2]) -1) * 24 + Number(dateArr[3]) -1) * 60 + Number(dateArr[4])) * 60 + Number(dateArr[5])
       // console.log (dateArr)
@@ -119,6 +132,7 @@ function userList (app) {
       ipObj[usersArray[ip].ip] = 1;
       cityObj[usersArray[ip].city] = 1;
       countryObj[usersArray[ip].countryName] = 1;
+      // userArrayFlush()
 
     }
 
@@ -144,6 +158,8 @@ function userList (app) {
         txt = '^ ' + txt;
       else        
         txt = '  ' + txt;
+
+        //** Display only last records */
       const DISPLAY_LIMIT = 20
       if (i > usersArr.length - DISPLAY_LIMIT - 1)
         console.log (i, txt)
