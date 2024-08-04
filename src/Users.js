@@ -108,6 +108,7 @@ function userList (app) {
         if (usersArray[ip].city === '')
           delete usersArray[ip].city
         delete usersArray[ip].countryCode
+        delete usersArray[ip].countryName
 
 
         // console.log ('after', usersArray[ip])
