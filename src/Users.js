@@ -88,7 +88,7 @@ function userList (app) {
         continue
       }
       // remove invalid ip
-      if (! usersArray[ip].ip || usersArray[ip].ip === '') {
+      if (! usersArray[ip].ip || usersArray[ip].ip === '' || usersArray[ip].ip === 'undefined') {
         console.log ('remove invalid', ip, usersArray[ip])
         usersArray[ip]= null; // remove invalid
         userArrayFlush()
@@ -97,7 +97,6 @@ function userList (app) {
       
       /** clear bad fields */
       if (LOG_EXTRA) {
-        // console.log ('before', usersArray[ip])
         if (usersArray[ip].regionName === 'undefined')
           delete usersArray[ip].regionName
         if (usersArray[ip].countryName === '')
@@ -111,8 +110,6 @@ function userList (app) {
         delete usersArray[ip].countryCode
         delete usersArray[ip].countryName
 
-
-        // console.log ('after', usersArray[ip])
       }
 
       //** date for sort list */  
@@ -145,7 +142,6 @@ function userList (app) {
 
 
     usersArr.sort(compare)  //* sort according to date
-    // console.log ('arr', usersArr)
 
 
     //* highlight last and LOG
@@ -156,7 +152,7 @@ function userList (app) {
       if (! ip)
         continue;
 
-      if (! LOG_EXTRA)
+      // if (! LOG_EXTRA)
         delete usersArr[i].sec // not needed anymore
       var txt =  JSON.stringify(usersArr[i])
       if (usersArr[i].ip === lastIp)
@@ -213,9 +209,7 @@ function userList (app) {
 
 //*  collect ip of users called from gain request
 function userAccess (sym, ip, city, country, region) {
-    //    regionName: regionName, count: 1}
-    // console.log ('params', sym, ip, 'city=', city, 'countryName=', countryName, 'countryCode=', countryCode, 'regionName=', regionName)
-
+ 
     if (! ip) {
       console.log ('error, missing ip')
       return;
