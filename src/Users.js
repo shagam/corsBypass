@@ -84,6 +84,7 @@ function userList (app) {
       const ip = ipList[i]
       if (! ip) {
         console.log ('ip null', i, usersArray[ip])
+        usersArray[ip] = null;
         continue
       }
       // remove invalid ip
