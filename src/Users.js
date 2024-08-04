@@ -83,14 +83,15 @@ function userList (app) {
     for (let i = 0; i <  ipList.length; i++) {
       const ip = ipList[i]
       if (! ip) {
-        console.log ('ip null', i, usersArray[ip])
-        usersArray[ip] = null;
+        console.log ('ip is null ipList:', i, ipList)
+        console.log ('ip is null', i, usersArray[ip])
+        delete usersArray[ip];
         continue
       }
       // remove invalid ip
-      if (ip && (usersArray[ip].ip === null || usersArray[ip].ip === '' || usersArray[ip].ip === 'undefined')) {
+      if (ip && LOG_EXTRA && (usersArray[ip].ip === null || usersArray[ip].ip === '' || usersArray[ip].ip === 'undefined')) {
         console.log ('remove invalid', ip, usersArray[ip])
-        usersArray[ip]= null; // remove invalid
+        delete usersArray[ip]; // remove invalid
         userArrayFlush()
         continue;
       }
