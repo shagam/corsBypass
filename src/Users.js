@@ -97,14 +97,19 @@ function userList (app) {
       /** clear bad fields */
       if (LOG_EXTRA) {
         // console.log ('before', usersArray[ip])
-        if (usersArray[ip].regionName === 'umdefined')
+        if (usersArray[ip].regionName === 'undefined')
           delete usersArray[ip].regionName
         if (usersArray[ip].countryName === '')
           delete usersArray[ip].countryName
+        if (usersArray[ip].countryName.length > 3 && ! usersArray[ip].country)
+          usersArray[ip].country = usersArray[ip].countryName
         if (usersArray[ip].countryCode === '')
           delete usersArray[ip].countryCode
         if (usersArray[ip].city === '')
           delete usersArray[ip].city
+        delete usersArray[ip].countryCode
+
+
         // console.log ('after', usersArray[ip])
       }
 
