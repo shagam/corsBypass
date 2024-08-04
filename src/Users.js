@@ -101,7 +101,7 @@ function userList (app) {
           delete usersArray[ip].regionName
         if (usersArray[ip].countryName === '')
           delete usersArray[ip].countryName
-        if (usersArray[ip].countryName.length > 3 && ! usersArray[ip].country)
+        // if (usersArray[ip].countryName.length > 3 && ! usersArray[ip].country)
           usersArray[ip].country = usersArray[ip].countryName
         if (usersArray[ip].countryCode === '')
           delete usersArray[ip].countryCode
@@ -166,6 +166,7 @@ function userList (app) {
 
         //** Display only last records */
       const DISPLAY_LIMIT = 20
+      // const DISPLAY_LIMIT = LOG_EXTRA ? usersArr.length : 20  // LOG_EXTRA display all
       if (i > usersArr.length - DISPLAY_LIMIT - 1)
         console.log (i, txt)
     }
