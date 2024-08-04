@@ -88,12 +88,12 @@ function userList (app) {
         continue
       }
       // remove invalid ip
-      if (ip && (! usersArray[ip].ip || usersArray[ip].ip === '' || usersArray[ip].ip === 'undefined')) {
-        console.log ('remove invalid', ip, usersArray[ip])
-        usersArray[ip]= null; // remove invalid
-        userArrayFlush()
-        continue;
-      }
+      // if (ip && (! usersArray[ip].ip || usersArray[ip].ip === '' || usersArray[ip].ip === 'undefined')) {
+      //   console.log ('remove invalid', ip, usersArray[ip])
+      //   usersArray[ip]= null; // remove invalid
+      //   userArrayFlush()
+      //   continue;
+      // }
       
       /** clear bad fields */
       if (LOG_EXTRA) {
