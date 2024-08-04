@@ -88,7 +88,7 @@ function userList (app) {
         continue
       }
       // remove invalid ip
-      if (! usersArray[ip].ip || usersArray[ip].ip === '' || usersArray[ip].ip === 'undefined') {
+      if (ip && (! usersArray[ip].ip || usersArray[ip].ip === '' || usersArray[ip].ip === 'undefined')) {
         console.log ('remove invalid', ip, usersArray[ip])
         usersArray[ip]= null; // remove invalid
         userArrayFlush()
