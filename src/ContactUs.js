@@ -34,8 +34,9 @@ function contact (app)  {
             const parsed = JSON.parse (array[i]) 
             // console.log (parsed)
 
-            if (name && array[i] && ! parsed.name.includes (name) && ! parsed.email.includes (name))
-                continue; // skip when name missing
+            if (name && array[i] && ! parsed.name.includes (name) && ! parsed.email.includes (name)
+                && ! parsed.text.includes (name)
+            )  continue; // skip when name missing
 
             // console.log ('query:', mili, 'item:', parsed.mili)
             if (mili > parsed.mili) 
