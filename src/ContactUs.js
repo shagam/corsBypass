@@ -15,7 +15,7 @@ function contact (app)  {
 
         console.log(getDate(), 'cantactGet query:', req.query)
         
-        const name = req.query.name;
+        var name = req.query.name;
         if (name)
             name = name.toUpperCase()
         const count = Number(req.query.count);
