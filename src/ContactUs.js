@@ -18,14 +18,14 @@ function contact (app)  {
         const name = req.query.name;
         const count = Number(req.query.count);
         const mili = Number(req.query.mili);
-        const LOG = Number(req.query.LOG);
+        const LOG = req.query.LOG;
 
 
         var msgArr = [];
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
     
         if (LOG)
-            console.log ('length', array.length)
+            console.log ('array.length', array.length)
 
         for (let i = 0; i < array.length; i++) {
             if (! array[i])
@@ -49,7 +49,8 @@ function contact (app)  {
         //** clip array. send last <count> and make newest first.*/
 
         const loopCount = count < msgArr.length ? count : msgArr.length 
-        console.log ('msgArr.length=', msgArr.length, 'loopCount=', loopCount)
+        if (LOG)
+            console.log ('msgArr.length=', msgArr.length, 'loopCount=', loopCount)
         const msgArrForSend = []
         for ( let i = 0; i < loopCount; i++) {
             msgArrForSend.push (msgArr[loopCount - i -1])
@@ -57,7 +58,7 @@ function contact (app)  {
                 console.log ('index=', loopCount - i -1)
             if (LOG) {
                 console.log ('last msgs', msgArr.length,  i,  msgArr.length - count + i - 1)
-                console.log ('msg', msgArr[i])
+                console.log ('msg', i, msgArr[i])
             }
         }
 
@@ -74,7 +75,7 @@ function contact (app)  {
 
 
     app.get('/contactUs', (req, res) => {
-        var LOG = Number(req.query.LOG);
+        var LOG = req.query.LOG;
         // LOG = true;
         console.log(getDate(), 'cantactGet query:', req.query)
         const txtArray = req.query.text
