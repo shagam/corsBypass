@@ -15,7 +15,9 @@ function contact (app)  {
 
         console.log(getDate(), 'cantactGet query:', req.query)
         
-        const name = req.query.name.toUpper();
+        const name = req.query.name;
+        if (name)
+            name = name.toUpper()
         const count = Number(req.query.count);
         const mili = Number(req.query.mili);
         const LOG = req.query.LOG;
