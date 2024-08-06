@@ -6,28 +6,28 @@ const fs = require ('fs')
 
 
 function contact (app)  {
-    const LOG = false;
+
 
     // nowMili = Date.now();
 
     // filter file
     app.get('/contactGet', (req, res) => {
-        // if (LOG)
+
         console.log(getDate(), 'cantactGet query:', req.query)
         
         const name = req.query.name;
         const count = Number(req.query.count);
         const mili = Number(req.query.mili);
+        const LOG = Number(req.query.LOG);
 
 
         var msgArr = [];
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
     
-        const loopStart = array.length - 2*count >= 0 ? array.length - 2*count : 0
         if (LOG)
             console.log ('length', array.length)
 
-        for(let i = loopStart; i < array.length; i++) {
+        for (let i = 0; i < array.length; i++) {
             if (! array[i])
                 continue;
 
@@ -44,10 +44,28 @@ function contact (app)  {
             //  array[i].txt = parsedTxt;
             msgArr.push(parsed)
         }
+
+
+        //** clip array. send last <count> and make newest first.*/
+
+        const loopCount = count < msgArr.length ? count : msgArr.length 
+        console.log ('msgArr.length=', msgArr.length, 'loopCount=', loopCount)
+        const msgArrForSend = []
+        for ( let i = 0; i < loopCount; i++) {
+            msgArrForSend.push (msgArr[loopCount - i -1])
+            if (LOG)
+                console.log ('index=', loopCount - i -1)
+            if (LOG) {
+                console.log ('last msgs', msgArr.length,  i,  msgArr.length - count + i - 1)
+                console.log ('msg', msgArr[i])
+            }
+        }
+
+
         if (LOG)
-            console.log (getDate(), 'Arrey to be sent', msgArr)
-        console.log (getDate(), 'sent count:', msgArr.length)
-        res.send (JSON.stringify(msgArr))
+            console.log (getDate(), 'Arrey to be sent',  msgArr.length, msgArrForSend)
+        console.log (getDate(), 'sent count:', msgArrForSend.length)
+        res.send (JSON.stringify(msgArrForSend))
         return; 
     })
 
@@ -56,7 +74,8 @@ function contact (app)  {
 
 
     app.get('/contactUs', (req, res) => {
-        const LOG = true;
+        var LOG = Number(req.query.LOG);
+        // LOG = true;
         console.log(getDate(), 'cantactGet query:', req.query)
         const txtArray = req.query.text
         if (LOG)
