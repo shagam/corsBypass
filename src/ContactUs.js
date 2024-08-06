@@ -15,7 +15,7 @@ function contact (app)  {
 
         console.log(getDate(), 'cantactGet query:', req.query)
         
-        const name = req.query.name;
+        const name = req.query.name.toUpper();
         const count = Number(req.query.count);
         const mili = Number(req.query.mili);
         const LOG = req.query.LOG;
@@ -34,8 +34,8 @@ function contact (app)  {
             const parsed = JSON.parse (array[i]) 
             // console.log (parsed)
 
-            if (name && array[i] && ! parsed.name.includes (name) && ! parsed.email.includes (name)
-                && ! parsed.text.includes (name)
+            if (name && array[i] && ! parsed.name.toUpper().includes (name) && ! parsed.email.toUpper().includes (name)
+                && ! parsed.text.toUpper().includes (name)
             )  continue; // skip when name missing
 
             // console.log ('query:', mili, 'item:', parsed.mili)
