@@ -209,7 +209,7 @@ function userList (app) {
 
 
 //*  collect ip of users called from gain request
-function userAccess (sym, ip, city, country, region) {
+function userAccess (sym, ip, city, country, region, os) {
  
     if (! ip) {
       console.log ('error, missing ip')
@@ -219,6 +219,7 @@ function userAccess (sym, ip, city, country, region) {
     if (usersArray[ip]) { //* already exist: update data
       usersArray[ip].sym = sym;
       usersArray[ip].date = getDate()
+      usersArray[ip].os = os;
       usersArray[ip].ip = ip;
       usersArray[ip].count++
     }
