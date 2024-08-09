@@ -187,6 +187,7 @@ function userList (app) {
     // console.log ('\nCounters:', obj)
 
     obj.ip = lastIp
+    obj.os = usersArray[lastIp].os
     obj.date = usersArray[lastIp].date
     obj.sym = usersArray[lastIp].sym
     if (usersArray[lastIp].city)
