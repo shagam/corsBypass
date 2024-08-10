@@ -209,7 +209,9 @@ function userList (app) {
 } 
 
 
-//*  collect ip of users called from gain request
+
+
+//*  collect ip of users called from gain request */
 function userAccess (sym, ip, city, country, region, os) {
  
     if (! ip) {
