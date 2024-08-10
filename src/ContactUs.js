@@ -45,6 +45,7 @@ function contact (app)  {
                 continue // skip older recors
 
             //  array[i].txt = parsedTxt;
+            // console.log ('collect contactGet', parsed)
             msgArr.push(parsed)
         }
 
@@ -80,7 +81,7 @@ function contact (app)  {
     app.get('/contactUs', (req, res) => {
         var LOG = req.query.LOG;
         // LOG = true;
-        console.log(getDate(), 'cantactGet query:', req.query)
+        console.log(getDate(), 'cantactUs', req.query)
         const txtArray = req.query.text
         if (LOG)
         console.log (getDate(), 'contactRequest name=', req.query.name, 'email=',
@@ -91,7 +92,7 @@ function contact (app)  {
         console.log('query:', req.query)
         const msg = {date: getDate(), mili: Date.now(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip,
-            ip: req.query.ip, city: req.query.city, region: req.query.region, country: req.query.country,
+            ip: req.query.ip, city: req.query.city, region: req.query.region, country: req.query.country, os: req.query.os,
             text: req.query.text}
 
         if (LOG)
