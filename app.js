@@ -29,7 +29,7 @@ const {holdingsSchMain, holdingsSchFlush} = require('./src/HoldingsSch')
 
 
 const {gain, gainFlush} = require('./src/Gain')
-const {contact} = require('./src/ContactUs') 
+const {contact} = require('./src/Contact') 
 const {userAccess, userArrayFlush, userList} = require('./src/Users') 
 
 const app = express()
