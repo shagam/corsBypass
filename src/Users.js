@@ -62,6 +62,8 @@ function userArrayFlush() {
 }
 
 
+
+
 //** collect statistics and display user ip of gain  */   
 function userList (app) {
   app.get('/users', (req, res) => {
@@ -186,19 +188,23 @@ function userList (app) {
 
     // console.log ('\nCounters:', obj)
 
-    obj.ip = lastIp
-    obj.os = usersArray[lastIp].os
     obj.date = usersArray[lastIp].date
     obj.sym = usersArray[lastIp].sym
+    obj.ip = lastIp
+
     if (usersArray[lastIp].city)
       obj.city = usersArray[lastIp].city
-    if (usersArray[lastIp].country)
-      obj.country = usersArray[lastIp].country
     if (usersArray[lastIp].region)
       obj.region = usersArray[lastIp].region
+    if (usersArray[lastIp].country)
+      obj.country = usersArray[lastIp].country
+
+
+    obj.os = usersArray[lastIp].os
     delete usersArray[lastIp].countryName; // clear old
     delete usersArray[lastIp].regionName;  // clear old
     delete usersArray[lastIp].countryCode;  // clear old
+
     userArrayFlush();  //* write removed fields
     console.log ('\nUsers info:', obj)
   
