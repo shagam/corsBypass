@@ -44,8 +44,6 @@ function contact (app)  {
             if (mili > parsed.mili) 
                 continue // skip older recors
 
-            //  array[i].txt = parsedTxt;
-            // console.log ('collect contactGet', parsed)
             msgArr.push(parsed)
         }
 
@@ -53,17 +51,10 @@ function contact (app)  {
         //** clip array. send last <count> and make newest first.*/
 
         const loopCount = count < msgArr.length ? count : msgArr.length 
-        if (LOG)
-            console.log ('msgArr.length=', msgArr.length, 'loopCount=', loopCount)
+        console.log ('msgArr.length=', msgArr.length, 'loopCount=', loopCount, 'newest:', msgArr[msgArr.length - 1])
         const msgArrForSend = []
         for ( let i = 0; i < loopCount; i++) {
-            msgArrForSend.push (msgArr[loopCount - i -1])
-            if (LOG)
-                console.log ('index=', loopCount - i -1)
-            if (LOG) {
-                console.log ('last msgs', msgArr.length,  i,  msgArr.length - count + i - 1)
-                console.log ('msg', i, msgArr[i])
-            }
+            msgArrForSend.push (msgArr[msgArr.length - i -1])
         }
 
 
