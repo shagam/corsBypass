@@ -55,10 +55,10 @@ function gain (app)  {
         const symOnly = req.query.symOnly;
         const factor = req.query.factor;
 
-        console.log ('\n\n', getDate(), 'gain cmd=', cmd, 'stock=', stock, 'factor=', factor, 'write=', writeCounter, 'read=', readCount,
-         'filterCount=', filterCount, 'removeCount=', removeCount, 'symOnly=', symOnly)
+        console.log ('\n\n', getDate(), 'gain ', req.query, 'write=', writeCounter, 'read=', readCount,
+         'filterCount=', filterCount, 'removeCount=', removeCount)
 
-        if (cmd === 'r') { // read one stock
+        if (cmd === 'r' || cmd === 'readOne') { // read one stock
             readCount++;
             const dat = gainArray[stock]
             if (LOG)
@@ -70,7 +70,7 @@ function gain (app)  {
             return;     
         }
 
-        else if (cmd === 'w') {  // write one stock
+        else if (cmd === 'w' || cmd === 'writeOneSym') {  // write one stock
             if (! stock) {
                 res.send ('fail, missing stock') 
                 console.log ('fail, missing stock')  
@@ -148,7 +148,7 @@ function gain (app)  {
             return;           
         }
 
-        else if (cmd === 'a') { // get all 
+        else if (cmd === 'a' || cmd === 'getAll') { // get all 
             filterCount ++;
             const keys=Object.keys(gainArray)
             
@@ -166,14 +166,14 @@ function gain (app)  {
             return;
         }
 
-        else if (cmd === 'b') {//best 1,2,5,10 years
+        else if (cmd === 'b' || cmd === 'betterThanQQQ') {//best 1,2,5,10 years
             filterCount ++;
             if (! gainArray['QQQ']) {
                 res.send ('fail missing needed QQQ')
                 return;
             }
             const factor = req.query.factor;
-            console.log ('b  gainFilter_1_2_5_10  factor=', factor)
+            console.log ('b  gainFilter_1_2_5_10 ')
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
                 if (LOG)
@@ -194,7 +194,7 @@ function gain (app)  {
             res.send (JSON.stringify(filterdObj))
         }
 
-        else if (cmd === 'd') {//get list for remove gain 1,2,5,10
+        else if (cmd === 'd'|| cmd === 'listForDelete') {//get list for remove gain 1,2,5,10
             filterCount ++;
             if (! gainArray['QQQ'] || ! gainArray['QQQ'].year) {
                 res.send ('fail missing needed QQQ')
@@ -235,15 +235,19 @@ function gain (app)  {
             res.send (JSON.stringify(filterdObj))
         }
 
-        else if (cmd === 'f') { // get best
+        else if (cmd === 'f' || cmd === 'filterBetterThanQQQ') { // get best
             filterCount++;
             const period = req.query.period;
             const factor = req.query.factor;
             const qqqValue = req.query.qqqValue;
-            console.log ('f gainFilter periodYears=', period, ' factor=', factor, 'qqqValue=', qqqValue)
+
             const filterdObj = {}
 
             Object.keys(gainArray).forEach ((sym) => {
+                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10) {
+                    console.log ('missing year ', gainArray[sym])
+                    // continue;
+                }
                 if (LOG)
                     console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
                 switch (Number(period)){
@@ -293,7 +297,7 @@ function gain (app)  {
             console.log(getDate(), Object.keys(filterdObj))
             res.send (JSON.stringify(filterdObj))
         }
-        else if (cmd === 'p') { // remove list
+        else if (cmd === 'p' || cmd === 'purgeList') { // remove list
             removeCount++;
             var dat = JSON.parse(req.query.dat)
             console.log('stocks for remove', dat.length, dat)
