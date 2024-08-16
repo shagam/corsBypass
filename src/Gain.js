@@ -176,6 +176,11 @@ function gain (app)  {
             console.log ('b  gainFilter_1_2_5_10 ')
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
+                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10) {
+                    console.log ('missing year ', gainArray[sym])
+                    // continue;
+                }
+                
                 if (LOG)
                     console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
                 if (Number(gainArray[sym].year) > Number(gainArray['QQQ'].year * factor) ||
@@ -195,6 +200,11 @@ function gain (app)  {
         }
 
         else if (cmd === 'd'|| cmd === 'listForDelete') {//get list for remove gain 1,2,5,10
+            if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10) {
+                console.log ('missing year ', gainArray[sym])
+                // continue;
+            }
+
             filterCount ++;
             if (! gainArray['QQQ'] || ! gainArray['QQQ'].year) {
                 res.send ('fail missing needed QQQ')
