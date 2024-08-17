@@ -167,7 +167,7 @@ function gain (app)  {
             return;
         }
 
-        else if (cmd === 'b' || cmd === 'betterThanQQQ') {//best 1,2,5,10 years
+        else if (cmd === 'b' || cmd === 'betterThanQQQ_1_2_5_10') {//best 1,2,5,10 years
             filterCount ++;
             if (! gainArray['QQQ']) {
                 res.send ('fail missing needed QQQ')
@@ -201,17 +201,13 @@ function gain (app)  {
         }
 
         else if (cmd === 'd'|| cmd === 'listForDelete') {//get list for remove gain 1,2,5,10
-            if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10) {
-                console.log ('missing year ', gainArray[sym])
-                // continue;
-            }
 
             filterCount ++;
             if (! gainArray['QQQ'] || ! gainArray['QQQ'].year) {
                 res.send ('fail missing needed QQQ')
                 return;
             }
-            console.log ('verify QQQ exists', gainArray['QQQ']) // 
+            // console.log ('verify QQQ exists', gainArray['QQQ']) // 
             const factor = req.query.factor; // overRide 
             if (Number(factor) < 1.05) {
                 console.log ('fail, factor too small:', factor)
@@ -225,7 +221,7 @@ function gain (app)  {
                     res.send ('fail, missing year ' + sym + ' ' + gainArray[sym])
                     return
                 }
-                console.log ('verify QQQ exists', gainArray['QQQ']) // 
+                // console.log ('verify QQQ exists', gainArray['QQQ']) // 
                 if (
                  (Number(gainArray[sym].year * factor) < Number(gainArray['QQQ'].year)) &&
                  (Number(gainArray[sym].year2 * factor) < Number(gainArray['QQQ'].year2)) &&
@@ -305,7 +301,7 @@ function gain (app)  {
                 }
             } 
             else
-                console.log ('missing yrar', gainArray[sym])  // missing year or year2     
+                console.log ('missing year', gainArray[sym])  // missing year or year2     
             })
             // if (LOG)
             console.log(getDate(), Object.keys(filterdObj))
