@@ -218,10 +218,11 @@ function gain (app)  {
             const filterdObj = {};
             const keys = Object.keys(gainArray)
             for (let i = 0; i < keys.length; i++) {
-            const sym = keys[i]
-                if (! gainArray[sym] || ! gainArray[sym].year) {
-                    res.send ('fail, missing year ' + sym + ' ' + gainArray[sym])
-                    return
+                const sym = keys[i]
+                
+                if (! gainArray[sym]) {
+                    console.log ('fail, missing ' + sym + ' ' + gainArray[sym])
+                    continue;
                 }
                 // console.log ('verify QQQ exists', gainArray['QQQ']) // 
                 if (
