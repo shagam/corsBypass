@@ -324,10 +324,12 @@ function gain (app)  {
             const keys = Object.keys(gainArray);
             console.log ('countBefore=', keys.length)
             keys.forEach ((sym) => {
-                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10)  {
-                    console.log ('gain verify delete ', gainArray.sym)
-                    delete gainArray.sym
-                }
+                if (LOG)
+                console.log (JSON.stringify(gainArray[sym]))
+                // if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10)  {
+                //     console.log ('gain verify delete ', gainArray.sym)
+                //     delete gainArray.sym
+                // }
             })
             console.log ('countAfter=', Object.keys(gainArray).length)
         }
