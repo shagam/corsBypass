@@ -252,11 +252,11 @@ function gain (app)  {
 
             Object.keys(gainArray).forEach ((sym) => {
                 
-                if (gainArray[sym].year &&  gainArray[sym].year2 &&  gainArray[sym].year5 && gainArray[sym].year10) {
+                if (true || gainArray[sym].year &&  gainArray[sym].year2 &&  gainArray[sym].year5 && gainArray[sym].year10) {
 
 
                 if (LOG)
-                    console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
+                    console.log (sym, 'before Switch', gainArray[sym].year)
                 switch (Number(period)){
                     case 1:
                         if (LOG)
@@ -324,8 +324,9 @@ function gain (app)  {
             const keys = Object.keys(gainArray);
             console.log ('countBefore=', keys.length)
             keys.forEach ((sym) => {
-                if (! gainArray[sym])
-                    next;
+            
+                if (! gainArray[sym].year)
+                    console.log ('missing year')
                 if (LOG)
                     console.log (gainArray[sym])
                 else
