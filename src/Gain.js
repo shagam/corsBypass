@@ -5,7 +5,7 @@ const {getDate} = require ('./Utils')
 const {userAccess} = require ('./Users') 
 var gainArray = {};   // key is symbol saved one obj per stock
 
-const LOG = false;
+// const LOG = false;
 const date = getDate();
 var writeCounter = 0;
 var readCount = 0;
@@ -54,6 +54,7 @@ function gain (app)  {
         const cmd = req.query.cmd; // R, W, F
         const symOnly = req.query.symOnly;
         const factor = req.query.factor;
+        const LOG = req.query.LOG
 
         console.log ('\n\n', getDate(), 'gain ', req.query, 'write=', writeCounter, 'read=', readCount,
          'filterCount=', filterCount, 'removeCount=', removeCount)
@@ -176,10 +177,10 @@ function gain (app)  {
             console.log ('b  gainFilter_1_2_5_10 ')
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
-                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10) {
+                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10)
                     console.log ('missing year ', gainArray[sym])
-                    // continue;
-                }
+                    //  continue;
+            
                 
                 if (LOG)
                     console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
@@ -254,10 +255,10 @@ function gain (app)  {
             const filterdObj = {}
 
             Object.keys(gainArray).forEach ((sym) => {
-                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10) {
-                    console.log ('missing year ', gainArray[sym])
-                    // continue;
-                }
+                
+                if (gainArray[sym].year &&  gainArray[sym].year2 &&  gainArray[sym].year5 && gainArray[sym].year10) {
+
+
                 if (LOG)
                     console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
                 switch (Number(period)){
@@ -301,7 +302,10 @@ function gain (app)  {
                                 filterdObj[sym] = gainArray[sym]
                         }
                         break;                       
-                }         
+                }
+            } 
+            else
+                console.log ('missing yrar', gainArray[sym])  // missing year or year2     
             })
             // if (LOG)
             console.log(getDate(), Object.keys(filterdObj))
