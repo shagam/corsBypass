@@ -319,6 +319,18 @@ function gain (app)  {
             // console.log(getDate())
             res.send ('ok')
         }
+        //** delete sym with missing year, year2 ... */
+        else if (cmd === 'verifyAll') {
+            const keys = Object.keys(gainArray);
+            console.log ('countBefore=', keys.length)
+            keys.forEach ((sym) => {
+                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10)  {
+                    console.log ('gain verify delete ', gainArray.sym)
+                    delete gainArray.sym
+                }
+            })
+            console.log ('countAfter=', Object.keys(gainArray).length)
+        }
 
         else
             res.send ('fail cmd invalid')
