@@ -177,11 +177,9 @@ function gain (app)  {
             console.log ('b  gainFilter_1_2_5_10 ')
             const filterdObj = {};
             Object.keys(gainArray).forEach ((sym) => {
-                if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10)
-                    console.log ('missing year ', gainArray[sym])
-                    //  continue;
-            
-                
+
+                if (gainArray[sym]) {
+
                 if (LOG)
                     console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
                 if (Number(gainArray[sym].year) > Number(gainArray['QQQ'].year * factor) ||
@@ -193,7 +191,9 @@ function gain (app)  {
                         filterdObj[sym]=''
                     else
                         filterdObj[sym] = gainArray[sym]
-                }
+                }}
+                else
+                    console.log ('missing  ', sym, gainArray[sym])
             })
             const keys=Object.keys(filterdObj)
             console.log(getDate(), keys.length, keys)
