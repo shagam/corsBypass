@@ -332,6 +332,7 @@ function gain (app)  {
                 // }
             })
             console.log ('countAfter=', Object.keys(gainArray).length)
+            res.send ('ok')
         }
 
         else
