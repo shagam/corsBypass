@@ -324,7 +324,7 @@ function gain (app)  {
             const keys = Object.keys(gainArray);
             console.log ('countBefore=', keys.length)
             keys.forEach ((sym) => {
-                if ( ! 'year' in gainArray[sym])
+                if (! gainArray[sym] || ! 'year' in gainArray[sym])
                     console.log ('missing year')
                 if (LOG)
                     console.log (gainArray[sym])
