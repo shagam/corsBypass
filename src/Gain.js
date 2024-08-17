@@ -127,7 +127,7 @@ function gain (app)  {
                 res.send ('fail, gain delete symbol missing')
             }
             else {
-                gainArray[stock] = null; // remove sym
+                delete gainArray[stock]; // remove sym
                 console.log ('\n\n', getDate(), stock, ' gain delete done')
                 res.send ('ok')
             }
@@ -324,8 +324,16 @@ function gain (app)  {
             const keys = Object.keys(gainArray);
             console.log ('countBefore=', keys.length)
             keys.forEach ((sym) => {
+                if (! gainArray[sym])
+                    next;
                 if (LOG)
-                console.log (JSON.stringify(gainArray[sym]))
+                    console.log (gainArray[sym])
+                else
+                    console.log (JSON.stringify(gainArray[sym]))
+
+                if (gainArray[sym] === undefined)
+                    delete gainArray.sym                    
+                // console.log (gainArray[sym][year], gainArray[sym][year2], gainArray[sym][year5], gainArray[sym][year10])
                 // if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10)  {
                 //     console.log ('gain verify delete ', gainArray.sym)
                 //     delete gainArray.sym
