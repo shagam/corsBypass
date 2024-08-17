@@ -216,7 +216,9 @@ function gain (app)  {
             }
             console.log ('d  list of bad_1_2_5_10  factor=', factor)
             const filterdObj = {};
-            Object.keys(gainArray).forEach ((sym) => {
+            const keys = Object.keys(gainArray)
+            for (let i = 0; i < keys.length; i++) {
+            const sym = keys[i]
                 if (! gainArray[sym] || ! gainArray[sym].year) {
                     res.send ('fail, missing year ' + sym + ' ' + gainArray[sym])
                     return
@@ -236,9 +238,9 @@ function gain (app)  {
                         filterdObj[sym] = gainArray[sym]
                     // delete gainArray[sym]
                 }
-            })
-            const keys=Object.keys(filterdObj)
-            console.log(getDate(), keys.length, keys)
+            }
+            const keys_=Object.keys(filterdObj)
+            console.log(getDate(), keys_.length, keys_)
             res.send (JSON.stringify(filterdObj))
         }
 
@@ -250,9 +252,12 @@ function gain (app)  {
 
             const filterdObj = {}
 
-            Object.keys(gainArray).forEach ((sym) => {
+            const keys = Object.keys(gainArray)
+            for (let i = 0; i < keys.length; i++) {
+                const sym = keys[i]
+
                 
-                if (true || gainArray[sym].year &&  gainArray[sym].year2 &&  gainArray[sym].year5 && gainArray[sym].year10) {
+                if (gainArray[sym]) {
 
 
                 if (LOG)
@@ -302,7 +307,7 @@ function gain (app)  {
             } 
             else
                 console.log ('missing year', gainArray[sym])  // missing year or year2     
-            })
+            }
             // if (LOG)
             console.log(getDate(), Object.keys(filterdObj))
             res.send (JSON.stringify(filterdObj))
@@ -323,7 +328,8 @@ function gain (app)  {
         else if (cmd === 'verifyAll') {
             const keys = Object.keys(gainArray);
             console.log ('countBefore=', keys.length)
-            keys.forEach ((sym) => {
+            for (let i = 0; i < keys.length; i++) {
+                sym = keys[i]
                 if (! gainArray[sym] || ! 'year' in gainArray[sym])
                     console.log ('missing year')
                 if (LOG)
@@ -333,12 +339,7 @@ function gain (app)  {
 
                 if (gainArray[sym] === undefined)
                     delete gainArray.sym                    
-                // console.log (gainArray[sym][year], gainArray[sym][year2], gainArray[sym][year5], gainArray[sym][year10])
-                // if (! gainArray[sym].year || ! gainArray[sym].year2 || ! gainArray[sym].year5 || ! gainArray[sym].year10)  {
-                //     console.log ('gain verify delete ', gainArray.sym)
-                //     delete gainArray.sym
-                // }
-            })
+            }
             console.log ('countAfter=', Object.keys(gainArray).length)
             res.send ('ok')
         }
