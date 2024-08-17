@@ -261,7 +261,7 @@ function gain (app)  {
                     case 1:
                         if (LOG)
                             console.log (sym, 'filter year val', gainArray[sym].year, 'q*f', qqqValue* factor)
-                        if (Number(gainArray[sym].year) > Number(qqqValue * factor)){
+                        if (gainArray[sym]  && Number(gainArray[sym].year) > Number(qqqValue * factor)){
                             if (symOnly)
                                 filterdObj[sym]=''
                             else
