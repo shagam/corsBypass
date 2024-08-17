@@ -325,7 +325,7 @@ function gain (app)  {
             console.log ('countBefore=', keys.length)
             keys.forEach ((sym) => {
             
-                if (! gainArray[sym].year)
+                if (! gainArray[sym].year === null)
                     console.log ('missing year')
                 if (LOG)
                     console.log (gainArray[sym])
