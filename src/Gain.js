@@ -78,7 +78,7 @@ function gain (app)  {
                 const stock = stocks[i];
                 if (! gainArray[stock])
                     continue;
-                if (! gainArray[stock].exchange) 
+                if (gainArray[stock].exchange) 
                     continue;
                 
                 foundList.push(stock)
