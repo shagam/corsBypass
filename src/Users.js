@@ -248,7 +248,7 @@ function userAccess (sym, ip, city, country, region, os) {
     delete usersArray[ip].countryName; // clear old
     delete usersArray[ip].regionName;  // clear old
     
-    console.log ('ip collect:', usersArray[ip])
+    // console.log ('ip collect:', usersArray[ip])
     userArrayFlush();
 } //* end of collection
 
