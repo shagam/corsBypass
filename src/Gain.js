@@ -76,9 +76,11 @@ function gain (app)  {
             var foundList = [];
             for (let i = 0; i < stocks.length; i++) {
                 const stock = stocks[i];
-                if (! gainArray[stock].exchange) {
+                if (! gainArray[stock])
                     continue;
-                }
+                if (! gainArray[stock].exchange) 
+                    continue;
+                
                 foundList.push(stock)
             }
             res.send (foundList)
