@@ -71,6 +71,20 @@ function gain (app)  {
             return;     
         }
 
+        else if (cmd === 'etf') {
+            const stocks = Object.keys(gainArray)
+            var foundList = [];
+            for (let i = 0; i < stocks.length; i++) {
+                const stock = stocks[i];
+                if (! gainArray[stock].exchange) {
+                    continue;
+                }
+                foundList.push(stock)
+            }
+            res.send (foundList)
+            console.log ('\n\n', getDate(), 'etf-list', foundList)
+            return;
+        }        
         else if (cmd === 'w' || cmd === 'writeOneSym') {  // write one stock
             if (! stock) {
                 res.send ('fail, missing stock') 
