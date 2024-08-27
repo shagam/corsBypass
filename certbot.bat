@@ -47,7 +47,7 @@ npm i pm2@5.1.2
 --max-old-space-size=4096
  2>&1 >> log
 
-NODE_OPTIONS=--max-old-space-size=100; pm2 start app.js --name 'corsBypass'
+NODE_OPTIONS=--max-old-space-size=100; pm2 start app.js --name 'corsBypass' --time
 pm2 start ecosystem.config.js --env production
 
 pm2 ls
@@ -64,4 +64,6 @@ pm2 start app.js --name 'corsBypass'
 
 dir ~/.pm2/logs/*
 tail  /home/eli/.pm2/logs/corsBypass-out.log
+tail  /home/eli/.pm2/logs/corsBypass-error.log
+
 
