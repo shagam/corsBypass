@@ -65,7 +65,7 @@ function gain (app)  {
             if (LOG)
                 console.log ('r', stock, req.query.dat)
             if (dat) 
-                res.send (JSON.stringify(dat))
+                res.send (dat)
             else
                 res.send ('fail stock not found')
             return;     
@@ -103,6 +103,9 @@ function gain (app)  {
             if (LOG)
                 console.log ('w write ', dat)
 
+
+            if (! dat.exchange || (gainArray[stock] && gainArray[stock].exchange)) {// fix missing exchange on old version       
+
             if ((stock != 'QQQ') && gainArray['QQQ'] && 
 
             (
@@ -117,6 +120,9 @@ function gain (app)  {
             res.send ('fail, abort write, gain too low')
             return;
            }
+
+           }
+             else console.log (stock, 'update exchange attribute, even if low gain')
 
             // console.log (dat)
             gainArray[stock] = dat; // readable format
