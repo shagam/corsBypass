@@ -49,6 +49,8 @@ npm i pm2@5.1.2
 
 NODE_OPTIONS=--max-old-space-size=100; pm2 start app.js --name 'corsBypass' --time
 pm2 start ecosystem.config.js --env production
+pm2 restart 0 --time
+pm2 monit
 
 pm2 ls
 pm2 show 0
