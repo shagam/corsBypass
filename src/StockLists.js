@@ -47,13 +47,15 @@ function stockListsFlush () {
 
 
 function stockLists (app)  {
-    console.log ('stockLists')
+
     app.get('/stockLists', (req, res) => {
 
         const listName = req.query.listName
         const cmd = req.query.cmd; // R, W, F
         const datNew = req.query.dat
         const LOG = req.query.LOG
+        const nameArrayAll = Object.keys(stockListsArray)
+        if (LOG)
 
         console.log ('\n',getDate(), ' stocksLists stock=', listName, 'cmd=', cmd, 'datNew=', datNew, 'query=', req.query)
         // res.send ('ok_')
@@ -99,9 +101,14 @@ function stockLists (app)  {
             const dat = JSON.parse(req.query.dat)
             if (LOG)
                 console.log ('writeOne ', listName, dat)
+            const obj = {
+                stocks: dat,
+                ip: req.query.ip,
+                date: getDate()
+            }
 
-            stockListsArray[listName] = dat; // add object
-            console.log (getDate(), listName, 'new', dat)
+            stockListsArray[listName] = obj; // add object
+            console.log (getDate(), listName, 'new', obj)
 
 
             // if (LOG)
@@ -119,6 +126,35 @@ function stockLists (app)  {
             res.send ('ok')
             return;           
         }
+        else if (cmd === 'filterNames') {  // write one stock
+            const nameArrayFiltered = [];
+            const filterName = req.query.filterName.toUpperCase();
+            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', filterName)
+            for (let i = 0; i < nameArrayAll.length; i++) {
+                if (nameArrayAll[i].toUpperCase().indexOf(filterName) !== -1)
+                    nameArrayFiltered.push (nameArrayAll[i])
+            }
+            res.send(nameArrayFiltered)
+            console.log ('filtered list names=', nameArrayFiltered)
+        }
+        else if (cmd === 'getOne') {  // write one stock
+            const listName = req.query.listName;
+
+            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', listName)
+            const obj = {
+                listName: listName,
+                list: stockListsArray[listName] 
+            }
+            res.send(obj)
+            console.log (obj)
+        }
+        else if (cmd === 'delOne') {  // write one stock
+            const listName = req.query.filterName.listName;
+            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', listName)
+            delete stockListsArray[listName]
+            res.send('ok')
+        }
+
 
         else
             res.send (getDate(), cmd, 'fail cmd invalid')
