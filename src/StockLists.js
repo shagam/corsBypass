@@ -129,10 +129,9 @@ function stockLists (app)  {
 
         else if (cmd === 'filterNames') {  // write one stock
             const nameArrayFiltered = [];
-            const filterName = req.query.filterName.toUpperCase();
 
             for (let i = 0; i < nameArrayAll.length; i++) {
-                if (nameArrayAll[i].toUpperCase().indexOf(filterName) !== -1)
+                if (! req.query.filterName || nameArrayAll[i].toUpperCase().indexOf(req.query.filterName.toUpperCase()) !== -1)
                     nameArrayFiltered.push (nameArrayAll[i])
             }
             res.send(nameArrayFiltered)
