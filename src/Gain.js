@@ -56,8 +56,9 @@ function gain (app)  {
         const factor = req.query.factor;
         const LOG = req.query.LOG
 
-        console.log ('\n\n', getDate(), 'gain ', req.query, 'write=', writeCounter, 'read=', readCount,
-         'filterCount=', filterCount, 'removeCount=', removeCount)
+        console.log ('\n\n', getDate(), 'gain ', req.query, 
+        // 'write=', writeCounter, 'read=', readCount, 'filterCount=', filterCount, 'removeCount=', removeCount
+    )
 
         if (cmd === 'r' || cmd === 'readOne') { // read one stock
             readCount++;
@@ -97,8 +98,8 @@ function gain (app)  {
             writeCounter++;
 
             userAccess (req.query.stock, req.query.ip, req.query.city, req.query.country, req.query.region, req.query.os)
-            if (LOG)
-                console.log ('gainWrite', req.query)
+            // if (LOG)
+            //     console.log ('gainWrite', req.query)
             var dat = JSON.parse(req.query.dat)
             if (LOG)
                 console.log ('w write ', dat)
@@ -126,7 +127,7 @@ function gain (app)  {
 
             // console.log (dat)
             gainArray[stock] = dat; // readable format
-            console.log (getDate(), 'gainWrite', dat)
+            // console.log (getDate(), 'gainWrite', dat)
 
             if(LOG)
                 console.log (Object.keys(gainArray))
