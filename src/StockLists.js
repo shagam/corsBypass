@@ -112,7 +112,7 @@ function stockLists (app)  {
             console.log (getDate(), listName, 'new', obj)
 
 
-            console.log (getDate(), listName, 'target length ', stockListsArray[listName].length)
+            console.log ('new listName=', listName, 'size=', stockListsArray[listName].stocks.length)
 
             if (writeCount % 1 === 0) { // write every time
                 stockListsFlush()
