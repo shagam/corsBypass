@@ -55,20 +55,22 @@ function stockLists (app)  {
         const datNew = req.query.dat
         const LOG = req.query.LOG
         const nameArrayAll = Object.keys(stockListsArray)
-        if (LOG)
+        
+        console.log ('\n\n', getDate(), 'stockList', req.query)
 
-        console.log ('\n',getDate(), ' stocksLists stock=', listName, 'cmd=', cmd, 'datNew=', datNew, 'query=', req.query)
-        // res.send ('ok_')
-        // return
+        if (LOG) {
+            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', listName)  
+        }
+
 
         if (req.query.cmd === 'delOneSym') { // delete one sym
           if (! stockListsArray[listName]) {
-              console.log ('\n\n', getDate(), listName, ' stocksLists delete missing')
+              console.log (listName, ' stocksLists delete missing')
               res.send ('fail, splits symbol missing')
           }
           else {
             delete stockListsArray[listName] // remove sym
-            console.log ('\n\n', getDate(), listName, ' stocksLists delete done')
+            console.log ('deleteOne', listName)
             res.send ('ok')
           }
           return;   
@@ -89,6 +91,7 @@ function stockLists (app)  {
             return;     
         }
 
+
         else if (cmd === 'writeOne') {  // write one stock
             const listName = req.query.listName
             if (! listName) {
@@ -99,8 +102,6 @@ function stockLists (app)  {
 
             writeCounter++;
             const dat = JSON.parse(req.query.dat)
-            if (LOG)
-                console.log ('writeOne ', listName, dat)
             const obj = {
                 stocks: dat,
                 ip: req.query.ip,
@@ -111,8 +112,6 @@ function stockLists (app)  {
             console.log (getDate(), listName, 'new', obj)
 
 
-            // if (LOG)
-                // target[stock].forEach((d)=> {console.log(d)}) //print array
             console.log (getDate(), listName, 'target length ', stockListsArray[listName].length)
 
             if (writeCount % 1 === 0) { // write every time
@@ -126,10 +125,12 @@ function stockLists (app)  {
             res.send ('ok')
             return;           
         }
+
+
         else if (cmd === 'filterNames') {  // write one stock
             const nameArrayFiltered = [];
             const filterName = req.query.filterName.toUpperCase();
-            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', filterName)
+
             for (let i = 0; i < nameArrayAll.length; i++) {
                 if (nameArrayAll[i].toUpperCase().indexOf(filterName) !== -1)
                     nameArrayFiltered.push (nameArrayAll[i])
@@ -137,20 +138,23 @@ function stockLists (app)  {
             res.send(nameArrayFiltered)
             console.log ('filtered list names=', nameArrayFiltered)
         }
+
+
         else if (cmd === 'getOne') {  // write one stock
             const listName = req.query.listName;
-
-            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', listName)
             const obj = {
                 listName: listName,
                 list: stockListsArray[listName] 
             }
             res.send(obj)
-            console.log (obj)
+            console.log ('getOne', obj)
         }
+
+
         else if (cmd === 'delOne') {  // write one stock
-            const listName = req.query.filterName.listName;
-            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', listName)
+            const listName = req.query.listName;
+            // if(LOG)
+            console.log ('deleteOne listName=', listName)
             delete stockListsArray[listName]
             res.send('ok')
         }
