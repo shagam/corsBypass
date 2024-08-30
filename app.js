@@ -21,7 +21,9 @@ const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
 const {splitsGet, splitArrayFlush} = require('./src/Splits')
 const { price, priceDel, historicPriceFlush } = require('./src/HistoricPrice')
 const { priceNasdaq, priceNasdaqDel, historicPriceNasdaqFlush } = require('./src/HistoricPriceNasdaq')
-const appGet = require('./src/app-get')
+const {stockLists, stockListsFlush} = require ('./src/StockLists')
+
+// const appGet = require('./src/app-get')
 // const  {getLocalIp, user, userTest, root} = require ('./Tests')
 
 const {holdingsMain, holdingArrayFlush} = require('./src/Holdings')
@@ -171,7 +173,7 @@ targetPrice (app)
 
 splitsGet(app)
 
-
+stockLists(app)
 
 // 1 day delay
 // app.get('/splitsDay', (req, res) => {
@@ -209,6 +211,7 @@ splitsGet(app)
   holdingsSchFlush()
   splitArrayFlush()
   userArrayFlush()
+  stockListsFlush()
  }
 
 
