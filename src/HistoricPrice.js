@@ -23,7 +23,7 @@ var priceArray = {};   // saved one obj per stock
 fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
   if (err) {
     console.error (err)
-    eturn;
+    return;
   }
   priceArray = JSON.parse(data);
   const keys = Object.keys(priceArray);
