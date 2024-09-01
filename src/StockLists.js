@@ -22,9 +22,14 @@ fs.readFile('txt/stocksLists', 'utf8', (err, data) => {
   console.log('\n', getDate(), 'txt/stocksLists  read count=', keys.length)
 
     var symbols = "";
-    for (var i = 0; i < keys.length; i++)
-    //   console.log (JSON.stringify (target[keys[i]]))
-        symbols += keys[i] + ' (' + stockListsArray[keys[i]].length + ')  '
+    for (var i = 0; i < keys.length; i++) {
+        //   console.log (JSON.stringify (target[keys[i]]))
+        if (stockListsArray[keys[i]].stocks)
+            symbols += keys[i] + ' (' + stockListsArray[keys[i]].stocks.length + ')  '
+        else
+            symbols += keys[i] + ' (' + stockListsArray[keys[i]].length + ') ^stocks^ '
+        console.log ('\n\n', keys[i], stockListsArray[keys[i]])
+    }
     console.log(symbols)
 });
 
@@ -62,21 +67,8 @@ function stockLists (app)  {
             console.log ('nameArrayAll=', nameArrayAll, 'filterName=', listName)  
         }
 
-
-        if (req.query.cmd === 'delOneSym') { // delete one sym
-          if (! stockListsArray[listName]) {
-              console.log (listName, ' stocksLists delete missing')
-              res.send ('fail, splits symbol missing')
-          }
-          else {
-            delete stockListsArray[listName] // remove sym
-            console.log ('deleteOne', listName)
-            res.send ('ok')
-          }
-          return;   
-       }    
-    
-        else if (cmd === 'readOne') { // read one stock stocksListsArray
+   
+         if (cmd === 'readOne') { // read one stock stocksListsArray
             readCount++;
             const dat = stockListsArray[listName]
             if (! dat) {
@@ -107,12 +99,13 @@ function stockLists (app)  {
                 ip: req.query.ip,
                 date: getDate()
             }
+            if (LOG)
+                console.log (listName, obj)
 
+            if (stockListsArray[listName]) {
+                console.log ('write replaces old=', stockListsArray[listName]) 
+            }
             stockListsArray[listName] = obj; // add object
-            console.log (getDate(), listName, 'new', obj)
-
-
-            console.log ('new listName=', listName, 'size=', stockListsArray[listName].stocks.length)
 
             if (writeCount % 1 === 0) { // write every time
                 stockListsFlush()
@@ -141,9 +134,11 @@ function stockLists (app)  {
 
         else if (cmd === 'getOne') {  // write one stock
             const listName = req.query.listName;
+            if (LOG)
+                console.log (listName, stockListsArray[listName] )
             const obj = {
                 listName: listName,
-                list: stockListsArray[listName] 
+                stocks: stockListsArray[listName].stocks
             }
             res.send(obj)
             console.log ('getOne', obj)
@@ -152,8 +147,12 @@ function stockLists (app)  {
 
         else if (cmd === 'delOne') {  // write one stock
             const listName = req.query.listName;
-            // if(LOG)
-            console.log ('deleteOne listName=', listName)
+            if (! stockListsArray[listName]) {
+                console.log ('delOne missing', )
+                res.send('fail, missing=' + listName)
+                return;
+            }
+
             delete stockListsArray[listName]
             res.send('ok')
         }
