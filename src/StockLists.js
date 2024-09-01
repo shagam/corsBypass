@@ -28,7 +28,7 @@ fs.readFile('txt/stocksLists', 'utf8', (err, data) => {
             symbols += keys[i] + ' (' + stockListsArray[keys[i]].stocks.length + ')  '
         else
             symbols += keys[i] + ' (' + stockListsArray[keys[i]].length + ') ^stocks^ '
-        console.log ('\n\n', keys[i], stockListsArray[keys[i]])
+        // console.log ('\n\n', keys[i], stockListsArray[keys[i]])
     }
     console.log(symbols)
 });
