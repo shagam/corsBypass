@@ -128,7 +128,7 @@ function stockLists (app)  {
                     nameArrayFiltered.push (nameArrayAll[i])
             }
             res.send(nameArrayFiltered)
-            console.log ('filtered list names=', nameArrayFiltered)
+            console.log ('filtered list names=',  nameArrayFiltered.length, nameArrayFiltered)
         }
 
 
@@ -138,7 +138,9 @@ function stockLists (app)  {
                 console.log (listName, stockListsArray[listName] )
             const obj = {
                 listName: listName,
-                stocks: stockListsArray[listName].stocks
+                stocks: stockListsArray[listName].stocks,
+                date: stockListsArray[listName].date,
+                ip:  stockListsArray[listName].ip
             }
             res.send(obj)
             console.log ('getOne', obj)
