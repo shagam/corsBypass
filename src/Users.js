@@ -2,7 +2,6 @@ const fs = require ('fs')
 
 
 const {getDate} = require ('./Utils');
-const JSONTransport = require('nodemailer/lib/json-transport');
 
 
 //*  read data from disk
