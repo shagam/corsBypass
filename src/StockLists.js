@@ -155,6 +155,12 @@ function stockLists (app)  {
                 return;
             }
 
+            if (stockListsArray[listName] && ! req.query.admin
+                 && req.query.ip !== stockListsArray[listName].ip) {
+                res.send('fail, del rejected=' + listName)
+                return;
+            }
+
             delete stockListsArray[listName]
             res.send('ok')
         }
