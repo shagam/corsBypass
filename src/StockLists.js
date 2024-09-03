@@ -124,8 +124,13 @@ function stockLists (app)  {
             const nameArrayFiltered = [];
 
             for (let i = 0; i < nameArrayAll.length; i++) {
-                if (req.query.MyIp && req.query.MyIp !== nameArrayAll[i].ip)
+                if (LOG)
+                console.log ('filter, req.query.ip=',  req.query.ip, 'listIp=', stockListsArray[nameArrayAll[i]].ip)
+                if (req.query.ip && req.query.ip !== stockListsArray[nameArrayAll[i]].ip) {
+                    console.log ('filterNames skip, diffErent request ip=',
+                         req.query.ip, 'listIp=', stockListsArray[nameArrayAll[i]].ip)
                     continue; // send only my lists? or all
+                }
                 if (! req.query.filterName || nameArrayAll[i].toUpperCase().indexOf(req.query.filterName.toUpperCase()) !== -1)
                     nameArrayFiltered.push (nameArrayAll[i])
             }
