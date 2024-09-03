@@ -124,7 +124,7 @@ function stockLists (app)  {
             const nameArrayFiltered = [];
 
             for (let i = 0; i < nameArrayAll.length; i++) {
-                if (LOG)
+                if (LOG && req.query.ip)
                 console.log ('filter, req.query.ip=',  req.query.ip, 'listIp=', stockListsArray[nameArrayAll[i]].ip)
                 if (req.query.ip && req.query.ip !== stockListsArray[nameArrayAll[i]].ip) {
                     console.log ('filterNames skip, diffErent request ip=',
