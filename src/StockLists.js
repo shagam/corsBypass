@@ -124,6 +124,8 @@ function stockLists (app)  {
             const nameArrayFiltered = [];
 
             for (let i = 0; i < nameArrayAll.length; i++) {
+                if (req.query.MyIp && req.query.MyIp !== nameArrayAll[i].ip)
+                    continue; // send only my lists? or all
                 if (! req.query.filterName || nameArrayAll[i].toUpperCase().indexOf(req.query.filterName.toUpperCase()) !== -1)
                     nameArrayFiltered.push (nameArrayAll[i])
             }
@@ -150,14 +152,14 @@ function stockLists (app)  {
         else if (cmd === 'delOne') {  // write one stock
             const listName = req.query.listName;
             if (! stockListsArray[listName]) {
-                console.log ('delOne missing', )
+                console.log ('delOne missing=', listName)
                 res.send('fail, missing=' + listName)
                 return;
             }
 
             if (stockListsArray[listName] && ! req.query.admin
                  && req.query.ip !== stockListsArray[listName].ip) {
-                res.send('fail, del rejected=' + listName)
+                res.send('fail, del rejected, delete only from same ip;  listName=' + listName)
                 return;
             }
 
