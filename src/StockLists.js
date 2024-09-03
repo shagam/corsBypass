@@ -92,6 +92,14 @@ function stockLists (app)  {
                 return
             }
 
+            if (! req.query.admin && stockListsArray[listName] && stockListsArray[listName].ip !== req.query.ip) {
+                console.log ('fail, write over different ip listName=' + listName, 
+                    'oldList ip=' + stockListsArray[listName].ip + ' new write ip=' + req.query.ip)  
+                res.send('fail, write over different ip listName=' + listName, 
+                    'oldList ip=' + stockListsArray[listName].ip + ' new write ip=' + req.query.ip)
+                return;
+            }
+
             writeCounter++;
             const dat = JSON.parse(req.query.dat)
             const obj = {
@@ -103,7 +111,7 @@ function stockLists (app)  {
                 console.log (listName, obj)
 
             if (stockListsArray[listName]) {
-                console.log ('write replaces old=', stockListsArray[listName]) 
+                console.log ('write replaces old=', listName, stockListsArray[listName], 'oldIp=', stockListsArray[listName].ip) 
             }
             stockListsArray[listName] = obj; // add object
 
@@ -164,7 +172,7 @@ function stockLists (app)  {
 
             if (stockListsArray[listName] && ! req.query.admin
                  && req.query.ip !== stockListsArray[listName].ip) {
-                res.send('fail, del rejected, delete only from same ip;  listName=' + listName)
+                res.send('fail, delete only from same ip;  listName=' + listName)
                 return;
             }
 
