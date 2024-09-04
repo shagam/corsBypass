@@ -93,9 +93,9 @@ function stockLists (app)  {
             }
 
             if (! req.query.admin && stockListsArray[listName] && stockListsArray[listName].ip !== req.query.ip) {
-                console.log ('fail, write over different ip listName=' + listName, 
-                    'oldList ip=' + stockListsArray[listName].ip + ' new write ip=' + req.query.ip)  
-                res.send('fail, write over different ip listName=' + listName, 
+                console.log ('fail, write over different ip listName=', listName, 
+                    'oldList ip=', stockListsArray[listName].ip, ' new write ip=', req.query.ip)  
+                res.send('fail, write over different ip listName=' + listName + 
                     'oldList ip=' + stockListsArray[listName].ip + ' new write ip=' + req.query.ip)
                 return;
             }
