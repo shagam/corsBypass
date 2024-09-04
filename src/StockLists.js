@@ -96,7 +96,7 @@ function stockLists (app)  {
                 console.log ('fail, write over different ip listName=', listName, 
                     'oldList ip=', stockListsArray[listName].ip, ' new write ip=', req.query.ip)  
                 res.send('fail, write over different ip listName=' + listName + 
-                    'oldList ip=' + stockListsArray[listName].ip + ' new write ip=' + req.query.ip)
+                    '  oldList ip=' + stockListsArray[listName].ip + ' new write ip=' + req.query.ip)
                 return;
             }
 
