@@ -39,7 +39,9 @@ fs.readFile('txt/holdingsArray.txt', 'utf8', (err, data) => {
 function parse_0 (stocks, percent, text) {
 
   // get stock array
+  // <a href="/stocks/aapl/">AAPL</a>
   var pattern='<a href="/stocks/msft/">MSFT</a>'
+
   pattern =  pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
   // pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>|<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
   // pattern='<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
@@ -56,7 +58,7 @@ function parse_0 (stocks, percent, text) {
   // pattern = '<td class="svelte-1yyv6eq">([0-9.]+)%</td>'
 
   // <td class="svelte-172ru7t">5.25%</td> 2024 Jul 6
-  pattern = '<td class="svelte-172ru7t">([0-9.]+)%</td>'
+  pattern = '<td class="svelte-lg083p">([0-9.]+)%</td>'
 
   rx = new RegExp (pattern,'g');
     while ((rs = rx.exec(text)) !== null){
@@ -242,4 +244,6 @@ function holdingsMain (app) {
 module.exports = {holdingsMain, holdingArrayFlush}
 
 
+
+//  <tr class="svelte-lg083p"><td class="rrpad svelte-lg083p">1</td><td class="svelte-lg083p"><a href="/stocks/aapl/">AAPL</a></td><td class="shr svelte-lg083p">Apple Inc.</td><td class="svelte-lg083p">8.97%</td><td class="hide-column-mobile svelte-lg083p">113,099,136</td> </tr> 
 
