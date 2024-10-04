@@ -59,6 +59,8 @@ function parse_0 (stocks, percent, text) {
 
   // <td class="svelte-172ru7t">5.25%</td> 2024 Jul 6
   pattern = '<td class="svelte-lg083p">([0-9.]+)%</td>'
+  pattern = '<td class="svelte-16u5l6m">([0-9.]+)%</td>'
+
 
   rx = new RegExp (pattern,'g');
     while ((rs = rx.exec(text)) !== null){
