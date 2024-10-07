@@ -170,10 +170,11 @@ function stockLists (app)  {
                 return;
             }
 
-            if (stockListsArray[listName] && ! req.query.admin
-                 && req.query.ip !== stockListsArray[listName].ip) {
-                res.send('fail, delete only from same ip;  listName=' + listName)
-                return;
+            if (stockListsArray[listName]) {
+                if (req.query.ip !== stockListsArray[listName].ip && ! delOtherIp) {
+                    res.send('fail, delete only from same ip;  listName=' + listName)
+                    return;
+                }
             }
 
             delete stockListsArray[listName]
