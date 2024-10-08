@@ -64,7 +64,7 @@ function stockLists (app)  {
         console.log ('\n\n', getDate(), 'stockList', req.query)
 
         if (LOG) {
-            console.log ('nameArrayAll=', nameArrayAll, 'filterName=', listName)  
+            console.log (getDate(), 'nameArrayAll=', nameArrayAll, 'filterName=', listName)  
         }
 
    
@@ -93,7 +93,7 @@ function stockLists (app)  {
             }
 
             if (! req.query.admin && stockListsArray[listName] && stockListsArray[listName].ip !== req.query.ip) {
-                console.log ('fail, write over different ip listName=', listName, 
+                console.log (getDate(), 'fail, write over different ip listName=', listName, 
                     'oldList ip=', stockListsArray[listName].ip, ' new write ip=', req.query.ip)  
                 res.send('fail, write over different ip listName=' + listName + 
                     '  oldList ip=' + stockListsArray[listName].ip + ' new write ip=' + req.query.ip)
@@ -108,10 +108,10 @@ function stockLists (app)  {
                 date: getDate()
             }
             if (LOG)
-                console.log (listName, obj)
+                console.log (getDate(), listName, obj)
 
             if (stockListsArray[listName]) {
-                console.log ('write replaces old=', listName, stockListsArray[listName], 'oldIp=', stockListsArray[listName].ip) 
+                console.log (getDate(), 'write replaces old=', listName, stockListsArray[listName], 'oldIp=', stockListsArray[listName].ip) 
             }
             stockListsArray[listName] = obj; // add object
 
@@ -120,7 +120,7 @@ function stockLists (app)  {
                 lastWriteMili = Date.now()
             }
             else
-                console.log ('skip too frequent Writes, writeCount=', writeCount)
+                console.log (getDate(), 'skip too frequent Writes, writeCount=', writeCount)
             writeCount++;
 
             res.send ('ok')
@@ -130,6 +130,8 @@ function stockLists (app)  {
 
         else if (cmd === 'filterNames') {  // write one stock
             const nameArrayFiltered = [];
+            if (LOG)
+                console.log (stockListsArray, 'count=' + Object.keys(stockListsArray).length)
 
             for (let i = 0; i < nameArrayAll.length; i++) {
                 if (LOG && req.query.ip)
@@ -143,7 +145,7 @@ function stockLists (app)  {
                     nameArrayFiltered.push (nameArrayAll[i])
             }
             res.send(nameArrayFiltered)
-            console.log ('filtered list names=',  nameArrayFiltered.length, nameArrayFiltered)
+            console.log (getDate(), 'filtered list names=',  nameArrayFiltered.length, nameArrayFiltered)
         }
 
 
@@ -158,33 +160,36 @@ function stockLists (app)  {
                 ip:  stockListsArray[listName].ip
             }
             res.send(obj)
-            console.log ('getOne', obj)
+            console.log (getDate(), 'getOne', obj)
         }
 
 
         else if (cmd === 'delOne') {  // write one stock
             const listName = req.query.listName;
             if (! stockListsArray[listName]) {
-                console.log ('delOne missing=', listName)
+                console.log (getDate(), 'delOne missing=', listName)
                 res.send('fail, missing=' + listName)
                 return;
             }
 
             if (stockListsArray[listName]) {
-                if (req.query.ip !== stockListsArray[listName].ip && ! delOtherIp) {
-                    res.send('fail, delete only from same ip;  listName=' + listName)
+                if (req.query.ip !== stockListsArray[listName].ip && ! req.query.delOtherIp) {
+                    console.log (getDate(), 'fail, delete only from same ip;  listName=' + listName)
+                    res.send('fail, delete allowed only from same ip;  listName=' + listName)
                     return;
                 }
             }
 
             delete stockListsArray[listName]
-            res.send('ok')
+            console.log(getDate(), 'delete ok list=', listName)
+            res.send('ok, delete')
         }
 
 
-        else
-            res.send (getDate(), cmd, 'fail cmd invalid')
-
+        else {
+            res.send (cmd + ' fail cmd invalid')
+            console.log(getDate, ' fail cmd invalid')
+        }
     })
 }
 
