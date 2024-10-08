@@ -139,6 +139,8 @@ function holdingsSch (req, res, daysDelay) {
     "method": "GET",
   };
 
+  if (LOG)
+    console.log (getDate(), req.query.stock, 'holdings', url)
   axios.get (url)
   .then ((result) => {
     const text = result.data;
