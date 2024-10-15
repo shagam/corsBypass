@@ -122,11 +122,11 @@ function userList (app) {
 
       usersArr.push (usersArray[ipList[i]]) // ptrepare array
       // skip my ip when searching for last
-      if (ip === '62.0.92.49') { // skip developer ip
+      if (ip === process.env.NODE_localIP){ //  62.0.92.49') { // skip developer ip
         // console.log ('homeIP', ip )
         continue;
       }
-      
+
       //* find last access
       if (seconds > lastSeconds) {
         lastSeconds = seconds;
@@ -159,7 +159,7 @@ function userList (app) {
       var txt =  JSON.stringify(usersArr[i])
       if (usersArr[i].ip === lastIp)
         txt = '* ' + txt;
-      else if (ip === '62.0.92.49')
+      else if (ip === process.env.NODE_localIP) //62.0.92.49')
         txt = '^ ' + txt;
       else        
         txt = '  ' + txt;

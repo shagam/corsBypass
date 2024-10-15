@@ -14,6 +14,9 @@ const path = require('path')
 const fs = require('fs')
 const axios = require('axios')
 const cors = require('cors')
+
+require('dotenv').config()
+console.log ('\n\n\nenv', process.env)
 //const detect = require ('detect-browser')
 
 const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
@@ -51,7 +54,8 @@ else
 
   console.log("\nRunning on EC2? " + onEC2 + ',  port=' + port + '\n');
 
-const externalIp = '62.0.90.49'
+console.log ('\n\n\nip=', process.env.NODE_localIP)
+const externalIp = process.env.NODE_localIP // '62.0.90.49'
 const l2_Ip = '10.100.102.4'
 const pc_ip = '10.100.102.3'
 
