@@ -11,15 +11,15 @@ const date = getDate();
 var lastWriteMili;
 
 // read gain from local file once on startup
-fs.readFile('txt/stocksLists', 'utf8', (err, data) => {
+fs.readFile('txt/stocksLists.txt', 'utf8', (err, data) => {
   if (err) {
-    console.log ('txt/stocksLists read fail')
+    console.log ('txt/stocksLists.txt read fail')
     stockListsArray = {};
   }
   if (data)
     stockListsArray = JSON.parse(data);
   const keys = Object.keys(stockListsArray);
-  console.log('\n', getDate(), 'txt/stocksLists  read count=', keys.length)
+  console.log('\n', getDate(), 'txt/stocksLists.txt  read count=', keys.length)
 
     var symbols = "";
     for (var i = 0; i < keys.length; i++) {
@@ -41,12 +41,12 @@ function stockListsFlush () {
     if (Object.keys(stockListsArray).length === 0) // avoid write of empty
         return;
 
-    fs.writeFile ('txt/stocksLists', JSON.stringify (stockListsArray), err => {
+    fs.writeFile ('txt/stocksLists.txt', JSON.stringify (stockListsArray), err => {
         if (err) {
-            console.log(getDate(), 'txt/stocksLists write fail', err)
+            console.log(getDate(), 'txt/stocksLists.txt write fail', err)
         }
         else
-            console.log(getDate(), 'txt/stocksLists write, sym count=', Object.keys(stockListsArray).length, 'writeCount=', writeCount )
+            console.log(getDate(), 'txt/stocksLists.txt write, sym count=', Object.keys(stockListsArray).length, 'writeCount=', writeCount )
     })
 }
 
