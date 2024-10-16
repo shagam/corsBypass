@@ -16,7 +16,7 @@ const axios = require('axios')
 const cors = require('cors')
 
 require('dotenv').config()
-console.log ('\n\n\nenv', process.env)
+// console.log ('\n\n\nenv', process.env)
 //const detect = require ('detect-browser')
 
 const {targetPrice, targetPriceFlush} = require ('./src/Targetprice')
