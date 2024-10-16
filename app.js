@@ -68,44 +68,50 @@ const pc_ip = '10.100.102.3'
 
 
 const ssl = true
+var key_; 
+var cert_;
+
 if (ssl) {
   var sslServer;
   // if (getLocalIp() == l2_Ip) {
   if (true) {
     if (true) {// letsaencrypt
-      console.log('Certificate letsEncrypt')
-      if (onEC2)
-        sslServer = https.createServer({
-          key: fs.readFileSync('/etc/letsencrypt/live/dinagold.net/privkey.pem'),
-          cert: fs.readFileSync('/etc/letsencrypt/live/dinagold.net/fullchain.pem'),
-        }, app)
-      else
-        sslServer = https.createServer({
-          key: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/privkey.pem'),
-          cert: fs.readFileSync('/etc/letsencrypt/live/dinagold.org/fullchain.pem'),
-        }, app)
 
+      if (onEC2) {
+        console.log('Certificate letsEncrypt EC2 production  dinagold.net')
+        key_ =  fs.readFileSync('/etc/letsencrypt/live/dinagold.net/privkey.pem')
+        cert_= fs.readFileSync('/etc/letsencrypt/live/dinagold.net/fullchain.pem')
+      }
+      else {
+        console.log('Certificate letsEncrypt home test server dinagold.org')
+        key_ = fs.readFileSync('/etc/letsencrypt/live/dinagold.org/privkey.pem')
+        cert_= fs.readFileSync('/etc/letsencrypt/live/dinagold.org/fullchain.pem')
+      }
     }
     else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
       console.log('certificate local authority')
-      sslServer = https.createServer({
-        key: fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.key'),
-        cert: fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.crt'),
-      }, app)
+        key_ =  fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.key')
+        cert_= fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.crt')
     }
   }
   else { // certificate local
     console.log('certificate without authority')
-    sslServer = https.createServer({
-      key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-      cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
-    }, app)
+      key_ = fs.readFileSync(path.join(__dirname, 'cert', 'key.pem'))
+      cert_ = fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
+
   }
 }
   else {
     console.log('certificate none')
     sslServer = app;
   }
+
+  console.log ('key', key_)
+  console.log ('cert', cert_)
+  sslServer = https.createServer({
+    key: key_,
+    cert: cert_,
+  }, app)
 
 
   // appGet (sslServer, app, port) 
