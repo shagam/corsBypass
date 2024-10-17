@@ -74,6 +74,14 @@ function userList (app) {
     console.log ('\n', getDate(), 'users arguments', req.query, 'count=', ipList.length)
     // if (LOG)
     //   console.log (usersArray)
+
+    //** Send all info */
+    if (req.query.getAll) {
+      res.send (usersArray)
+      console.log ('usersArray', Object.keys(usersArray).length) 
+      return;
+    }
+
     // collect for count
     var cityObj = {};
     var countryObj = {}
