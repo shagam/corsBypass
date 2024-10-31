@@ -36,7 +36,7 @@ fs.readFile('txt/holdingsArray.txt', 'utf8', (err, data) => {
 
 
 
-function parse_0 (stocks, percent, text, percentRegex) {
+function parse_0 (stocks, percent, text, percentRegex, LOG) {
 
   // get stock array
   // <a href="/stocks/aapl/">AAPL</a>
@@ -60,11 +60,12 @@ function parse_0 (stocks, percent, text, percentRegex) {
   // <td class="svelte-172ru7t">5.25%</td> 2024 Jul 6
   if (! percentRegex)
     pattern = '<td class=\"svelte-2d4szo\">([0-9.]+)%</td>'
-  else if (percentRegex = 1)
+  else if (percentRegex == 1)
     pattern = '<td class="svelte-lg083p">([0-9.]+)%</td>'
-  else if (percentRegex = 2)
+  else if (percentRegex == 2)
     pattern = '<td class="svelte-16u5l6m">([0-9.]+)%</td>'
-
+  if (LOG)
+    console.log('pecent regex', pattern)
 
   rx = new RegExp (pattern,'g');
     while ((rs = rx.exec(text)) !== null){
@@ -193,7 +194,7 @@ function holdings (req, res, daysDelay) {
 
     var stocks=[];
     var percent = [];
-    parse_0 (stocks, percent, text, req.query.percentRegex)
+    parse_0 (stocks, percent, text, req.query.percentRegex, LOG)
 
 
     // build jason for send 
@@ -206,6 +207,7 @@ function holdings (req, res, daysDelay) {
       const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
       console.log (sym, 'parse mismatch', 'sym:', stocks.length, 'perc:', percent.length, holdingsObg)
       holdingsObg['err']= 'fail, parse mismatch'
+      delete holdingsArray[sym]
       res.send(JSON.stringify(holdingsObg))
       return;
     }
