@@ -36,7 +36,7 @@ fs.readFile('txt/holdingsArray.txt', 'utf8', (err, data) => {
 
 
 
-function parse_0 (stocks, percent, text) {
+function parse_0 (stocks, percent, text, percentRegex) {
 
   // get stock array
   // <a href="/stocks/aapl/">AAPL</a>
@@ -58,8 +58,12 @@ function parse_0 (stocks, percent, text) {
   // pattern = '<td class="svelte-1yyv6eq">([0-9.]+)%</td>'
 
   // <td class="svelte-172ru7t">5.25%</td> 2024 Jul 6
-  pattern = '<td class="svelte-lg083p">([0-9.]+)%</td>'
-  pattern = '<td class="svelte-16u5l6m">([0-9.]+)%</td>'
+  if (! percentRegex)
+    pattern = '<td class=\"svelte-2d4szo\">([0-9.]+)%</td>'
+  else if (percentRegex = 1)
+    pattern = '<td class="svelte-lg083p">([0-9.]+)%</td>'
+  else if (percentRegex = 2)
+    pattern = '<td class="svelte-16u5l6m">([0-9.]+)%</td>'
 
 
   rx = new RegExp (pattern,'g');
@@ -189,7 +193,7 @@ function holdings (req, res, daysDelay) {
 
     var stocks=[];
     var percent = [];
-    parse_0 (stocks, percent, text)
+    parse_0 (stocks, percent, text, req.query.percentRegex)
 
 
     // build jason for send 
