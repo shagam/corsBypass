@@ -139,7 +139,7 @@ function holdings (req, res, daysDelay) {
      else {  // delete old wrong saved format
        holdingsArray [req.query.stock] = undefined;
        if (LOG)
-       console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdings missing or old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
+       console.log ("\n", req.query.stock, getDate(), '\x1b[31m holdings missing or old or ignoreSaved\x1b[0m days=', (diff / miliInADay).toFixed(0), savedHoldings);
        savedHoldings = undefined;
      }
 
@@ -201,6 +201,10 @@ function holdings (req, res, daysDelay) {
     // console.log (JSON.stringify(percent))
     var holdingArray = [];
     holdingArray.push ({sym: stocks.length, perc: percent.length})
+    if (LOG) {
+      console.log ('sym:', stocks.length, stocks)
+      console.log ('percent:', percent.length, percent)
+    }
 
     if (Math.abs(holdingArray[0].sym - holdingArray[0].perc) >= MAX_MISMATCH
       || holdingArray[0].sym === 0) {
@@ -208,8 +212,11 @@ function holdings (req, res, daysDelay) {
       console.log (sym, 'parse mismatch', 'sym:', stocks.length, 'perc:', percent.length, holdingsObg)
       holdingsObg['err']= 'fail, parse mismatch'
       delete holdingsArray[sym]
-      res.send(JSON.stringify(holdingsObg))
-      return;
+      if (! req.query.ignoreMismatch) {
+        res.send(JSON.stringify(holdingsObg))
+        console.log ('abort, mismatch')
+        return;
+      }
     }
 
     console.log (holdingArray) // verify count
