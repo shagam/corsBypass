@@ -40,6 +40,9 @@ function parse_0 (stocks, percent, text, percentRegex, LOG) {
 
   // get stock array
   // <a href="/stocks/aapl/">AAPL</a>
+  // '<td class=\"shr svelte-2d4szo\">NASDAQ 100 INDEX SWAP JPMORGAN CHASE BANK NA</td>'
+  // '<td class=\\\"shr svelte\\-2d4szo\\\">NASDAQ 100 [A-Z /\\-\\&:;\\.]</td>'
+
   var pattern='<a href="/stocks/msft/">MSFT</a>'
 
   pattern =  pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
