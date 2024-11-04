@@ -62,7 +62,7 @@ function parse_0 (stocks, percent, text, percentRegex, LOG) {
     else if (rs[6])
       stocks.push(rs[6]);
 
-    console.log ('matched ', rs[1], rs[2], rs[3], rs[4], rs[6])
+    // console.log ('matched ', rs[1], rs[2], rs[3], rs[4], rs[6])
   };
   
   // get percentage array
