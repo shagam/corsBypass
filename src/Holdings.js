@@ -45,14 +45,19 @@ function parse_0 (stocks, percent, text, percentRegex, LOG) {
 
   var pattern='<a href="/stocks/msft/">MSFT</a>'
 
-  pattern =  pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>'
+  pattern =  pattern='(<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>)|(<td class=\\"shr svelte-2d4szo\\">Us (Dollar)</td>)'
   // pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>|<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
   // pattern='<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
   // pattern='<td class="rlpad svelte-1jtwn20">(6861.T)</td>'
+  // <td class=\"shr svelte-2d4szo\">Us Dollar</td>
   var rx = new RegExp (pattern,'g');
   while ((rs = rx.exec(text)) !== null){
-      stocks.push(rs[1]);
-    };
+    if (rs[2])
+      stocks.push(rs[2]);
+    else if (rs[4])
+      stocks.push(rs[4]);
+    // console.log ('matched ', rs[1], rs[2], rs[3], rs[4])
+  };
   
   // get percentage array
 
