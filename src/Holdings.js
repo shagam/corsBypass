@@ -47,7 +47,7 @@ function parse_0 (stocks, percent, text, percentRegex, LOG) {
 
   pattern =  pattern='(<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>)' 
   + '|(<td class=\\"shr svelte-2d4szo\\">Us (Dollar)</td>)'
-  + '|(<td class=\\"shr svelte-2d4szo\\">(NASDAQ 100 [A-Z ]+)</td>)'
+  + '|(<td class=\\"shr svelte-2d4szo\\">(NASDAQ 100 [a-zA-Z0-9/-;&\\. .]+)</td>)'
 
   // pattern='<a href="/stocks/[a-z\\.]+/" >([A-Z\\.]+)</a>|<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>'
   // pattern='<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>' 
