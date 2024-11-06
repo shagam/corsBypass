@@ -148,13 +148,14 @@ function holdingsSch (req, res, daysDelay) {
 
     // save for debug
     if (req.query.saveInFile) {
+      const rawFileName= 'txt/holdingsSchRaw_' + req.query.stock + '.txt'
       const choppedTxt = JSON.stringify(text).replaceAll('<', '\n\a<')
-      fs.writeFile ('txt/holdingsSchRaw.txt', choppedTxt, err => {
+      fs.writeFile (rawFileName, choppedTxt, err => {
         if (err) {
-          console.err(getDate(), 'txt/holdingsSchRaw.txt write fail', err)
+          console.err(getDate(), rawFileName, 'write fail', err)
         }
         else
-          console.log(getDate(), 'txt/holdingsSchRaw.txt write')
+          console.log(getDate(), rawFileName, ' write')
       })
     
     }
