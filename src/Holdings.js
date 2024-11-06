@@ -196,7 +196,7 @@ function holdings (req, res, daysDelay) {
 
     // save for debug
     if (req.query.saveInFile) {
-      const rawFileName = 'txt/holdingsRaw_' + req.query.stock + '.txt'
+      const rawFileName = 'raw/holdingsRaw_' + req.query.stock + '.txt'
       const choppedTxt = JSON.stringify(text).replaceAll('<', '\n\a<')
       fs.writeFile (rawFileName, choppedTxt, err => {
         if (err) {
