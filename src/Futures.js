@@ -2,7 +2,7 @@ const fs = require ('fs')
 const axios = require('axios')
 
 
-const {getDate} = require ('./Utils')
+const {getDate, getDateOnly } = require ('./Utils')
 
 const print_textFiles = false
 
@@ -11,13 +11,13 @@ var priceArray = {};   // saved one obj per stock
 
 
 function futures(app) {
-  nowMili = Date.now();
 
+  const updateDate = getDateOnly ()
   app.get('/futures', (req, res) => {
 
+    console.log ('\n\n', getDate(), 'futures', req.query)
 
-
-    var url = 'https://www.barchart.com/futures/quotes/NQZ24'
+    var url = 'https://www.barchart.com/futures/quotes/' + req.query.stock
 
     console.log (url)
     const options = {
@@ -28,7 +28,7 @@ function futures(app) {
     .then ((result) => {
       const text = result.data
       const choppedTxt = JSON.stringify(text).replaceAll('<', '\n\a<')
-      console.log (result.data.length)
+
       if (req.query.saveInFile) {
 
         const rawFileName = 'raw/futuresRaw_' + req.query.stock + '.txt'
@@ -53,9 +53,13 @@ function futures(app) {
       var regex1 = new RegExp (pattern);
       var regExpResult = regex1.exec(choppedTxt)
 
+      console.log ('futures', req.query.stock, regExpResult[1])
 
-      console.log (regExpResult[1])
-      res.send (regExpResult[1])
+      const future = {
+        lastPrice: regExpResult[1],
+        sym: req.query.stock,
+      }
+      res.send (future)
   })
 })
 

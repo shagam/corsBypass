@@ -8,5 +8,11 @@ function getDate() {
   return date + " " + time;    
 }
 
+function getDateOnly () {
+  const today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
+  return date;    
+}
 
-module.exports = {getDate, }
+module.exports = {getDate, getDateOnly}
