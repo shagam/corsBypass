@@ -70,17 +70,17 @@ function price (app) {
 
   app.get('/price', (req, res) => {
     // price(req, res)
-    console.log (getDate(), req.query)
+    console.log ('\n\n' + getDate(), 'historicPrice', req.query)
     // console.log (getDate(), req.query.stock, req.query.mon, req.query.day, req.query.year)
     const stock = req.query.stock
     if (req.query.cmd === 'delOneSym') { // delete one sym
       if (! priceArray[stock]) {
-          console.log ('\n\n', getDate(), stock, ' price delete missing')
+          console.log (getDate(), stock, ' price delete missing')
           res.send ('fail, price symbol missing')
       }
       else {
         priceArray[stock] = null; // remove sym
-          console.log ('\n\n', getDate(), stock, ' price delete done')
+          console.log ( getDate(), stock, ' price delete done')
           res.send ('ok')
       }
       return;   
@@ -90,7 +90,7 @@ function price (app) {
   const savedPrice = priceArray[req.query.stock];
   if (savedPrice && ! req.query.ignoreSaved && (nowMili - savedPrice.updateMili < DAYS_DELAY * 24 * 3600 * 1000) && // 3 days
   req.query.year === savedPrice.year && req.query.mon === savedPrice.mon && req.query.day === savedPrice.day) {
-    console.log ('\n' + req.query.stock, getDate() + '\x1b[36m Saved price found\x1b[0m',
+    console.log (req.query.stock, getDate() + '\x1b[36m Saved price found\x1b[0m',
      'saveCount=' + Object.keys(priceArray).length)
     console.log (JSON.stringify(savedPrice))
     res.send (JSON.stringify(savedPrice))
