@@ -7,12 +7,44 @@ const {getDate, getDateOnly } = require ('./Utils')
 const print_textFiles = false
 
 
-var priceArray = {};   // saved one obj per stock
+var futureArr = {};   // saved one obj per stock
+const fileName = 'txt/futureArray.txt'
+
+fs.readFile(fileName, 'utf8', (err, data) => {
+  if (err) {
+    console.error (err)
+    return;
+  }
+  futureArr = JSON.parse(data);
+  const keys = Object.keys(futureArr);
+  console.log('\n', getDate(), fileName, ' read, count=', keys.length)
+  if (print_textFiles) {
+    for (var i = 0; i < keys.length; i++)
+      console.log (JSON.stringify (futureArr[keys[i]]))
+  }
+  else {
+      var symbols = "";
+      for (var i = 0; i < keys.length; i++)
+        symbols += keys[i] + '  '
+      console.log(symbols)
+  }
+});
+
+
+function futuresFlush () {
+  if (Object.keys(futureArr).length === 0) // avoid write of empty
+    return;
+  fs.writeFile (fileName, JSON.stringify (futureArr), err => {
+    if (err) {
+      console.log (getDate(), fileName, ' write fail', err)
+    }
+    else
+      console.log (getDate(), fileName, 'sym count:', Object.keys(futureArr).length)
+  })
+}
 
 
 function futures(app) {
-
-  var futureArr = {}
 
   const updateDate = getDateOnly ()
   app.get('/futures', (req, res) => {
@@ -57,19 +89,19 @@ function futures(app) {
 
       console.log (getDateOnly(), 'futures', req.query.stock, lastPrice)
 
-      if (! futureArr[req.query.stock])
+      if (! futureArr[req.query.stock]) // create entry if first time
         futureArr[req.query.stock] = {}
       if (! futureArr[req.query.stock][getDateOnly ()] || req.query.ignoreSaved) {
         futureArr[req.query.stock][getDateOnly ()] = lastPrice;
-
+        futuresFlush();
         if (LOG)
           console.log ('futureArr', futureArr)
       }
 
-      const future = {
-        lastPrice: lastPrice,
-        sym: req.query.stock,
-      }
+      // const future = {
+      //   lastPrice: lastPrice,
+      //   sym: req.query.stock,
+      // }
       res.send (futureArr[req.query.stock])
   })
 })
@@ -80,4 +112,4 @@ function futures(app) {
 
 
 
-module.exports = {futures}
+module.exports = {futures, futuresFlush}

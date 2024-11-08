@@ -36,7 +36,7 @@ const {holdingsSchMain, holdingsSchFlush} = require('./src/HoldingsSch')
 const {gain, gainFlush} = require('./src/Gain')
 const {contact} = require('./src/Contact') 
 const {userAccess, userArrayFlush, userList} = require('./src/Users') 
-const {futures} = require('./src/Futures') 
+const {futures, futuresFlush} = require('./src/Futures') 
 
 const app = express()
 const router = express.Router();
@@ -225,6 +225,7 @@ futures(app)
   splitArrayFlush()
   userArrayFlush()
   stockListsFlush()
+  futuresFlush()
  }
 
 
