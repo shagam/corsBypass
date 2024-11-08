@@ -70,7 +70,7 @@ function futures(app) {
         lastPrice: lastPrice,
         sym: req.query.stock,
       }
-      res.send (future)
+      res.send (futureArr[req.query.stock])
   })
 })
 
