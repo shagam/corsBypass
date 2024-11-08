@@ -63,9 +63,9 @@ function futures(app) {
         futureArr[req.query.stock][getDateOnly ()] = lastPrice;
 
         if (LOG)
-          console.log (futureArr)
+          console.log ('futureArr', futureArr)
       }
-      
+
       const future = {
         lastPrice: lastPrice,
         sym: req.query.stock,
