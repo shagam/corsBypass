@@ -59,6 +59,7 @@ function futures(app) {
       "method": "GET",
     };
 
+    // try {
     axios.get (url)
     .then ((result) => {
       const text = result.data
@@ -85,13 +86,35 @@ function futures(app) {
 
       var regex1 = new RegExp (pattern);
       var regExpResult = regex1.exec(choppedTxt)
-      const lastPrice = regExpResult[1]
+       
+      var lastPrice;
+      if (regExpResult)
+        lastPrice = regExpResult[1]
+
+      // report err if not found
+      if (! lastPrice) {
+        res.send ('fail, invalid sym', req.query.stock)
+        return;
+      }
 
       console.log (getDateOnly(), 'futures', req.query.stock, lastPrice)
 
       if (! futureArr[req.query.stock]) // create entry if first time
         futureArr[req.query.stock] = {}
-      if (! futureArr[req.query.stock][getDateOnly ()] || req.query.ignoreSaved) {
+
+      // avoid duplicate price
+      var priceFound = false;
+      const keys = Object.keys(futureArr[req.query.stock])
+      for (let i = 0; i < keys.length; i++) {
+        if (lastPrice === futureArr[req.query.stock][keys[i]]){
+          priceFound = true;
+          console.log ('duplicate price', lastPrice)
+          break;
+        }
+      }
+
+      // add new future price
+      if (!priceFound && ! futureArr[req.query.stock][getDateOnly ()] || req.query.ignoreSaved) {
         futureArr[req.query.stock][getDateOnly ()] = lastPrice;
         futuresFlush();
         if (LOG)
@@ -104,7 +127,9 @@ function futures(app) {
       // }
       res.send (futureArr[req.query.stock])
   })
-})
+}
+
+)
 
 }
 
