@@ -37,6 +37,8 @@ const {gain, gainFlush} = require('./src/Gain')
 const {contact} = require('./src/Contact') 
 const {userAccess, userArrayFlush, userList} = require('./src/Users') 
 const {futures, futuresFlush} = require('./src/Futures') 
+const {urlGetParse} = require('./src/UrlGetParse')
+
 
 const app = express()
 const router = express.Router();
@@ -187,6 +189,8 @@ splitsGet(app)
 stockLists(app)
 
 futures(app)
+
+urlGetParse(app)
 
 // 1 day delay
 // app.get('/splitsDay', (req, res) => {
