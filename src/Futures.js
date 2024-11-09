@@ -46,6 +46,8 @@ function futuresFlush () {
 
 function futures(app) {
 
+  // try {
+
   const updateDate = getDateOnly ()
   app.get('/futures', (req, res) => {
 
@@ -59,7 +61,6 @@ function futures(app) {
       "method": "GET",
     };
 
-    // try {
     axios.get (url)
     .then ((result) => {
       const text = result.data
@@ -127,10 +128,14 @@ function futures(app) {
       // }
       res.send (futureArr[req.query.stock])
   })
+  .catch ((err) => {
+    console.log(req.query.stock, err.message)
+    res.send(err.message)
+  })
+
 }
 
 )
-
 }
 
 
