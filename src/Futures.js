@@ -64,7 +64,7 @@ function futures(app) {
     axios.get (url)
     .then ((result) => {
       const text = result.data
-      const choppedTxt = JSON.stringify(text).replaceAll('<', '\n\a<')
+      const choppedTxt = JSON.stringify(text).replaceAll('<', '\n<')
 
       if (req.query.saveInFile) {
 

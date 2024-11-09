@@ -25,7 +25,7 @@ function urlGetParse (app) {
     axios.get (url)
     .then ((result) => {
       const text = result.data
-      const choppedTxt = text.replaceAll('<', '\n\a<')
+      const choppedTxt = text.replaceAll('<', '\n<')
 
       if (req.query.saveInFile) {
 
