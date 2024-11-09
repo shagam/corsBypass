@@ -41,20 +41,21 @@ function urlGetParse (app) {
       }
   
 
-      var pattern = req.query.pattern
+      var pattern = req.query.pattern.replace(/~~/,'+')
+      console.log ('pattern after replace', pattern)
 
       var regex1 = new RegExp (pattern);
       var regExpResult = regex1.exec(choppedTxt)
        
 
       if (regExpResult && regExpResult[1]) {
-         console.log (regExpResult[1])
+        console.log (regExpResult[1])
         res.send (regExpResult[1])
+        return;
       }
 
       console.log (getDateOnly(), 'urlGetParse fail', req.query.stock)
       res.send ('fail, regex')
-
   })
   .catch ((err) => {
     console.log('urlGetParse', req.query.stock, err.message)
