@@ -60,7 +60,21 @@ function userArrayFlush() {
   }) 
 }
 
+function filterUpcase (attrib, filter) {
+  if (! attrib) {
+    return false;
+  }
+  if (! filter) {
+    console.log ('missing filter')
+    return false;
+  }
+  if (attrib.toUpperCase().includes(filter.toUpperCase())) {
+    console.log ('filter upperCase', attrib, filter)
+    return true;
+  }
 
+  else return false;
+}
 
 
 //** collect statistics and display user ip of gain  */   
@@ -77,9 +91,45 @@ function userList (app) {
 
     //** Send all info */
     if (req.query.getAll) {
-      res.send (usersArray)
-      console.log ('usersArray', Object.keys(usersArray).length) 
-      return;
+      if (! req.query.filter) {    
+        res.send (usersArray)
+        console.log ('usersArray', ipList.length) 
+        return;
+      }
+
+      //** Create filterd list */
+      const filter = req.query.filter;
+      console.log (filter, ipList)
+      var filteredUsers = {}
+      for (let i = 0; i < ipList.length; i++) {
+        const ip = ipList[i]
+        const oneUser = usersArray[ip]
+        // console.log (oneUser)
+        if (filterUpcase (oneUser.os, filter))
+          filteredUsers[ip] = oneUser;
+
+        if (filterUpcase (oneUser.sym, filter))
+          filteredUsers[ip] = oneUser;
+
+        if (filterUpcase (oneUser.country, filter))
+          filteredUsers[ip] = oneUser;
+
+        // if (usersArray[ip].countryCode.includes(filter))
+        //   filteredUsers[ip] = oneUser;
+
+        if (filterUpcase (oneUser.city, filter))
+          filteredUsers[ip] = oneUser;
+
+        if (filterUpcase (oneUser.region, filter))
+          filteredUsers[ip] = oneUser;
+
+        if (ip.includes(filter))
+          filteredUsers[ip] = oneUser;
+      }
+      res.send (filteredUsers)
+      // if (LOG)
+        console.log ('filtered users', Object.keys(filteredUsers).length)
+      return; 
     }
 
     // collect for count
