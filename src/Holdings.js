@@ -225,7 +225,7 @@ function holdings (req, res, daysDelay) {
       || holdingArray[0].sym === 0) {
       const holdingsObg = {sym: req.query.stock, updateMili: updateMili, updateDate: updateDate, holdArr: holdingArray}
       console.log (sym, 'parse mismatch', 'sym:', stocks.length, 'perc:', percent.length, holdingsObg)
-      holdingsObg['err']= 'fail, parse mismatch'
+      holdingsObg['err']= 'fail, parse mismatch, sym:' + stocks.length + ' perc:' + percent.length)
       delete holdingsArray[sym]
       if (! req.query.ignoreMismatch) {
         res.send(JSON.stringify(holdingsObg))
