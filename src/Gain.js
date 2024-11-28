@@ -256,7 +256,7 @@ function gain (app)  {
                  (Number(gainArray[sym].year10 * factor) < Number(gainArray['QQQ'].year10))) 
                 {
                     if (LOG)
-                        onsole.log (sym, 'bad gain')
+                        console.log (sym, 'bad gain')
                      if (symOnly)
                         filterdObj[sym]=''
                     else
