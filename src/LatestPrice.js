@@ -7,7 +7,7 @@ function latestPrice (app) {
   app.get('/latestPrice', (req, res) => {
     // var nowMili = Date.now();
     console.log ('\n', getDate(), 'latestPrice', req.query)
-
+    const LOG = req.query.LOG
     var url;
     if (req.query.src === 'goog')
         url = 'https://www.google.com/finance/quote/' + req.query.stock + ':NASDAQ'
