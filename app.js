@@ -31,7 +31,7 @@ const {stockLists, stockListsFlush} = require ('./src/StockLists')
 
 const {holdingsMain, holdingArrayFlush} = require('./src/Holdings')
 const {holdingsSchMain, holdingsSchFlush} = require('./src/HoldingsSch')
-
+const {latestPrice} = require('./src/LatestPrice')
 
 const {gain, gainFlush} = require('./src/Gain')
 const {contact} = require('./src/Contact') 
@@ -191,6 +191,8 @@ stockLists(app)
 futures(app)
 
 urlGetParse(app)
+
+latestPrice(app)
 
 // 1 day delay
 // app.get('/splitsDay', (req, res) => {
