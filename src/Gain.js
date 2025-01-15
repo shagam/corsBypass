@@ -205,7 +205,7 @@ function gain (app)  {
                 if (gainArray[sym]) {
 
                 if (LOG)
-                    console.log (sym, 'before Switch', gainArray[sym].year, 'qqqValue=', qqqValue, 'period=', period)
+                    console.log (sym, 'before Switch', gainArray[sym].year, 'period=', period)
                 if (Number(gainArray[sym].year) > Number(gainArray['QQQ'].year * factor) ||
                  (Number(gainArray[sym].year2) > Number(gainArray['QQQ'].year2 * factor)) ||
                  (Number(gainArray[sym].year5) > Number(gainArray['QQQ'].year5 * factor)) ||
