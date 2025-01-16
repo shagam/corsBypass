@@ -19,6 +19,15 @@ function latestPrice (app) {
             // <bg-quote class="value" field="Last" format="0,0.00" channel="/zigman2/quotes/208575548/composite,/zigman2/quotes/208575548/lastsale" session="pre">513.26</bg-quote>
         pattern = '<bg-quote class="value" field="Last" format="0,0.00" channel="/zigman2/quotes/208575548/composite,/zigman2/quotes/208575548/lastsale" session="pre">([0-9.]+)</bg-quote>'
     }
+    else if (req.query.src === 'yahoo') {
+        url = 'https://finance.yahoo.com/quote/' + req.query.stock + '/'
+        pattern = 'data-testid="qsp-pre-price">([0-9.]+)'
+    }
+    else {
+        res.send ('fail, invalid src type');
+        return;
+    }
+
 
     console.log (url)
     axios.get (url)
