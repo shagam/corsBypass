@@ -14,7 +14,7 @@ function latestPrice (app) {
         url = 'https://www.google.com/finance/quote/' + req.query.stock + ':NASDAQ'
         pattern = 'data-currency-code="USD" data-last-price="([0-9.]+)'
     }
-    else if (req.query.src === 'watch') {
+    else if (req.query.src === 'nasdaq') {
         url = 'https://www.nasdaq.com/market-activity/etf/' + req.query.stock
             // <bg-quote class="value" field="Last" format="0,0.00" channel="/zigman2/quotes/208575548/composite,/zigman2/quotes/208575548/lastsale" session="pre">513.26</bg-quote>
         pattern = '<bg-quote class="value" field="Last" format="0,0.00" channel="/zigman2/quotes/208575548/composite,/zigman2/quotes/208575548/lastsale" session="pre">([0-9.]+)</bg-quote>'
