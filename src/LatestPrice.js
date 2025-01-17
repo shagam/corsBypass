@@ -23,11 +23,14 @@ function latestPrice (app) {
         url = 'https://finance.yahoo.com/quote/' + req.query.stock + '/'
         pattern = 'data-testid="qsp-pre-price">([0-9.]+)'
     }
+    else if (req.query.src === 'watch') {
+        url = 'https://www.marketwatch.com/investing/fund/' + req.query.stock 
+        pattern = 'data-last-raw="([0-9.]+)">([0-9.]+)</bg-quote>'
+    }
     else {
         res.send ('fail, invalid src type');
         return;
     }
-
 
     console.log (url)
     axios.get (url)
@@ -55,7 +58,7 @@ function latestPrice (app) {
         })
     .catch ((err) => {
         console.log(req.query.stock, err.message)
-        res.send(err.message)
+        res.send('fail' + err.message)
         })
     })
 }
