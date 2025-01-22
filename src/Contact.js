@@ -114,7 +114,7 @@ function contact (app)  {
         })
 
         // add email to mailList
-        if (req.query.mailList) {
+        if (req.query.mailList  && ! mailList.includes(req.query.email)) {
             mailList.push(req.query.email)
             fs.writeFile ('txt/mailList.txt', JSON.stringify (mailList), err => {
                 if (err) {
