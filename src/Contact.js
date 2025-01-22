@@ -4,6 +4,17 @@ const {getDate} = require ('./Utils')
 const fs = require ('fs')
 
 
+fs.readFile('txt/mailList.txt', 'utf8', (err, data) => {
+  if (err) {
+    mailList = [];
+    console.log(getDate(), ' faile read mailList.txt')
+  }
+  if (data)
+    mailList = JSON.parse(data);
+
+  console.log('\n', getDate(), 'txt/mailList.txt  count=', mailList.length)
+});
+
 
 function contact (app)  {
 
@@ -15,6 +26,11 @@ function contact (app)  {
 
         console.log(getDate(), 'cantactGet query:', req.query)
         
+        if (req.query.mailList) {
+            res.send (mailList)
+            return;
+        }
+
         var search = req.query.name;
         if (search)
             search = search.toUpperCase()
@@ -25,7 +41,7 @@ function contact (app)  {
 
         var msgArr = [];
         var array = fs.readFileSync('txt/contact.txt').toString().split("\n");
-    
+
         if (LOG)
             console.log ('array.length', array.length)
 
@@ -97,6 +113,17 @@ function contact (app)  {
                 console.log('txt/contact.txt write, ')
         })
 
+        // add email to mailList
+        if (req.query.mailList) {
+            mailList.push(req.query.email)
+            fs.writeFile ('txt/mailList.txt', JSON.stringify (mailList), err => {
+                if (err) {
+                    console.log (getDate(), 'txt/mailList.txt write fail', err)
+                }
+                else
+                    console.log (getDate(), 'txt/mailList.txt', mailList )
+            })
+        }
         //  main(req.query.name, req.query.email, html)
         //  .catch(e => console.log('send fail', e))
          
