@@ -114,16 +114,21 @@ function contact (app)  {
         })
 
         // add email to mailList
-        if (req.query.mailList  && ! mailList.includes(req.query.email)) {
-            mailList.push(req.query.email)
-            fs.writeFile ('txt/mailList.txt', JSON.stringify (mailList), err => {
-                if (err) {
-                    console.log (getDate(), 'txt/mailList.txt write fail', err)
-                }
-                else
-                    console.log (getDate(), 'txt/mailList.txt', mailList )
-            })
+        if (req.query.mailList) {
+            if (! mailList.includes(req.query.email)) {
+                mailList.push(req.query.email)
+                fs.writeFile ('txt/mailList.txt', JSON.stringify (mailList), err => {
+                    if (err) {
+                        console.log (getDate(), 'txt/mailList.txt write fail', err)
+                    }
+                    else
+                        console.log (getDate(), 'txt/mailList.txt', mailList )
+                })
+            }
+            else
+                console.log ('MailList already in')
         }
+        console.log ('MailList', mailList)
         //  main(req.query.name, req.query.email, html)
         //  .catch(e => console.log('send fail', e))
          
