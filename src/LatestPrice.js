@@ -1,6 +1,6 @@
 const axios = require('axios')
 const {getDate} = require ('./Utils')
-
+const {fetchPage} = require('./FetchPage')
 
 function latestPrice (app) {
 //   console.log ('prepare latestPrice')
@@ -8,8 +8,25 @@ function latestPrice (app) {
     // var nowMili = Date.now();
     console.log ('\n', getDate(), 'latestPrice', req.query)
     const LOG = req.query.LOG
+    const stock = req.query.stock
+
     var url;
     var pattern;
+    if (req.query.src === 'fetchPage') {
+        // if (! url)
+            url = 'https://www.nasdaq.com/market-activity/etf/' + stock + '/after-hours'
+        pattern = '<bg-quote class="value" field="Last" format="0,0.00" channel="/zigman2/quotes/208575548/composite,/zigman2/quotes/208575548/lastsale" session="pre">([0-9.]+)</bg-quote>'
+
+        console.log ('url=', url)
+        // fetchPage('https://www.nasdaq.com/market-activity/etf/qqq/after-hours')
+        const txt = fetchPage (url)
+        console.log ('fechPage_length=', txt.length)
+        res.send (txt.length);
+        return;
+    }
+
+
+
     if (req.query.src === 'goog'){
         url = 'https://www.google.com/finance/quote/' + req.query.stock + ':NASDAQ'
         pattern = 'data-currency-code="USD" data-last-price="([0-9.]+)'
