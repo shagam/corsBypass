@@ -134,24 +134,22 @@ function stockLists (app)  {
                 console.log (stockListsArray, 'count=' + Object.keys(stockListsArray).length)
 
             for (let i = 0; i < nameArrayAll.length; i++) {
-                if (LOG && req.query.ip)
-                console.log ('filter, req.query.ip=',  req.query.ip, 'listIp=', stockListsArray[nameArrayAll[i]].ip)
+                if (req.query.ip)
+                    console.log ('filter,',  'listIp=', stockListsArray[nameArrayAll[i]].ip, nameArrayAll[i])
+                if (req.query.filterName && nameArrayAll[i].toUpperCase().indexOf(req.query.filterName.toUpperCase()) === -1)
+                    continue; // txt not found
+
                 if (req.query.ip) {
-                    if (req.query.myIp && req.query.ip !== stockListsArray[nameArrayAll[i]].ip) {
+                    if (req.query.myIp && req.query.ip === stockListsArray[nameArrayAll[i]].ip ||
+                        req.query.otherIp && req.query.ip !== stockListsArray[nameArrayAll[i]].ip) {
                         if (LOG)
-                        console.log ('filterNames skip, diffErent request ip=',
-                            req.query.ip, 'listIp=', stockListsArray[nameArrayAll[i]].ip)
-                        continue; // send only my lists? or all
-                    }
-                    if (req.query.otherIp && req.query.ip === stockListsArray[nameArrayAll[i]].ip) {
-                        if (LOG)
-                        console.log ('filterNames skip, same request ip=',
-                            req.query.ip, 'listIp=', stockListsArray[nameArrayAll[i]].ip)
-                        continue; // send only my lists? or all
+                            console.log ('filterNames request', req.query.ip, 'listIp=', nameArrayAll[i], tockListsArray[nameArrayAll[i]].ip)
+                        nameArrayFiltered.push (nameArrayAll[i])
                     }
                 }
-                if (! req.query.filterName || nameArrayAll[i].toUpperCase().indexOf(req.query.filterName.toUpperCase()) !== -1)
-                    nameArrayFiltered.push (nameArrayAll[i])
+                else {
+
+                }
             }
             res.send(nameArrayFiltered)
             console.log (getDate(), 'filtered list names=',  nameArrayFiltered.length, nameArrayFiltered)
