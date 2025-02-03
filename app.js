@@ -194,7 +194,7 @@ urlGetParse(app)
 
 latestPrice(app)
 // fetchPage('https://www.nasdaq.com/market-activity/etf/qqq/after-hours')
-fetchPage('https://example.com')
+// fetchPage('https://example.com')
 
 // 1 day delay
 // app.get('/splitsDay', (req, res) => {
