@@ -12,15 +12,15 @@ function latestPrice (app) {
 
     var url;
     var pattern;
-    if (req.query.src === 'fetchPage') {
-        // if (! url)
+    if (req.query.src === 'fetchPage' || req.query.subPages) {
+        if (! url)
             url = 'https://www.nasdaq.com/market-activity/etf/' + stock + '/after-hours'
         pattern = '<bg-quote class="value" field="Last" format="0,0.00" channel="/zigman2/quotes/208575548/composite,/zigman2/quotes/208575548/lastsale" session="pre">([0-9.]+)</bg-quote>'
 
         console.log ('url=', url)
         // fetchPage('https://www.nasdaq.com/market-activity/etf/qqq/after-hours')
         const txt = fetchPage (url)
-        console.log ('fechPage_length=', txt.length)
+        console.log ('latestPrice fechPage_length=', txt.length)
         res.send (txt.length);
         return;
     }
