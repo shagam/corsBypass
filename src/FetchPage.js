@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 
 
 async function fetchPage(url) {
+    console.log ('fetchPage', url)
     try {
         const { data } = await axios.get(url);
         return cheerio.load(data);
