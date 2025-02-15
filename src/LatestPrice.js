@@ -1,6 +1,60 @@
 const axios = require('axios')
 const {getDate} = require ('./Utils')
 const {fetchPage} = require('./FetchPage')
+const cheerio = require('cheerio');
+
+
+
+// Fetch the URL
+const fetchUrl = async (url, res) => {
+     try {
+        const { data } = await axios.get(url);
+        return data;
+        } catch (error) {
+            console.error(`Error fetching the URL: ${error.message}`);
+        return null;
+        }
+    };
+    
+    // Parse and fetch subpages
+    const fetchSubPages = async (baseUrl, html, res) => {
+        const $ = cheerio.load(html);
+        const links = $('a'); // Get all anchor tags
+        const subPageUrls = [];
+        
+        links.each((_, link) => {
+            const href = $(link).attr('href');
+            if (href && href.startsWith('/')) {
+                subPageUrls.push(`${baseUrl}${href}`);
+            }
+        });
+        console.log ('subPageUrls', subPageUrls)
+        for (const subPageUrl of subPageUrls) {
+            const subPageHtml = await fetchUrl(subPageUrl, res);
+            if (subPageHtml === null)
+            console.log(`Fetched subpage: ${subPageUrl}`);
+            // Process the subpage HTML as needed
+        }
+
+    };
+    
+    const main = async (res, url_) => {
+        var url = 'https://example.com';
+        if (url_)
+            url = url_;
+
+        const baseUrl =  url; //'https://example.com';
+    
+        const mainPageHtml = await fetchUrl(url, res);
+        if (mainPageHtml) {
+            await fetchSubPages(baseUrl, mainPageHtml, res);
+        }
+    };
+    
+    // main();
+
+
+
 
 function latestPrice (app) {
 //   console.log ('prepare latestPrice')
@@ -12,7 +66,11 @@ function latestPrice (app) {
 
     var url;
     var pattern;
-    if (req.query.src === 'fetchPage' || req.query.subPages) {
+
+
+
+    if (req.query.src === 'fetchPage') {
+        
         if (! url)
             url = 'https://www.nasdaq.com/market-activity/etf/' + stock + '/after-hours'
         pattern = '<bg-quote class="value" field="Last" format="0,0.00" channel="/zigman2/quotes/208575548/composite,/zigman2/quotes/208575548/lastsale" session="pre">([0-9.]+)</bg-quote>'
@@ -49,6 +107,14 @@ function latestPrice (app) {
         return;
     }
 
+    if (req.query.subPages) {
+        main(res, url)
+        res.send('done')
+        console.log ('done')
+        return;
+    }
+
+
     console.log (url)
     axios.get (url)
     .then ((result) => {
@@ -79,5 +145,10 @@ function latestPrice (app) {
         })
     })
 }
+
+
+
+
+
 
 module.exports = {latestPrice}
