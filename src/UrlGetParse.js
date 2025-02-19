@@ -6,6 +6,7 @@ const {getDate, getDateOnly } = require ('./Utils')
 
 const print_textFiles = false
 
+var urlArray = {}
 
 function urlGetParse (app) {
 
@@ -29,6 +30,14 @@ function urlGetParse (app) {
       return
     }
 
+    // check if saved exist
+    const savedUrl = urlArray[req.query.url]
+    if (savedUrl && ! savedUrl.ignoreSaved && savedUrl.url === url && Date.now() - savedUrl.mili < 1000^60*60) {
+      console.log (getDate(), 'savedUrlFound', savedUrl.results[1])
+      res.send (savedUrl.results[1])
+      return;
+    }
+
     const options = {
       "method": "GET",
     };
@@ -49,6 +58,16 @@ function urlGetParse (app) {
 
       if (regExpResult && regExpResult[1]) {
         console.log ('results', regExpResult[1])
+
+
+        // save to avoid too many url access
+        const obj = {
+          url: req.query.url,
+          pattern: req.query.pattern,
+          results: regExpResult,
+          mili: Date.now()
+        }
+        urlArray[req.query.url] = obj;
         res.send (regExpResult[1])
         return;
       }
