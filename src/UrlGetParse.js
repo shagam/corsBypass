@@ -32,9 +32,9 @@ function urlGetParse (app) {
 
     // check if saved exist
     const savedUrl = urlArray[req.query.url]
-    if (savedUrl && ! req.query.ignoreSaved && savedUrl.url === url && Date.now() - savedUrl.mili < 1000^60*60) {
+    if (savedUrl && ! req.query.ignoreSaved && savedUrl.url === url && Date.now() - savedUrl.mili < 1000^60) {
       console.log (getDate(), 'savedUrlFound', savedUrl.results[1])
-      res.send (savedUrl.results[1])
+      res.send ({result_1: savedUrl.results[1], mili: savedUrl.mili})
       return;
     }
 
@@ -68,7 +68,7 @@ function urlGetParse (app) {
           mili: Date.now()
         }
         urlArray[req.query.url] = obj;
-        res.send (regExpResult[1])
+        res.send ({result_1: regExpResult[1], mili: Date.now()})
         return;
       }
 
