@@ -32,7 +32,7 @@ function urlGetParse (app) {
 
     // check if saved exist
     const savedUrl = urlArray[req.query.url]
-    if (savedUrl && ! savedUrl.ignoreSaved && savedUrl.url === url && Date.now() - savedUrl.mili < 1000^60*60) {
+    if (savedUrl && ! req.query.ignoreSaved && savedUrl.url === url && Date.now() - savedUrl.mili < 1000^60*60) {
       console.log (getDate(), 'savedUrlFound', savedUrl.results[1])
       res.send (savedUrl.results[1])
       return;
