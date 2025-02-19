@@ -32,14 +32,14 @@ function urlGetParse (app) {
 
     // check if saved exist
     const savedUrl = urlArray[req.query.url]
-    if (savedUrl && ! req.query.ignoreSaved && savedUrl.url === url && Date.now() - savedUrl.mili < 1000^60) {
-      console.log (getDate(), 'savedUrlFound', savedUrl.results[1])
-      res.send ({result_1: savedUrl.results[1], mili: savedUrl.mili})
+    if (savedUrl && ! req.query.ignoreSaved && savedUrl.url === url && Date.now() - savedUrl.mili < 1000*60*10) {
+      console.log (getDate(), 'savedUrlFound', savedUrl.results_1)
+      res.send ({result_1: savedUrl.results_1, mili: savedUrl.mili, secondsDiff: (Date.now() - savedUrl.mili) / 1000})
       return;
     }
 
     const options = {
-      "method": "GET",
+      "   method": "GET",
     };
     console.log (url)
     axios.get (url)
@@ -64,19 +64,20 @@ function urlGetParse (app) {
         const obj = {
           url: req.query.url,
           pattern: req.query.pattern,
-          results: regExpResult,
+          results_1: regExpResult[1],
           mili: Date.now()
         }
         urlArray[req.query.url] = obj;
-        res.send ({result_1: regExpResult[1], mili: Date.now()})
+        console.log (getDate(), 'save', obj)
+        res.send ({result_1: regExpResult[1], mili: Date.now(), secondsDiff: 0})
         return;
       }
 
-      console.log (getDateOnly(), 'urlGetParse fail', req.query.stock)
+      console.log (getDateOnly(), 'urlGetParse fail')
       res.send ('fail, regex')
   })
   .catch ((err) => {
-    console.log('urlGetParse', req.query.stock, err.message)
+    console.log('urlGetParse', err.message)
     res.send('err ' + err.message)
   })
 }
