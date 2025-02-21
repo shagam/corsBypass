@@ -122,6 +122,9 @@ function userList (app) {
 
         if (filterUpcase (oneUser.region, filter))
           filteredUsers[ip] = oneUser;
+        
+        if (filterUpcase (oneUser.date, filter))
+          filteredUsers[ip] = oneUser;
 
         if (ip.includes(filter))
           filteredUsers[ip] = oneUser;
