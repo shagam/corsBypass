@@ -57,7 +57,7 @@ else
 
   console.log("\nRunning on EC2? " + onEC2 + ',  port=' + port + '\n');
 
-console.log ('\n\n\nip=', process.env.NODE_localIP)
+console.log ('\n\n\nip=', process.env.NODE_localIP, port)
 const externalIp = process.env.NODE_localIP // '62.0.90.49'
 const l2_Ip = '10.100.102.4'
 const pc_ip = '10.100.102.3'
@@ -120,7 +120,7 @@ if (ssl) {
   // appGet (sslServer, app, port) 
 
 
-  sslServer.listen(port, (err) => {
+  sslServer.listen(port, '0.0.0.0', (err) => {
     // console.log('secureServer on port=', port)
     if (err) {
       console.log('err: ', err)
