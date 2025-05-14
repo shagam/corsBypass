@@ -8,9 +8,12 @@
 #/etc/letsencrypt/live/dinagold.org/privkey.pem
 
 
-sudo certbot certonly --manual -d dinagold.org --preferred-challenges=dns
+sudo certbot certonly --manual -d dinagold.org, portfolio-chk.xyz --preferred-challenges=dns
+# namecheap.com: txt record  _acme_challenge  <....>
 
-# sudo certbot --nginx -d dinagold.net
+#aws ec2 
+# sudo certbot --nginx -d portfolio-chk.com
+# old dinagold.net
 
 sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net 
 #sudo certbot --manual --preferred-challenges dns certonly -d dinagold.org 
