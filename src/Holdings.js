@@ -73,6 +73,8 @@ function parse_0 (stocks, percent, text, percentRegex, LOG) {
 
   // <td class="svelte-172ru7t">5.25%</td> 2024 Jul 6
   if (! percentRegex)
+    pattern = '<td class="svelte-7muvl3">([0-9.]+)%</td>'
+  else if (percentRegex == 0)
     pattern = '<td class=\"svelte-2d4szo\">([0-9.]+)%</td>'
   else if (percentRegex == 1)
     pattern = '<td class="svelte-lg083p">([0-9.]+)%</td>'
