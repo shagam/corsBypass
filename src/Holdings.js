@@ -53,42 +53,20 @@ function parse_0 (stocks, percent, text, percentRegex, LOG) {
   // pattern='<td class="rlpad svelte-1jtwn20">([A-Z0-9\\.]+)</td>' 
   // pattern='<td class="rlpad svelte-1jtwn20">(6861.T)</td>'
   // <td class=\"shr svelte-2d4szo\">Us Dollar</td>
+
+
+  // pattern = ',s:"$NVDA",as:"7.33%",sh:"'
+  pattern = '([A-Z\\.]+)",as:"([0-9.]+)%",sh:"'
+
   var rx = new RegExp (pattern,'g');
   while ((rs = rx.exec(text)) !== null){
-    if (rs[2])
-      stocks.push(rs[2]);
-    else if (rs[4])
-      stocks.push(rs[4]);
-    else if (rs[6])
-      stocks.push(rs[6]);
-
-    // console.log ('matched ', rs[1], rs[2], rs[3], rs[4], rs[6])
+    stocks.push(rs[1])
+    percent.push(rs[2]);
   };
   
-  // get percentage array
-
-  //pattern = '<td class="svelte-1jtwn20">8.74%</td>'
-  // <td class="svelte-1yyv6eq">2.29%</td>
-  // pattern = '<td class="svelte-1yyv6eq">([0-9.]+)%</td>'
-
-  // <td class="svelte-172ru7t">5.25%</td> 2024 Jul 6
-  if (! percentRegex)
-    pattern = '<td class="svelte-7muvl3">([0-9.]+)%</td>'
-  else if (percentRegex == 0)
-    pattern = '<td class=\"svelte-2d4szo\">([0-9.]+)%</td>'
-  else if (percentRegex == 1)
-    pattern = '<td class="svelte-lg083p">([0-9.]+)%</td>'
-  else if (percentRegex == 2)
-    pattern = '<td class="svelte-16u5l6m">([0-9.]+)%</td>'
-  if (LOG)
-    console.log('pecent regex', pattern)
-
-  rx = new RegExp (pattern,'g');
-    while ((rs = rx.exec(text)) !== null){
-      percent.push(rs[1]);
-  };
+ };
   // console.log ('stock', stocks.length, 'percent', percent.length)
-}
+// }
 
 var writeCount = 0
 function holdingArrayFlush () {
