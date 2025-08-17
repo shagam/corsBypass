@@ -9,6 +9,7 @@
 
 
 sudo certbot certonly --manual -d dinagold.org, portfolio-chk.xyz --preferred-challenges=dns
+sudo certbot certonly --manual -d portfolio-chk.xyz --preferred-challenges=dns
 # namecheap.com: txt record  _acme_challenge  <....>
 
 #aws ec2 

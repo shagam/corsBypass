@@ -83,10 +83,8 @@ if (ssl) {
       if (onEC2) {
         url = 'dinagold.net' //'portfolio-chk.com';
         console.log('Certificate letsEncrypt EC2 production ' + url)
-        key_ =  fs.readFileSync('/etc/letsencrypt/live/dinagold.net/privkey.pem')
-        cert_= fs.readFileSync('/etc/letsencrypt/live/dinagold.net/fullchain.pem')
-        // key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
-        // cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
+        key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
+        cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
       }
       else {
         url = 'dinagold.org' // 'portfolio-chk.xyz'
