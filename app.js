@@ -79,16 +79,18 @@ if (ssl) {
   // if (getLocalIp() == l2_Ip) {
   if (true) {
     if (true) {// letsaencrypt
-
+      var url
       if (onEC2) {
+        url = 'portfolio-chk.com';
         console.log('Certificate letsEncrypt EC2 production  dinagold.net')
         key_ =  fs.readFileSync('/etc/letsencrypt/live/dinagold.net/privkey.pem')
         cert_= fs.readFileSync('/etc/letsencrypt/live/dinagold.net/fullchain.pem')
       }
       else {
-        console.log('Certificate letsEncrypt home test server dinagold.org')
-        key_ = fs.readFileSync('/etc/letsencrypt/live/dinagold.org/privkey.pem')
-        cert_= fs.readFileSync('/etc/letsencrypt/live/dinagold.org/fullchain.pem')
+        url = 'dinagold.org' // 'portfolio-chk.xyz';
+        console.log('Certificate letsEncrypt home test server ' + url)
+        key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
+        cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
       }
     }
     else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
