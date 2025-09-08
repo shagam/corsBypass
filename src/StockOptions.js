@@ -4,7 +4,11 @@ const {getDate} = require ('./Utils')
 
 // Zuberi Moshe
 
-function expirationsGet (symbol, log, res) {
+var results = {}
+var reqGlobal;
+
+function expirationsGet (symbol, log, req, res) {
+  reqGlobal = req
     const url = 'https://api.marketdata.app/v1/options/expirations/' + symbol + '/?token=' + TOKEN
     if (log)
       console.log (url)
@@ -19,7 +23,22 @@ function expirationsGet (symbol, log, res) {
         if (result.data.s !== 'ok') {
           console.log (props.symbol, 'expiration error', result.data.s)
         }
-        res.send (result.data.expirations)
+         
+        results.expirationArray = result.data.expirations
+        if (req.query.func === 'expirations') {
+          res.send (results) // result.data.expirations)// results)
+          return
+        }
+        else {
+          strikePricesGet (results.expirations)
+
+          res.send ('fail')
+        }
+        // if (req.query.func === 'strikes')
+        //   res.send (result.data.expirations)
+        // if (req.query.func === 'expirations')
+        //   res.send (result.data.expirations)
+
     
       })
       .catch ((err) => {
@@ -37,11 +56,11 @@ console.log ('MARKET_DATA')
 function stockOptions (app)  {
 
     app.get('/stockOptions', (req, res) => {
-      console.log (req.query)
+      console.log ('params', req.query)
       const stock = req.query.stock;
       const log = req.query.log
 
-      expirationsGet (stock, log, res)
+      expirationsGet (stock, log, req, res, req.query.selectedExpiration)
 
     })
   }
@@ -172,12 +191,12 @@ function OptionQuote (props) {
             'dte(days)=', result.data.dte[i], 'yield', yield_.toFixed(3), 'yearlyYield=', yearlyYield,
           )  
       }
-      if (!columnShow.includes('yield_')) // if gain is not in columnShow, add it
-        columnShow.push('yield_')
-      if (!columnShow.includes('yearlyYield')) // if yearlyGain is not in columnShow, add it
-        columnShow.push ('yearlyYield'); // add yearlyGain to columnShow_  
-      if (!columnShow.includes('breakEven')) // if breakEven is not in columnShow, add it
-        columnShow.push ('breakEven');   
+      // if (!columnShow.includes('yield_')) // if gain is not in columnShow, add it
+      //   columnShow.push('yield_')
+      // if (!columnShow.includes('yearlyYield')) // if yearlyGain is not in columnShow, add it
+      //   columnShow.push ('yearlyYield'); // add yearlyGain to columnShow_  
+      // if (!columnShow.includes('breakEven')) // if breakEven is not in columnShow, add it
+      //   columnShow.push ('breakEven');   
 
 
 
@@ -231,7 +250,7 @@ function OptionQuote (props) {
   }
 
 
-  function strikePricesGet (selectedExpiration, expirationsArray) {
+  function strikePricesGet (expirationsArray) {
     const url = 'https://api.marketdata.app/v1/options/strikes/' + props.symbol + '/?expiration=' 
         + expirationsArray[selectedExpiration] + '&token=' + TOKEN
         // + '?token=' + TOKEN;
