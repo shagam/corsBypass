@@ -161,7 +161,7 @@ function OptionQuote (props) {
         break;
       strikeGroup += ',' + strikeArray[strikeNum + i]
     }
-    if (log) {
+    if (reqGlobal.log) {
       console.log ('strikeGroup=', strikeGroup) 
       console.log ('expirationGroup=', expirationGroup)
     }
@@ -174,12 +174,12 @@ function OptionQuote (props) {
 
     // const TEST = 'https://api.marketdata.app/v1/options/chain/AAPL/?expiration=2026-05-15&side=call&strike=25'
     // url = TEST;
-    if (log)
+    if (reqGlobal.log)
       console.log (url)
 
     axios.get (url)
     .then ((result) => {
-      if (log)
+      if (reqGlobal.log)
         console.log ('primium', result.data)
 
       if (result.data.s !== 'ok') {
