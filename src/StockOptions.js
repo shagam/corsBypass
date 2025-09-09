@@ -14,31 +14,31 @@ const TOKEN = process.env.MARKET_DATA;
   function optionPremium (res) {
 
     //** create expiration group */
-      var expirationGroup =  '/?expiration=' + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
+      var expirationGroup =  '/?expiration=' + results.expirationArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
 
-    if (reqGlobal.expirationCount > 1 && (reqGlobal.expirationNum + reqGlobal.expirationCount < expirationsArray.length)) {
-      expirationGroup =  '/?from=' + expirationsArray[reqGlobal.expirationNum] +
-       '&to=' + expirationsArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1]
+    if (reqGlobal.expirationCount > 1 && (reqGlobal.expirationNum + reqGlobal.expirationCount < results.expirationArray.length)) {
+      expirationGroup =  '/?from=' + results.expirationArray[reqGlobal.expirationNum] +
+       '&to=' + results.expirationArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1]
        + '&token=' + TOKEN
     }
 
  
     //** Create strike-group  (list) */
-    var strikeGroup = strikeArray[reqGlobal.strikeNum];
-    
+    var strikeGroup = results.strikeArray[reqGlobal.strikeNum];
+    console.log (reqGlobal.strikeNum, 'strikeGroup=', strikeGroup) 
     for (let i = 1; i < reqGlobal.strikeCount; i++) {
-      if (reqGlobal.strikeNum + i >= strikeArray.length)
+      if (reqGlobal.strikeNum + i >= results.strikeArray.length)
         break;
-      strikeGroup += ',' + strikeArray[reqGlobal.strikeNum + i]
+      strikeGroup += ',' + results.strikeArray[reqGlobal.strikeNum + i]
     }
     if (reqGlobal.log) {
-      console.log ('strikeGroup=', strikeGroup) 
+      console.log ('__strikeGroup=', strikeGroup) 
       console.log ('expirationGroup=', expirationGroup)
     }
     
     const url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
         + expirationGroup
-        + '&side=' + callOrPut + '&strike=' + strikeGroup + '&api_key=' + TOKEN
+        + '&side=' + reqGlobal.callOrPut + '&strike=' + strikeGroup + '&api_key=' + TOKEN
         // + '?human=true';
 
     // const TEST = 'https://api.marketdata.app/v1/options/chain/AAPL/?expiration=2026-05-15&side=call&strike=25'
@@ -99,7 +99,7 @@ const TOKEN = process.env.MARKET_DATA;
 
 
       //** default select just above current price*/
-      if (reqGlobal.strikeNum === -1) {
+      if (reqGlobal.strikeNum == -1) {
          for (let i = 0; i < arr.length; i++) {
           if (arr[i] > reqGlobal.stockPrice) {
           if (reqGlobal.log)
@@ -115,8 +115,8 @@ const TOKEN = process.env.MARKET_DATA;
       
       if (reqGlobal.log)
         console.log ('send results', results)
-      res.send (results)
-      // optionPremium (res)
+      // res.send (results)
+      optionPremium (res)
     })
     .catch ((err) => {
       console.log(err.message)
