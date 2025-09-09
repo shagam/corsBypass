@@ -105,7 +105,7 @@ const TOKEN = process.env.MARKET_DATA;
           if (reqGlobal.log)
             console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
             reqGlobal.strikeNum = i;
-
+            results.strikeNum = i // send back to client
             // if (reqGlobal.log)
             //   console.log ('default strike selected', i, arr[i])
             break;
