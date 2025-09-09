@@ -14,12 +14,14 @@ var reqGlobal;
         + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN
 
     if (reqGlobal.log)
+      console.log(reqGlobal.expirationNum, expirationsArray[reqGlobal.expirationNum])
+    if (reqGlobal.log)
       console.log (url)
 
     axios.get (url)
     .then ((result) => {
-      if (reqGlobal.log)
-        console.log ('strike-prices', result.data)
+      // if (reqGlobal.log)
+      //   console.log ('strike-prices', result.data)
       const mili = result.data.updated
 
       if (result.data.s !== 'ok') {
