@@ -121,9 +121,8 @@ function stockOptions (app)  {
 
 function OptionQuote (res) {
 
-  // const [quote, setQuote] = useState(null);
   const optionSymbol = 'AAPL'+'250817C00' + '150000'; // Jan 2025 $150 AAPL Call
-  const TOKEN = process.env.REACT_APP_MARKETDATA;
+
   var url = 'https://marketdata.app/api/v1/marketdata?token=' + TOKEN;
 
 
@@ -135,11 +134,11 @@ function OptionQuote (res) {
    
          
   //** Get option premium for selected expiration and strike */
-  function optionPremium (expirationNum, strikeNum) {
-    //** clear */
-    // setOptionQuote({})
+  function optionPremium (res) {
 
-    setLineNumberArr([]);
+
+
+
     //** create expiration group */
       var expirationGroup =  '/?expiration=' + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
 
@@ -185,26 +184,17 @@ function OptionQuote (res) {
         return
       }
 
-      //** calc yearly yield */
-      const miliNow = Date.now()
-
       results.premiumArray = result.data
       if (reqGlobal.log)
         console.log ('send results', results)
       res.send (results)
-      
+
      })
     // .catch ((err) => {
     //   console.log(err.message)
     // })
 
   }
-
-
-
-  
-
-  
 
 }
 
