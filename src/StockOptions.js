@@ -53,7 +53,7 @@ const TOKEN = process.env.MARKET_DATA;
       if (reqGlobal.log)
         console.log ('send results', results)
       res.send (results)
-      // optionPremium ()
+      // optionPremium (res)
     })
     .catch ((err) => {
       console.log(err.message)
