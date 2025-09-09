@@ -119,19 +119,7 @@ function stockOptions (app)  {
     })
   }
 
-function OptionQuote (res) {
 
-  const optionSymbol = 'AAPL'+'250817C00' + '150000'; // Jan 2025 $150 AAPL Call
-
-  var url = 'https://marketdata.app/api/v1/marketdata?token=' + TOKEN;
-
-
-  
-  const columnsAll = [
-    "expiration","firstTraded","updated","underlying","side","strike","dte","bid","bidSize","mid","ask",
-    "askSize","last","openInterest","volume","inTheMoney","intrinsicValue","extrinsicValue",
-    "underlyingPrice","iv","delta","gamma","theta","vega"]
-   
          
   //** Get option premium for selected expiration and strike */
   function optionPremium (res) {
@@ -196,7 +184,7 @@ function OptionQuote (res) {
 
   }
 
-}
+
 
 
 
