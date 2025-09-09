@@ -2,6 +2,7 @@ const fs = require ('fs')
 const axios = require('axios')
 const {getDate} = require ('./Utils')
 
+
 // Zuberi Moshe
 
 var results = {}
@@ -122,7 +123,7 @@ function stockOptions (app)  {
   }
 
 function OptionQuote (props) {
-  const {eliHome} = IpContext();
+
   // const [quote, setQuote] = useState(null);
   const optionSymbol = 'AAPL'+'250817C00' + '150000'; // Jan 2025 $150 AAPL Call
   const TOKEN = process.env.REACT_APP_MARKETDATA;
@@ -137,29 +138,28 @@ function OptionQuote (props) {
    
          
   //** Get option premium for selected expiration and strike */
-  function optionPremium (selectedExpiration, selectedStrike) {
+  function optionPremium (expirationNum, strikeNum) {
     //** clear */
     // setOptionQuote({})
 
     setLineNumberArr([]);
     //** create expiration group */
-    // console.log (expirationCount, selectedExpiration, expirationsArray.length)
-    var expirationGroup =  '/?expiration=' + expirationsArray[selectedExpiration] + '&token=' + TOKEN;
-    // console.log ('expirationCount=', expirationCount)
-    if (expirationCount > 1 && (selectedExpiration + expirationCount < expirationsArray.length)) {
-      expirationGroup =  '/?from=' + expirationsArray[selectedExpiration] + '&to=' + expirationsArray[selectedExpiration + expirationCount -1]
+      var expirationGroup =  '/?expiration=' + expirationsArray[expirationNum] + '&token=' + TOKEN;
+
+    if (expirationCount > 1 && (expirationNum + expirationCount < expirationsArray.length)) {
+      expirationGroup =  '/?from=' + expirationsArray[expirationNum] + '&to=' + expirationsArray[expirationNum + expirationCount -1]
        + '&token=' + TOKEN
     }
 
  
     //** Create strike-group  (list) */
 
-    var strikeGroup = strikeArray[selectedStrike];
+    var strikeGroup = strikeArray[strikeNum];
     
     for (let i = 1; i < strikeCount; i++) {
-      if (selectedStrike + i >= strikeArray.length)
+      if (strikeNum + i >= strikeArray.length)
         break;
-      strikeGroup += ',' + strikeArray[selectedStrike + i]
+      strikeGroup += ',' + strikeArray[strikeNum + i]
     }
     if (log) {
       console.log ('strikeGroup=', strikeGroup) 
