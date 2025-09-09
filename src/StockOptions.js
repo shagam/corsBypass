@@ -6,6 +6,7 @@ const {getDate} = require ('./Utils')
 
 var results = {}
 var reqGlobal;
+const TOKEN = process.env.MARKET_DATA;
 
 
 
@@ -13,8 +14,6 @@ var reqGlobal;
     const url = 'https://api.marketdata.app/v1/options/strikes/' + reqGlobal.stock + '/?expiration=' 
         + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN
 
-    if (reqGlobal.log)
-      console.log(reqGlobal.expirationNum, expirationsArray[reqGlobal.expirationNum])
     if (reqGlobal.log)
       console.log (url)
 
@@ -110,17 +109,15 @@ function expirationsGet (res) {
 
 
 // 
-TOKEN=process.env.MARKET_DATA
-console.log ('MARKET_DATA')
+// console.log ('MARKET_DATA')
 function stockOptions (app)  {
 
     app.get('/stockOptions', (req, res) => {
       console.log ('params', req.query)
-      const stock = req.query.stock;
 
       reqGlobal = req.query
-      expirationsGet (res)
 
+      expirationsGet (res)
     })
   }
 
