@@ -7,15 +7,71 @@ const {getDate} = require ('./Utils')
 var results = {}
 var reqGlobal;
 
-function expirationsGet (symbol, log, req, res) {
-  reqGlobal = req
-    const url = 'https://api.marketdata.app/v1/options/expirations/' + symbol + '/?token=' + TOKEN
-    if (log)
+
+
+  function strikePricesGet (res, expirationsArray) {
+    const url = 'https://api.marketdata.app/v1/options/strikes/' + reqGlobal.stock + '/?expiration=' 
+        + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN
+
+    if (reqGlobal.log)
+      console.log (url)
+
+    axios.get (url)
+    .then ((result) => {
+      if (reqGlobal.log)
+        console.log ('strike-prices', result.data)
+      const mili = result.data.updated
+
+      if (result.data.s !== 'ok') {
+        console.log (reqGlobal.stock, 'strike-price error', result.data.s)
+      }
+
+      const arr = result.data[expirationsArray[reqGlobal.expirationNum]]
+      // if(reqGlobal.log)
+      //   console.log ('strike-array', arr)
+
+      results.strikeArray = arr
+
+
+      //** default select just above current price*/
+      if (reqGlobal.strikeNum === -1) {
+         for (let i = 0; i < arr.length; i++) {
+          if (arr[i] > reqGlobal.stockPrice) {
+          if (reqGlobal.log)
+            console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
+            reqGlobal.strikeNum = i;
+
+            // if (reqGlobal.log)
+            //   console.log ('default strike selected', i, arr[i])
+            break;
+          }
+        }
+      }
+      
+      if (reqGlobal.log)
+        console.log ('send results', results)
+      res.send (results)
+      // optionPremium ()
+    })
+    .catch ((err) => {
+      console.log(err.message)
+      res.send ('fail getStrikes exception')
+    })
+  };
+ 
+
+
+
+
+function expirationsGet (res) {
+
+    const url = 'https://api.marketdata.app/v1/options/expirations/' + reqGlobal.stock+ '/?token=' + TOKEN
+    if (reqGlobal.log)
       console.log (url)
 
     axios.get (url)
       .then ((result) => {
-        if (log)
+        if (reqGlobal.log)
           console.log ('expirations__', result.data)
         const mili = result.data.updated
         const status = result.data.s
@@ -25,14 +81,14 @@ function expirationsGet (symbol, log, req, res) {
         }
          
         results.expirationArray = result.data.expirations
-        if (req.query.func === 'expirations') {
+        if (reqGlobal.func === 'expirations') {
           res.send (results) // result.data.expirations)// results)
           return
         }
         else {
-          strikePricesGet (results.expirations)
+          strikePricesGet (res, results.expirationArray)
 
-          res.send ('fail')
+          // res.send ('fail')
         }
         // if (req.query.func === 'strikes')
         //   res.send (result.data.expirations)
@@ -43,6 +99,7 @@ function expirationsGet (symbol, log, req, res) {
       })
       .catch ((err) => {
         console.log(err.message)
+        res.send ('fail getExpirations exception')
         return 'fail'
       })
 
@@ -58,9 +115,9 @@ function stockOptions (app)  {
     app.get('/stockOptions', (req, res) => {
       console.log ('params', req.query)
       const stock = req.query.stock;
-      const log = req.query.log
 
-      expirationsGet (stock, log, req, res, req.query.selectedExpiration)
+      reqGlobal = req.query
+      expirationsGet (res)
 
     })
   }
@@ -249,48 +306,6 @@ function OptionQuote (props) {
 
   }
 
-
-  function strikePricesGet (expirationsArray) {
-    const url = 'https://api.marketdata.app/v1/options/strikes/' + props.symbol + '/?expiration=' 
-        + expirationsArray[selectedExpiration] + '&token=' + TOKEN
-        // + '?token=' + TOKEN;
-    if (log)
-      console.log (url)
-
-    axios.get (url)
-    .then ((result) => {
-      if (log)
-        console.log ('strike-prices', result.data)
-      const mili = result.data.updated
-
-      if (result.data.s !== 'ok') {
-        props.errorAdd ([props.symbol, 'strike-price error', result.data.s])
-        console.log (props.symbol, 'strike-price error', result.data.s)
-      }
-
-      const arr = result.data[expirationsArray[selectedExpiration]]
-      if(log)
-        console.log ('strike-array', arr)
-
-      setStrikeArray(arr);
-
-      //** default select just above current price*/
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i] > props.stockPrice) {
-          setSelectedStrike(i);
-          if (log)
-            console.log ('default strike selected', i, arr[i])
-          break;
-        }
-      }
-      // optionPremium ()
-    })
-    .catch ((err) => {
-      console.log(err.message)
-      props.errorAdd ([props.symbol, 'expiration error', err.message])
-    })
-  };
- 
 
 
   
