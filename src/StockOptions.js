@@ -10,6 +10,69 @@ var reqGlobal;
 const TOKEN = process.env.MARKET_DATA;
 
 
+  //** Get option premium for selected expiration and strike */
+  function optionPremium (res) {
+
+    //** create expiration group */
+      var expirationGroup =  '/?expiration=' + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
+
+    if (reqGlobal.expirationCount > 1 && (reqGlobal.expirationNum + reqGlobal.expirationCount < expirationsArray.length)) {
+      expirationGroup =  '/?from=' + expirationsArray[reqGlobal.expirationNum] +
+       '&to=' + expirationsArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1]
+       + '&token=' + TOKEN
+    }
+
+ 
+    //** Create strike-group  (list) */
+    var strikeGroup = strikeArray[reqGlobal.strikeNum];
+    
+    for (let i = 1; i < reqGlobal.strikeCount; i++) {
+      if (reqGlobal.strikeNum + i >= strikeArray.length)
+        break;
+      strikeGroup += ',' + strikeArray[reqGlobal.strikeNum + i]
+    }
+    if (reqGlobal.log) {
+      console.log ('strikeGroup=', strikeGroup) 
+      console.log ('expirationGroup=', expirationGroup)
+    }
+    
+    const url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
+        + expirationGroup
+        + '&side=' + callOrPut + '&strike=' + strikeGroup + '&api_key=' + TOKEN
+        // + '?human=true';
+
+    // const TEST = 'https://api.marketdata.app/v1/options/chain/AAPL/?expiration=2026-05-15&side=call&strike=25'
+    // url = TEST;
+    if (reqGlobal.log)
+      console.log (url)
+
+    axios.get (url)
+    .then ((result) => {
+      if (reqGlobal.log)
+        console.log ('primium', result.data)
+
+      if (result.data.s !== 'ok') {
+
+        console.log (reqGlobal.stock, 'option-fee error', result.data.s)
+        return
+      }
+
+      results.premiumArray = result.data
+      if (reqGlobal.log)
+        console.log ('send results', results)
+      res.send (results)
+
+     })
+    // .catch ((err) => {
+    //   console.log(err.message)
+    // })
+
+  }
+
+
+
+
+
 
   function strikePricesGet (res, expirationsArray) {
     const url = 'https://api.marketdata.app/v1/options/strikes/' + reqGlobal.stock + '/?expiration=' 
@@ -121,65 +184,6 @@ function stockOptions (app)  {
 
 
          
-  //** Get option premium for selected expiration and strike */
-  function optionPremium (res) {
-
-    //** create expiration group */
-      var expirationGroup =  '/?expiration=' + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
-
-    if (reqGlobal.expirationCount > 1 && (reqGlobal.expirationNum + reqGlobal.expirationCount < expirationsArray.length)) {
-      expirationGroup =  '/?from=' + expirationsArray[reqGlobal.expirationNum] +
-       '&to=' + expirationsArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1]
-       + '&token=' + TOKEN
-    }
-
- 
-    //** Create strike-group  (list) */
-    var strikeGroup = strikeArray[reqGlobal.strikeNum];
-    
-    for (let i = 1; i < reqGlobal.strikeCount; i++) {
-      if (reqGlobal.strikeNum + i >= strikeArray.length)
-        break;
-      strikeGroup += ',' + strikeArray[reqGlobal.strikeNum + i]
-    }
-    if (reqGlobal.log) {
-      console.log ('strikeGroup=', strikeGroup) 
-      console.log ('expirationGroup=', expirationGroup)
-    }
-    
-    const url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
-        + expirationGroup
-        + '&side=' + callOrPut + '&strike=' + strikeGroup + '&api_key=' + TOKEN
-        // + '?human=true';
-
-    // const TEST = 'https://api.marketdata.app/v1/options/chain/AAPL/?expiration=2026-05-15&side=call&strike=25'
-    // url = TEST;
-    if (reqGlobal.log)
-      console.log (url)
-
-    axios.get (url)
-    .then ((result) => {
-      if (reqGlobal.log)
-        console.log ('primium', result.data)
-
-      if (result.data.s !== 'ok') {
-
-        console.log (reqGlobal.stock, 'option-fee error', result.data.s)
-        return
-      }
-
-      results.premiumArray = result.data
-      if (reqGlobal.log)
-        console.log ('send results', results)
-      res.send (results)
-
-     })
-    // .catch ((err) => {
-    //   console.log(err.message)
-    // })
-
-  }
-
 
 
 
