@@ -124,9 +124,6 @@ function stockOptions (app)  {
   //** Get option premium for selected expiration and strike */
   function optionPremium (res) {
 
-
-
-
     //** create expiration group */
       var expirationGroup =  '/?expiration=' + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
 
@@ -138,7 +135,6 @@ function stockOptions (app)  {
 
  
     //** Create strike-group  (list) */
-
     var strikeGroup = strikeArray[reqGlobal.strikeNum];
     
     for (let i = 1; i < reqGlobal.strikeCount; i++) {
