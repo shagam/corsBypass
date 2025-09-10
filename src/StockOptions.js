@@ -14,17 +14,20 @@ const TOKEN = process.env.MARKET_DATA;
   function optionPremium (res) {
 
     //** create expiration group */
-    var expirationGroup// =  '/?expiration=' + results.expirationArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
-
     const num = Number(reqGlobal.expirationNum)
     const count = Number(reqGlobal.expirationCount)
+    var expirationGroup;
+    if (count == 1)
+      expirationGroup =  '/?expiration=' + results.expirationArray[reqGlobal.expirationNum]
+
+
     if (count > 1 && (num + count < results.expirationArray.length)) {
       expirationGroup =  '/?from=' + results.expirationArray[num] +
        '&to=' + results.expirationArray[num + count -1]
 
     }
     if (reqGlobal.log) {
-    //     console.log (results.expirationArray[num + count -1])
+        // console.log (results.expirationArray[num + count -1])
         // console.log ('expirationGroup', expirationGroup, 'num', reqGlobal.expirationNum, 'count', reqGlobal.expirationCount)
         // console.log ( '&to=', results.expirationArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1])
     }
@@ -53,7 +56,7 @@ const TOKEN = process.env.MARKET_DATA;
     // const TEST = 'https://api.marketdata.app/v1/options/chain/AAPL/?expiration=2026-05-15&side=call&strike=25'
     // url = TEST;
     if (reqGlobal.log)
-      console.log (url)
+      console.log ('\n\n'+ url)
 
     axios.get (url)
     .then ((result) => {
@@ -94,7 +97,7 @@ const TOKEN = process.env.MARKET_DATA;
     .then ((result) => {
       // if (reqGlobal.log)
       //   console.log ('strike-prices', result.data)
-      const mili = result.data.updated
+      // const mili = result.data.updated
 
       if (result.data.s !== 'ok') {
         console.log (reqGlobal.stock, 'strike-price error', result.data.s)
@@ -111,8 +114,8 @@ const TOKEN = process.env.MARKET_DATA;
       if (reqGlobal.strikeNum == -1) {
          for (let i = 0; i < arr.length; i++) {
           if (arr[i] > reqGlobal.stockPrice) {
-          if (reqGlobal.log)
-            console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
+           // if (reqGlobal.log)
+            // console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
             reqGlobal.strikeNum = i;
             results.strikeNum = i // send back to client
             // if (reqGlobal.log)
@@ -122,8 +125,8 @@ const TOKEN = process.env.MARKET_DATA;
         }
       }
       
-      if (reqGlobal.log)
-        console.log ('send results', results)
+      // if (reqGlobal.log)
+      //   console.log ('send results', results)
       // res.send (results)
       optionPremium (res)
     })
@@ -155,15 +158,15 @@ function expirationsGet (res) {
         }
          
         results.expirationArray = result.data.expirations
-        if (reqGlobal.func === 'expirations') {
-          res.send (results) // result.data.expirations)// results)
-          return
-        }
-        else {
+        // if (reqGlobal.func === 'expirations') {
+        //   res.send (results) // result.data.expirations)// results)
+        //   return
+        // }
+        // else {
           strikePricesGet (res, results.expirationArray)
 
           // res.send ('fail')
-        }
+        // }
 
 
     
