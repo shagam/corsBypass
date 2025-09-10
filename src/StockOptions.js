@@ -14,31 +14,40 @@ const TOKEN = process.env.MARKET_DATA;
   function optionPremium (res) {
 
     //** create expiration group */
-      var expirationGroup =  '/?expiration=' + results.expirationArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
+    var expirationGroup// =  '/?expiration=' + results.expirationArray[reqGlobal.expirationNum] + '&token=' + TOKEN;
 
-    if (reqGlobal.expirationCount > 1 && (reqGlobal.expirationNum + reqGlobal.expirationCount < results.expirationArray.length)) {
-      expirationGroup =  '/?from=' + results.expirationArray[reqGlobal.expirationNum] +
-       '&to=' + results.expirationArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1]
-       + '&token=' + TOKEN
+    const num = Number(reqGlobal.expirationNum)
+    const count = Number(reqGlobal.expirationCount)
+    if (count > 1 && (num + count < results.expirationArray.length)) {
+      expirationGroup =  '/?from=' + results.expirationArray[num] +
+       '&to=' + results.expirationArray[num + count -1]
+
     }
-
+    if (reqGlobal.log) {
+    //     console.log (results.expirationArray[num + count -1])
+        // console.log ('expirationGroup', expirationGroup, 'num', reqGlobal.expirationNum, 'count', reqGlobal.expirationCount)
+        // console.log ( '&to=', results.expirationArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1])
+    }
+    // res.send('fail ' + expirationGroup)
+    // return
  
     //** Create strike-group  (list) */
     var strikeGroup = results.strikeArray[reqGlobal.strikeNum];
-    console.log (reqGlobal.strikeNum, 'strikeGroup=', strikeGroup) 
+    // console.log (reqGlobal.strikeNum, 'strikeGroup=', strikeGroup) 
     for (let i = 1; i < reqGlobal.strikeCount; i++) {
       if (reqGlobal.strikeNum + i >= results.strikeArray.length)
         break;
       strikeGroup += ',' + results.strikeArray[reqGlobal.strikeNum + i]
     }
-    if (reqGlobal.log) {
-      console.log ('__strikeGroup=', strikeGroup) 
-      console.log ('expirationGroup=', expirationGroup)
-    }
+    // if (reqGlobal.log) {
+    //   console.log ('__strikeGroup=', strikeGroup) 
+    //   console.log ('expirationGroup=', expirationGroup)
+    // }
     
-    const url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
+    var url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
         + expirationGroup
-        + '&side=' + reqGlobal.callOrPut + '&strike=' + strikeGroup + '&api_key=' + TOKEN
+        + '&side=' + reqGlobal.callOrPut + '&strike=' + strikeGroup 
+    url += '&token=' + TOKEN
         // + '?human=true';
 
     // const TEST = 'https://api.marketdata.app/v1/options/chain/AAPL/?expiration=2026-05-15&side=call&strike=25'
@@ -48,8 +57,8 @@ const TOKEN = process.env.MARKET_DATA;
 
     axios.get (url)
     .then ((result) => {
-      if (reqGlobal.log)
-        console.log ('primium', result.data)
+      // if (reqGlobal.log)
+      //   console.log ('primium', result.data)
 
       if (result.data.s !== 'ok') {
 
@@ -58,8 +67,8 @@ const TOKEN = process.env.MARKET_DATA;
       }
 
       results.premiumArray = result.data
-      if (reqGlobal.log)
-        console.log ('send results', results)
+      // if (reqGlobal.log)
+      //   console.log ('send results', results)
       res.send (results)
 
      })
