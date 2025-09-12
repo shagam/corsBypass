@@ -49,7 +49,7 @@ const TOKEN = process.env.MARKET_DATA;
     
     var url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
         + expirationGroup
-        + '&side=' + reqGlobal.callOrPut + '&strike=' + strikeGroup 
+        + '&side=' + reqGlobal.side + '&strike=' + strikeGroup 
     url += '&token=' + TOKEN
         // + '?human=true';
 
@@ -70,8 +70,8 @@ const TOKEN = process.env.MARKET_DATA;
       }
 
       results.premiumArray = result.data
-      // if (reqGlobal.log)
-      //   console.log ('send results', results)
+      if (reqGlobal.logExtra)
+        console.log ('send results', results)
       res.send (results)
 
      })
