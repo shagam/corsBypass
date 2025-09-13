@@ -4,6 +4,50 @@ const {getDate} = require ('./Utils')
 
 
 // Zuberi Moshe
+const log = true
+const FILE_NAME = 'txt/stockOptionArray.txt'
+const miliInADay = 24 * 3600 * 1000;
+// read from local file once on startup
+var stockOptionArray = {};    // saved one obj per stock
+fs.readFile(FILE_NAME, 'utf8', (err, data) => {
+  if (err) {
+    console.error (err)
+    return;
+  }
+  if (data === undefined)
+    stockOptionArray == {}
+  else
+    stockOptionArray = JSON.parse(data);
+
+  const keys = Object.keys(stockOptionArray);
+  console.log('\n', getDate(), FILE_NAME, '  read count=', keys.length)
+  if (log && false)
+    for (var i = 0; i < keys.length; i++)
+      console.log ('\n', keys[i])// JSON.stringify (stockOptionArray[keys[i]]))
+  else {
+    var symbols ="";
+    for (var i = 0; i < keys.length; i++)
+      symbols += keys[i] + '  ' // +' (' + JSON.stringify (stockOptionArray[keys[i]]).length + ')  '
+    console.log (symbols)
+  }
+});
+
+
+
+function stockOptionArrayFlush() {
+  if (Object.keys(stockOptionArray).length === 0) // avoid write of empty
+    return;
+
+  fs.writeFile (FILE_NAME, JSON.stringify(stockOptionArray), err => {
+    if (err) {
+      console.log (getDate(), FILE_NAME, ' write fail', err)
+    }
+    else
+      console.log ('\n'+getDate(), FILE_NAME , ' write, sym count=', Object.keys(stockOptionArray).length)
+  }) 
+}
+
+
 
 var results = {}
 var reqGlobal;
@@ -70,8 +114,12 @@ const TOKEN = process.env.MARKET_DATA;
       }
 
       results.premiumArray = result.data
+      results.req = reqGlobal // to campare params for similar request
+      results.updateMili = nowMili // avoid too frequent access
       if (reqGlobal.logExtra)
-        console.log ('send results', results)
+        console.log ('send new results', results)
+      stockOptionArray [reqGlobal.stock] = results; //save results
+      stockOptionArrayFlush()
       res.send (results)
 
      })
@@ -180,19 +228,63 @@ function expirationsGet (res) {
   };
 
 
+function checkSame (req1, req2) {
+  if (req1.expirationNum != req2.expirationNum)
+    return false;
+  if (req1.expirationCount != req2.expirationCount)
+    return false;
+  if (req1.strikeNum != req2.strikeNum)
+    return false;
+  if (req1.strikeCount != req2.strikeCount)
+    return false;
+
+  if (req1.side != req2.side)
+    return false;
+  return true;
+}
+
 
 // 
 // console.log ('MARKET_DATA')
 function stockOptions (app)  {
 
-    app.get('/stockOptions', (req, res) => {
-      console.log ('params', req.query)
+  app.get('/stockOptions', (req, res) => {
+    console.log ('params', req.query)
 
-      reqGlobal = req.query
+    reqGlobal = req.query
+    const LOG = req.query.log
+    // check for saved 
+    const daysDelay = 1/4;  // max frequeny 6 hours
 
-      expirationsGet (res)
-    })
-  }
+    // search saved stockOption retrieved lately
+    const nowMili = Date.now();
+    var diff;
+    if (! reqGlobal.ignoreSaved) {
+      var savedOption = stockOptionArray [req.query.stock];
+      if (savedOption && savedOption.updateMili)
+        diff = nowMili - savedOption.updateMili
+
+      if (savedOption && savedOption.updateMili && (nowMili - savedOption.updateMili)  < daysDelay * miliInADay && checkSame(reqGlobal, savedOption.req)) {
+        console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,',
+        ' saveCount=', Object.keys(stockOptionArray).length)
+        if (reqGlobal.logExtra)
+          console.dir (savedOption)
+        if (savedOption.length == 1)
+          res.send ('')
+        else
+          res.send (JSON.stringify(savedOption))
+        return;
+      }
+      else {  // delete old wrong saved format
+        stockOptionArray [req.query.stock] = undefined;
+        if (reqGlobal.logExtra)
+          console.log ("\n", req.query.stock, getDate(), '\x1b[31m stockOption old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedOption);
+        savedOption = undefined;
+      }
+    }
+    expirationsGet (res)
+  })
+}
 
 
          
