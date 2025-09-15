@@ -7,6 +7,8 @@ const {getDate} = require ('./Utils')
 const log = true
 const FILE_NAME = 'txt/stockOptionArray.txt'
 const miliInADay = 24 * 3600 * 1000;
+var compareStatus;
+
 // read from local file once on startup
 var stockOptionArray = {};    // saved one obj per stock
 fs.readFile(FILE_NAME, 'utf8', (err, data) => {
@@ -120,12 +122,14 @@ const TOKEN = process.env.MARKET_DATA;
         console.log ('send new results', results)
       stockOptionArray [reqGlobal.stock] = results; //save results
       stockOptionArrayFlush()
+      results.compareStatus = compareStatus;
       res.send (results)
 
      })
-    // .catch ((err) => {
-    //   console.log(err.message)
-    // })
+    .catch ((err) => {
+      console.log(reqGlobal.stock, 'getPrimium', err.message)
+      res.send ('fail ' + reqGlobal.stock + ' getPrimium' + err.message)
+    })
 
   }
 
@@ -228,19 +232,43 @@ function expirationsGet (res) {
   };
 
 
-function checkSame (req1, req2) {
-  if (req1.expirationNum != req2.expirationNum)
-    return false;
-  if (req1.expirationCount != req2.expirationCount)
-    return false;
-  if (req1.strikeNum != req2.strikeNum)
-    return false;
-  if (req1.strikeCount != req2.strikeCount)
-    return false;
 
-  if (req1.side != req2.side)
+function checkSame (req1, savedOption) {
+  if (reqGlobal.logExtra)
+    console.log (Object.keys(savedOption))
+
+  const req2 = savedOption.req
+  if (req1.expirationNum != req2.expirationNum) {
+    compareStatus = 'expirationNum diff'
     return false;
-  return true;
+  }
+  if (req1.expirationCount != req2.expirationCount) {
+    compareStatus = 'expirationCount diff'
+    return false;
+  }
+  // if (req1.strikeNum != req2.strikeNum) {
+  //   compareStatus = 'strikeNum diff'
+  //   return false;
+  // }
+  if (req1.strikeCount != req2.strikeCount) {
+    compareStatus = 'expirationCount diff'
+    return false;
+  }
+
+  if (req1.side != req2.side) {
+    compareStatus = 'side diff'
+    return false;
+  }
+
+  const nowMili = Date.now();
+  const diff = (nowMili - savedOption.updateMili) / 1000   // diff in seconds;
+  if (diff > 600) {  // 10 minutes
+    compareStatus = 'too old. Last request was ' + diff + ' seconds ago'
+    return false;
+  }
+
+  compareStatus = 'get saved'
+  return true; // same:  use saved info
 }
 
 
@@ -252,21 +280,16 @@ function stockOptions (app)  {
     console.log ('params', req.query)
 
     reqGlobal = req.query
-    const LOG = req.query.log
-    // check for saved 
-    const daysDelay = 1/4;  // max frequeny 6 hours
+
 
     // search saved stockOption retrieved lately
-    const nowMili = Date.now();
-    var diff;
-    if (! reqGlobal.ignoreSaved) {
-      var savedOption = stockOptionArray [req.query.stock];
-      if (savedOption && savedOption.updateMili)
-        diff = nowMili - savedOption.updateMili
 
-      if (savedOption && savedOption.updateMili && (nowMili - savedOption.updateMili)  < daysDelay * miliInADay && checkSame(reqGlobal, savedOption.req)) {
-        console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,',
-        ' saveCount=', Object.keys(stockOptionArray).length)
+    var savedOption = stockOptionArray [req.query.stock];
+    if (savedOption && ! reqGlobal.ignoreSaved && checkSame(reqGlobal, savedOption)) {
+
+       console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,')
+
+        savedOption.compareStatus = compareStatus;
         if (reqGlobal.logExtra)
           console.dir (savedOption)
         if (savedOption.length == 1)
@@ -274,15 +297,17 @@ function stockOptions (app)  {
         else
           res.send (JSON.stringify(savedOption))
         return;
-      }
-      else {  // delete old wrong saved format
-        stockOptionArray [req.query.stock] = undefined;
-        if (reqGlobal.logExtra)
-          console.log ("\n", req.query.stock, getDate(), '\x1b[31m stockOption old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedOption);
-        savedOption = undefined;
-      }
+      
+      // else {  // delete old wrong saved format
+      //   stockOptionArray [req.query.stock] = undefined;
+      //   // if (reqGlobal.logExtra)
+      //   //   console.log ("\n", req.query.stock, getDate(), '\x1b[31m stockOption old\x1b[0m days=', (diff / miliInADay).toFixed(0), savedOption);
+      //   savedOption = undefined;
+      // }
     }
+
     expirationsGet (res)
+
   })
 }
 
