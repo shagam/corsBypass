@@ -57,25 +57,31 @@ const TOKEN = process.env.MARKET_DATA;
 
 
   //** Get option premium for selected expiration and strike */
-  function optionPremium (res) {
+  function optionPremium (res, expirationDayIndex) {
+    // console.log ('expirationDayIndex', expirationDayIndex)
 
     //** create expiration group */
-    const num = Number(reqGlobal.expirationNum)
     const count = Number(reqGlobal.expirationCount)
+
     var expirationGroup;
     if (count == 1)
-      expirationGroup =  '/?expiration=' + results.expirationArray[reqGlobal.expirationNum]
+      expirationGroup =  '/?expiration=' + results.expirationArray[expirationDayIndex]
 
 
-    if (count > 1 && (num + count < results.expirationArray.length)) {
-      expirationGroup =  '/?from=' + results.expirationArray[num] +
-       '&to=' + results.expirationArray[num + count -1]
-
+    if (count > 1 && (expirationDayIndex  + count < results.expirationArray.length)) {
+      expirationGroup =  '/?from=' + results.expirationArray[expirationDayIndex ] +
+       '&to=' + results.expirationArray[expirationDayIndex + count -1]
     }
+    else {
+      res.send ('fail, to build expirationGroup for url request')
+      console.log ('fail, to build expirationGroup for url request')
+      return;
+    }
+
     if (reqGlobal.log) {
         // console.log (results.expirationArray[num + count -1])
-        // console.log ('expirationGroup', expirationGroup, 'num', reqGlobal.expirationNum, 'count', reqGlobal.expirationCount)
-        // console.log ( '&to=', results.expirationArray[reqGlobal.expirationNum + reqGlobal.expirationCount -1])
+        // console.log ('expirationGroup', expirationGroup, 'num', expirationDayIndex, 'count', reqGlobal.expirationCount)
+        // console.log ( '&to=', results.expirationArray[expirationDayIndex + reqGlobal.expirationCount -1])
     }
     // res.send('fail ' + expirationGroup)
     // return
@@ -138,24 +144,24 @@ const TOKEN = process.env.MARKET_DATA;
 
 
 
-  function strikePricesGet (res, expirationsArray) {
+  function strikePricesGet (res, expirationsArray, expirationDayIndex) {
     const url = 'https://api.marketdata.app/v1/options/strikes/' + reqGlobal.stock + '/?expiration=' 
-        + expirationsArray[reqGlobal.expirationNum] + '&token=' + TOKEN
+        + expirationsArray[expirationDayIndex] + '&token=' + TOKEN
 
     if (reqGlobal.log)
       console.log (url)
 
     axios.get (url)
     .then ((result) => {
-      // if (reqGlobal.log)
-      //   console.log ('strike-prices', result.data)
+      if (reqGlobal.logExtra)
+        console.log ('strike-prices raw', result.data)
       // const mili = result.data.updated
 
       if (result.data.s !== 'ok') {
         console.log (reqGlobal.stock, 'strike-price error', result.data.s)
       }
 
-      const arr = result.data[expirationsArray[reqGlobal.expirationNum]]
+      const arr = result.data[expirationsArray[expirationDayIndex]]
       // if(reqGlobal.log)
       //   console.log ('strike-array', arr)
 
@@ -180,7 +186,7 @@ const TOKEN = process.env.MARKET_DATA;
       // if (reqGlobal.log)
       //   console.log ('send results', results)
       // res.send (results)
-      optionPremium (res)
+      optionPremium (res, expirationDayIndex)
     })
     .catch ((err) => {
       console.log(err.message)
@@ -210,17 +216,32 @@ function expirationsGet (res) {
         }
          
         results.expirationArray = result.data.expirations
-        // if (reqGlobal.func === 'expirations') {
-        //   res.send (results) // result.data.expirations)// results)
-        //   return
-        // }
-        // else {
-          strikePricesGet (res, results.expirationArray)
+
+        // search expration (days-to-expire)
+        var expirationDayIndex = -1;
+        const todayDays = new Date().getTime() / 1000 / 3600 / 24
+           console.log ('today=' + todayDays)
+        for (let i = 0; i < results.expirationArray.length; i++) {
+          const expirationDays = new Date(results.expirationArray[i]).getTime() / 1000 / 3600 / 24
+          if (reqGlobal.logExtra)
+            console.log (i, 'today=' + todayDays.toFixed(2), results.expirationArray[i],  'expirationDays=' + expirationDays)
+          if (expirationDays > todayDays + Number(reqGlobal.expirationNum)) {
+            expirationDayIndex = i;  // found requre expiration
+            break;
+          }
+        }
+        if (expirationDayIndex === -1) { // expirationIndex not found
+          console.log ('fail, expirationDayIndex not found')
+          res.send ('fail, expirationDayIndex not found')
+          return;
+        }
+        console.log ('expirationDayIndex=', expirationDayIndex, results.expirationArray[expirationDayIndex])
+
+   
+        strikePricesGet (res, results.expirationArray, expirationDayIndex)
 
           // res.send ('fail')
         // }
-
-
     
       })
       .catch ((err) => {
@@ -263,7 +284,7 @@ function checkSame (req1, savedOption) {
   const nowMili = Date.now();
   const diff = (nowMili - savedOption.updateMili) / 1000   // diff in seconds;
   if (diff > 600) {  // 10 minutes
-    compareStatus = 'too old. Last request was ' + diff + ' seconds ago'
+    compareStatus = 'last request ' + diff + ' seconds ago'
     return false;
   }
 
