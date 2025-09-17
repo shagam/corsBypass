@@ -83,7 +83,7 @@ const TOKEN = process.env.MARKET_DATA;
 
     if (reqGlobal.log) {
         // console.log (results.expirationArray[num + count -1])
-        console.log ('expirationGroup', expirationGroup, 'num', expirationDayIndex, 'count', reqGlobal.expirationCount)
+        console.log ('\nexpirationGroup=', expirationGroup, 'expirationDayIndex=' + expirationDayIndex, 'count=' + reqGlobal.expirationCount)
         // console.log ( '&to=', results.expirationArray[expirationDayIndex + reqGlobal.expirationCount -1])
     }
     // res.send('fail ' + expirationGroup)
@@ -111,7 +111,7 @@ const TOKEN = process.env.MARKET_DATA;
     // const TEST = 'https://api.marketdata.app/v1/options/chain/AAPL/?expiration=2026-05-15&side=call&strike=25'
     // url = TEST;
     if (reqGlobal.log)
-      console.log ('\n\n'+ url + '\n')
+      console.log ('\n'+ url + '\n')
 
     axios.get (url)
     .then ((result) => {
@@ -165,22 +165,24 @@ const TOKEN = process.env.MARKET_DATA;
       }
 
       const arr = result.data[expirationsArray[expirationDayIndex]]
-      // if(reqGlobal.log)
-      //   console.log ('strike-array', arr)
+      if(reqGlobal.log)
+        console.log ('strike-array', arr)
 
       results.strikeArray = arr
 
 
-      //** default select just above current price*/
-      if (reqGlobal.strikeNum == -1) {
+      //** strikeNum calc as percent abobe today price */
+      if (reqGlobal.strikeNum > 0) {
+        const requiredStrike =  reqGlobal.stockPrice * (1 + Number(reqGlobal.strikeNum) / 100)
          for (let i = 0; i < arr.length; i++) {
-          if (arr[i] > reqGlobal.stockPrice) {
+          if (arr[i] > requiredStrike) {
            // if (reqGlobal.log)
             // console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
-            reqGlobal.strikeNum = i;
+
             results.strikeNum = i // send back to client
-            // if (reqGlobal.log)
-            //   console.log ('default strike selected', i, arr[i])
+            if (reqGlobal.log)
+              console.log ('found strike=' + arr[i], 'requiredStrike=' + requiredStrike, 'index=' + i, 'percentAbovePrice=' + reqGlobal.strikeNum)
+            reqGlobal.strikeNum = i; //???
             break;
           }
         }
@@ -238,7 +240,7 @@ function expirationsGet (res) {
           res.send ('fail, expirationDayIndex not found')
           return;
         }
-        console.log ('expirationDayIndex=', expirationDayIndex, results.expirationArray[expirationDayIndex])
+        console.log ('expirationDayIndex='+ expirationDayIndex, 'dte=' + reqGlobal.expirationNum, 'date=' + results.expirationArray[expirationDayIndex])
 
    
         strikePricesGet (res, results.expirationArray, expirationDayIndex)
