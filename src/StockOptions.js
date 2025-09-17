@@ -149,7 +149,7 @@ const TOKEN = process.env.MARKET_DATA;
         + expirationsArray[expirationDayIndex] + '&token=' + TOKEN
 
     if (reqGlobal.log)
-      console.log (url)
+      console.log ('\n', url)
 
     axios.get (url)
     .then ((result) => {
@@ -202,7 +202,7 @@ function expirationsGet (res) {
 
     const url = 'https://api.marketdata.app/v1/options/expirations/' + reqGlobal.stock+ '/?token=' + TOKEN
     if (reqGlobal.log)
-      console.log (url)
+      console.log ('\n', url)
 
     axios.get (url)
       .then ((result) => {
