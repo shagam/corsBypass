@@ -272,10 +272,10 @@ function checkSame (req1, savedOption) {
     compareStatus = 'expirationCount diff'
     return false;
   }
-  // if (req1.strikeNum != req2.strikeNum) {
-  //   compareStatus = 'strikeNum diff'
-  //   return false;
-  // }
+  if (req1.strikeNum != req2.strikeNum) {
+    compareStatus = 'strikeNum diff'
+    return false;
+  }
   if (req1.strikeCount != req2.strikeCount) {
     compareStatus = 'expirationCount diff'
     return false;
@@ -286,6 +286,7 @@ function checkSame (req1, savedOption) {
     return false;
   }
 
+  // check for fresh data
   const nowMili = Date.now();
   const diff = (nowMili - savedOption.updateMili) / 1000   // diff in seconds;
   if (diff > 600) {  // 10 minutes
@@ -313,7 +314,7 @@ function stockOptions (app)  {
     var savedOption = stockOptionArray [req.query.stock];
     if (savedOption && ! reqGlobal.ignoreSaved && checkSame(reqGlobal, savedOption)) {
 
-       console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,')
+       console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,', 'compareStatus=', compareStatus)
 
         savedOption.compareStatus = compareStatus;
         if (reqGlobal.logExtra)
@@ -331,7 +332,7 @@ function stockOptions (app)  {
       //   savedOption = undefined;
       // }
     }
-
+    console.log ('\ncompareStatus=', compareStatus)
     expirationsGet (res)
 
   })
