@@ -130,9 +130,9 @@ const TOKEN = process.env.MARKET_DATA;
       results.updateMili = nowMili // avoid too frequent access
       if (reqGlobal.logExtra)
         console.log ('send new results', results)
+      results.compareStatus = compareStatus;
       stockOptionArray [reqGlobal.stock] = results; //save results
       stockOptionArrayFlush()
-      results.compareStatus = compareStatus;
       res.send (results)
 
      })
@@ -265,24 +265,24 @@ function checkSame (req1, savedOption) {
 
   const req2 = savedOption.req
   if (req1.expirationNum != req2.expirationNum) {
-    compareStatus = 'expirationNum diff'
+    compareStatus = 'get fresh. expirationNum diff'
     return false;
   }
   if (req1.expirationCount != req2.expirationCount) {
-    compareStatus = 'expirationCount diff'
+    compareStatus = 'get fresh. cexpirationCount diff'
     return false;
   }
   if (req1.strikeNum != req2.strikeNum) {
-    compareStatus = 'strikeNum diff'
+    compareStatus = 'get fresh. strikeNum diff'
     return false;
   }
   if (req1.strikeCount != req2.strikeCount) {
-    compareStatus = 'expirationCount diff'
+    compareStatus = 'get fresh. expirationCount diff'
     return false;
   }
 
   if (req1.side != req2.side) {
-    compareStatus = 'side diff'
+    compareStatus = 'get fresh. side diff'
     return false;
   }
 
@@ -290,7 +290,7 @@ function checkSame (req1, savedOption) {
   const nowMili = Date.now();
   const diff = (nowMili - savedOption.updateMili) / 1000   // diff in seconds;
   if (diff > 600) {  // 10 minutes
-    compareStatus = 'last request ' + diff + ' seconds ago'
+    compareStatus = 'get fresh. too old last request ' + diff + ' seconds ago'
     return false;
   }
 
