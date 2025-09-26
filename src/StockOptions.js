@@ -127,7 +127,7 @@ const TOKEN = process.env.MARKET_DATA;
 
       results.premiumArray = result.data
       results.req = reqGlobal // to campare params for similar request
-      results.updateMili = nowMili // avoid too frequent access
+      results.updateMili = Date.now() // avoid too frequent access
       if (reqGlobal.logExtra)
         console.log ('send new results', results)
       results.compareStatus = compareStatus;
