@@ -70,9 +70,9 @@ const TOKEN = process.env.MARKET_DATA;
     const endIndex = expirationDayIndex  + count < results.expirationArray.length ? expirationDayIndex  + count - 1 :
      results.expirationArray.length -1 
 
-    if (endIndex <=  expirationDayIndex || expirationDayIndex < 0){
-      res.send ('fail, to build expirationGroup for url request')
-      console.log ('fail, to build expirationGroup for url request', expirationDayIndex, endIndex)
+    if (endIndex <  expirationDayIndex || expirationDayIndex < 0){
+      res.send ('fail, to build expirationGroup   index=' + expirationDayInde + 'endIndex='+ endIndex)
+      console.log ('fail, to build expirationGroup  start=' + expirationDayIndex, 'end=' + endIndex)
       return;
     }
 
@@ -213,8 +213,6 @@ function expirationsGet (res) {
       .then ((result) => {
         if (reqGlobal.log)
           console.log ('expirations__', result.data)
-        const mili = result.data.updated
-        const status = result.data.s
 
         if (result.data.s !== 'ok') {
           console.log (reqGlobal.stock, 'expiration error', result.data.s)
@@ -296,7 +294,7 @@ function checkSame (req1, savedOption) {
 
   compareStatus = 'get saved'
   return true; // same:  use saved info
-}
+}  
 
 
 // 
