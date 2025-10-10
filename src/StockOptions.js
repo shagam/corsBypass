@@ -310,7 +310,8 @@ function stockOptions (app)  {
     // search saved stockOption retrieved lately
 
     var savedOption = stockOptionArray [req.query.stock];
-    if (savedOption && ! reqGlobal.ignoreSaved && checkSame(reqGlobal, savedOption)) {
+    // console.log (savedOption.premiumArray.underlying[0])
+    if (savedOption && ! reqGlobal.ignoreSaved && savedOption.premiumArray.underlying[0] === req.query.stock && checkSame(reqGlobal, savedOption)) {
 
        console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,', 'compareStatus=', compareStatus)
 
