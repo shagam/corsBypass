@@ -146,6 +146,8 @@ app.use(
   })
 )
 
+app.use('/uploads', express.static('uploads'));
+
 var nowMili = Date.now();
 
 function getDate() {
