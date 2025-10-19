@@ -40,6 +40,7 @@ const {futures, futuresFlush} = require('./src/Futures')
 const {urlGetParse} = require('./src/UrlGetParse')
 const {fetchPage} = require('./src/FetchPage')
 const {stockOptions} = require('./src/StockOptions')
+const {image} = require('./src/Image')
 
 const app = express()
 const router = express.Router();
@@ -146,17 +147,38 @@ app.use(
   })
 )
 
-app.use('/uploads', express.static('uploads'));
+// const stat = app.use('/uploads', express.static('uploads'));
+// app.get('/uploads', (req, res) => {
+//   const imagePath = path.join('/uploads/', req.file.filename); // Adjust path as needed
+//   console.log ('/uploads', 'public', req.file.filename)
+//   res.sendFile(imagePath, (err) => {
+//     if (err) {
+//       console.error('Error sending file:', err, req.file.filename);
+//       res.status(404).send('Image not found');
+//     }
+//   });
+// });
+
+  //  let defaultImage = await fs.readFileSync("public/default.jpg")
+  //   defaultImage = Buffer.from(defaultImage, "base64")
+    
+  //   result.writeHead(200, {
+  //     "Content-Type": "image/jpg",
+  //     "Content-Length": defaultImage.length
+  //   })
+  //   result.end(defaultImage)
+
+
 
 var nowMili = Date.now();
 
-function getDate() {
-  const today = new Date();
-  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-  // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
-  return date + " " + time;
-}
+// function getDate() {
+//   const today = new Date();
+//   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+//   var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+//   // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
+//   return date + " " + time;
+// }
 
 
 // app.get('/', (req, res) => {
@@ -174,6 +196,8 @@ function getDate() {
 
 
 //============================================================================
+
+image (app)
 
 // holdings of a stock
 holdingsMain (app)
