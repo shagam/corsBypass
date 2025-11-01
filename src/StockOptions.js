@@ -170,7 +170,7 @@ const TOKEN = process.env.MARKET_DATA;
         console.log ('strike-array', 'date=' + expirationsArray[expirationDayIndex],  arr)
 
       results.strikeArray = arr
-      if (reqGlobal.logExtra)
+      //if (reqGlobal.logExtra)
         results.strikeFull = result.data // for debug
 
 
