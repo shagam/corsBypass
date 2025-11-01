@@ -128,7 +128,7 @@ const TOKEN = process.env.MARKET_DATA;
       results.premiumArray = result.data
       results.req = reqGlobal // to campare params for similar request
       results.updateMili = Date.now() // avoid too frequent access
-      if (reqGlobal.logExtra)
+      if (reqGlobal.log)
         console.log ('send new results', results)
       results.compareStatus = compareStatus;
       stockOptionArray [reqGlobal.stock] = results; //save results
@@ -170,7 +170,8 @@ const TOKEN = process.env.MARKET_DATA;
         console.log ('strike-array', 'date=' + expirationsArray[expirationDayIndex],  arr)
 
       results.strikeArray = arr
-      results.strikeFull = result.data // for debug
+      if (reqGlobal.logExtra)
+        results.strikeFull = result.data // for debug
 
 
       //** strikeNum calc as percent abobe today price */
