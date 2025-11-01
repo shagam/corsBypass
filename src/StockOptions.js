@@ -170,6 +170,7 @@ const TOKEN = process.env.MARKET_DATA;
         console.log ('strike-array', 'date=' + expirationsArray[expirationDayIndex],  arr)
 
       results.strikeArray = arr
+      results.strikeFull = result.data // for debug
 
 
       //** strikeNum calc as percent abobe today price */
@@ -234,8 +235,8 @@ function expirationsGet (res) {
           }
         }
         if (expirationDayIndex === -1) { // expirationIndex not found
-          console.log ('fail, expirationDayIndex not found')
-          res.send ('fail, expirationDayIndex not found')
+          console.log ('fail, expirationDate not found')
+          res.send ('fail, expirationDate not found')
           return;
         }
         console.log ('expirationDayIndex='+ expirationDayIndex, 'dte=' + reqGlobal.expirationNum, 'date=' + results.expirationArray[expirationDayIndex])
