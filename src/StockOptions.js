@@ -168,27 +168,26 @@ const TOKEN = process.env.MARKET_DATA;
       const arr = result.data[expirationsArray[expirationDayIndex]]
       if(reqGlobal.log)
         console.log ('strike-array', 'date=' + expirationsArray[expirationDayIndex],  arr)
-
       results.strikeArray = arr
       //if (reqGlobal.logExtra)
         results.strikeFull = result.data // for debug
 
 
       //** strikeNum calc as percent abobe today price */
-      if (reqGlobal.strikeNum > 0) {
-        const requiredStrike =  reqGlobal.stockPrice * (1 + Number(reqGlobal.strikeNum) / 100)
-         for (let i = 0; i < arr.length; i++) {
-          if (arr[i] > requiredStrike) {
-           // if (reqGlobal.log)
-            // console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
 
-            results.strikeNum = i // send back to client
-            if (reqGlobal.log)
-              console.log ('found strike=' + arr[i], 'requiredStrike=' + requiredStrike.toFixed(2), 'index=' + i, 'percentAbovePrice=' + reqGlobal.strikeNum)
-            break;
-          }
+      const requiredStrike =  reqGlobal.stockPrice * (1 + Number(reqGlobal.strikeNum) / 100)
+        for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > requiredStrike) {
+          // if (reqGlobal.log)
+          // console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
+
+          results.strikeNum = i // send back to client
+          if (reqGlobal.log)
+            console.log ('found strike=' + arr[i], 'requiredStrike=' + requiredStrike.toFixed(2), 'index=' + i, 'percentAbovePrice=' + reqGlobal.strikeNum)
+          break;
         }
       }
+
       
       // if (reqGlobal.log)
       //   console.log ('send results', results)
