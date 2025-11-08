@@ -39,7 +39,7 @@ const {userAccess, userArrayFlush, userList} = require('./src/Users')
 const {futures, futuresFlush} = require('./src/Futures') 
 const {urlGetParse} = require('./src/UrlGetParse')
 const {fetchPage} = require('./src/FetchPage')
-const {stockOptions} = require('./src/StockOptions')
+const {stockOptions, stockOptionsHistory} = require('./src/StockOptions')
 const {image} = require('./src/Image')
 
 const app = express()
@@ -224,6 +224,8 @@ urlGetParse(app)
 latestPrice(app)
 
 stockOptions(app)
+
+stockOptionsHistory(app)
 
 // fetchPage('https://www.nasdaq.com/market-activity/etf/qqq/after-hours')
 // fetchPage('https://example.com')
