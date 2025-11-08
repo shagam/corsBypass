@@ -339,6 +339,41 @@ function stockOptions (app)  {
 }
 
 
+function stockOptionsHistory (app) {
+
+   app.get('/stockOptionsHistory', (req, res) => {
+    console.log ('params', req.query)
+    const log = req.query.log
+
+    var url = 'https://api.marketdata.app/v1/options/quotes/' + req.query.optionSymbol
+    // YYYY-MM-DD&to=YYYY-MM-DD'
+    url += '?from=' + req.query.from + '&to=' + req.query.to;
+    url += '&token=' + TOKEN
+    if (log)
+      console.log (url)
+
+    axios.get (url)
+    .then ((result) => {
+      if (req.query.log)
+        console.log ('historical option data', result.data)
+
+      if (result.data.s !== 'ok') {
+        console.log ( req.query.optionSymbol, 'historical option data fail', result.data.s)
+        res.send ('fail getExpirations exception')
+        return   
+      }
+
+      res.send (result.data)
+    })
+
+    .catch ((err) => {
+      console.log(err.message)
+      res.send ('fail getQuote history exception')
+      return 'fail'
+    })
+
+   })
+}
          
 
 
@@ -367,4 +402,4 @@ function stockOptions (app)  {
 
 
 
-module.exports = {stockOptions};
+module.exports = {stockOptions, stockOptionsHistory};
