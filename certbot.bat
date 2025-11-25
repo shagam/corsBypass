@@ -19,6 +19,8 @@ sudo certbot certonly --manual -d portfolio-chk.xyz --preferred-challenges=dns
 sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net 
 #sudo certbot --manual --preferred-challenges dns certonly -d dinagold.org 
 #sudo certbot --manual --preferred-challenges dns certonly -d portfolio-chk.com 
+#sudo certbot --manual --preferred-challenges dns certonly -d portfolio-chk.xyz
+
 
 # 2024 Mar 4 namecheap/mange/advanced/add a new record
 
