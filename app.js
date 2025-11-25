@@ -89,7 +89,7 @@ if (ssl) {
         cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
       }
       else {
-        url = 'dinagold.org' // 'portfolio-chk.xyz'
+        url = 'portfolio-chk.xyz'
         console.log('Certificate letsEncrypt home test server ' + url)
         key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
         cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
