@@ -83,7 +83,7 @@ if (ssl) {
     if (true) {// letsaencrypt
       var url
       if (onEC2) {
-        url = 'dinagold.net' //'portfolio-chk.com';
+        url = 'portfolio-chk.com';
         console.log('Certificate letsEncrypt EC2 production ' + url)
         key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
         cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
