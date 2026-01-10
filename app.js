@@ -32,6 +32,7 @@ const {stockLists, stockListsFlush} = require ('./src/StockLists')
 const {holdingsMain, holdingArrayFlush} = require('./src/Holdings')
 const {holdingsSchMain, holdingsSchFlush} = require('./src/HoldingsSch')
 const {latestPrice} = require('./src/LatestPrice')
+const {aiLog} = require ('./src/AiLog')
 
 const {gain, gainFlush} = require('./src/Gain')
 const {contact} = require('./src/Contact') 
@@ -226,6 +227,8 @@ latestPrice(app)
 stockOptions(app)
 
 stockOptionsHistory(app)
+
+aiLog (app)
 
 // fetchPage('https://www.nasdaq.com/market-activity/etf/qqq/after-hours')
 // fetchPage('https://example.com')
