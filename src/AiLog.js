@@ -57,7 +57,11 @@ function aiLog (app) {
     else if (req.query.brand==='DeepSeek')
         tokenCountArray[ip].deepSeek += Number(req.query.tokenCount)
     else {
-        res.send ({status: 'fail', err: ' wrong brand'})
+        res.send ( {
+            openAi: tokenCountArray[ip].openAi,
+            deepSeek: tokenCountArray[ip].deepSeek, 
+            status: 'fail',
+            error: 'invalid brand'})
         return;
     }
     tokenCountFlush () 
