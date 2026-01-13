@@ -46,6 +46,13 @@ function aiLog (app) {
 
     console.log ('\n\n' + getDate(), 'aiLog', req.query)
 
+    // read records
+    if (req.query.read) {
+        res.send (tokenCountArray)
+        console.log (tokenCountArray)
+        return;
+    }
+
     const ip = req.query.ip
     if (! tokenCountArray[ip]) {
         tokenCountArray[ip] = {openAi: 0,   deepSeek: 0,}
@@ -66,6 +73,11 @@ function aiLog (app) {
     }
     tokenCountFlush () 
 
+    // save user info
+    tokenCountArray[ip].params = req.query;
+
+
+
     var tokenCount = {
         openAi: tokenCountArray[ip].openAi,
         deepSeek: tokenCountArray[ip].deepSeek, 
@@ -74,7 +86,6 @@ function aiLog (app) {
 
     console.log ('AI returned tokenCounters', tokenCount)
     res.send (tokenCount)
-
 
     return;   
   })
