@@ -71,7 +71,7 @@ const TOKEN = process.env.MARKET_DATA;
      results.expirationArray.length -1 
 
     if (endIndex <  expirationDayIndex || expirationDayIndex < 0){
-      res.send ('fail, to build expirationGroup   index=' + expirationDayInde + 'endIndex='+ endIndex)
+      res.send ('fail, to build expirationGroup   index=' + expirationDayIndex + 'endIndex='+ endIndex)
       console.log ('fail, to build expirationGroup  start=' + expirationDayIndex, 'end=' + endIndex)
       return;
     }
@@ -89,8 +89,11 @@ const TOKEN = process.env.MARKET_DATA;
     }
     // res.send('fail ' + expirationGroup)
     // return
- 
     //** Create strike-group  (list) */
+    if (results.strikeArray.length <= reqGlobal.strikeNum) {
+      res.send ('fail, strikeNum beyond strikeArray')
+      return
+    }
     var strikeGroup = results.strikeArray[results.strikeNum];
     // console.log (results.strikeNum, 'strikeGroup=', strikeGroup) 
     for (let i = 1; i < reqGlobal.strikeCount; i++) {
@@ -98,10 +101,9 @@ const TOKEN = process.env.MARKET_DATA;
         break;
       strikeGroup += ',' + results.strikeArray[results.strikeNum + i]
     }
-    // if (reqGlobal.log) {
-    //   console.log ('__strikeGroup=', strikeGroup) 
-    //   console.log ('expirationGroup=', expirationGroup)
-    // }
+    if (reqGlobal.log) {
+      console.log ('strikeGroup_len=' + strikeGroup.length, 'strikeGroup=' + strikeGroup, 'strikeNum=' + results.strikeNum) 
+    }
     
     var url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
         + expirationGroup
