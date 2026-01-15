@@ -91,7 +91,7 @@ const TOKEN = process.env.MARKET_DATA;
     // return
     //** Create strike-group  (list) */
     if (results.strikeArray.length <= reqGlobal.strikeNum) {
-      res.send ('fail, required strike beyond strikeArray')
+      res.send ('fail, requested strike beyond strikeArray')
       return
     }
     var strikeGroup = results.strikeArray[results.strikeNum];
