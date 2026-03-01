@@ -39,7 +39,7 @@ const {contact} = require('./src/Contact')
 const {userAccess, userArrayFlush, userList} = require('./src/Users') 
 const {futures, futuresFlush} = require('./src/Futures') 
 const {urlGetParse} = require('./src/UrlGetParse')
-const {fetchPage} = require('./src/FetchPage')
+// const {fetchPage} = require('./src/FetchPage')
 const {stockOptions, stockOptionsHistory} = require('./src/StockOptions')
 const {image} = require('./src/Image')
 
