@@ -42,6 +42,7 @@ const {urlGetParse} = require('./src/UrlGetParse')
 // const {fetchPage} = require('./src/FetchPage')
 const {stockOptions, stockOptionsHistory} = require('./src/StockOptions')
 const {image} = require('./src/Image')
+const {polymarket} = require('./src/Polymarket')
 
 const app = express()
 const router = express.Router();
@@ -229,6 +230,8 @@ stockOptions(app)
 stockOptionsHistory(app)
 
 aiLog (app)
+
+polymarket(app)
 
 // fetchPage('https://www.nasdaq.com/market-activity/etf/qqq/after-hours')
 // fetchPage('https://example.com')
