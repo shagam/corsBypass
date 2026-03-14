@@ -13,12 +13,13 @@ function polymarket (app)  {
    
       // var url = "https://gamma-api.polymarket.com/markets"
       // var url = "https://polymarket.com/event/ndx-above-dec-2026"
-      var url = "https://gamma-api.polymarket.com/events?slug=ndx-above-dec-2026&limit=1"
-
-
+      var url = "https://gamma-api.polymarket.com/events?slug=ndx-above-dec-2026&limit=2"
       if (req.query.url)
         url = req.query.url
 
+      var index = 0;
+      if (req.query.index)
+        index = req.query.index
 
      try {
 
@@ -46,7 +47,7 @@ function polymarket (app)  {
           return;
         }
 
-        const event = data[0]
+        const event = data[index]
         // const markets = event.markets
         // console.log('\n\n\n', markets.length)
         
