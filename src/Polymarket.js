@@ -48,6 +48,8 @@ function polymarket (app)  {
         }
 
         const event = data[index]
+        if (req.query.log)
+          console.log (event)
         // const markets = event.markets
         // console.log('\n\n\n', markets.length)
         
@@ -55,9 +57,8 @@ function polymarket (app)  {
             question: market.question,
             slug: market.slug,
             yesPrice: JSON.parse(market.outcomePrices)[0],
-            //yesPrice: market.outcomePrices[0],
-            // noPrice: market.outcomePrices[1],
-            //volume: market.volume
+            noPrice: JSON.parse(market.outcomePrices)[1],
+            volume: market.volume
         }));
 
         // console.log ('\n\n', event.markets)
