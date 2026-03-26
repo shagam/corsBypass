@@ -49,17 +49,28 @@ const router = express.Router();
 
 var metadata = require("node-ec2-metadata");
 
-var port;
+var port = 5000;
+const ssl = true
+var key_; 
+var cert_;
+var url
+
+const isWindows = process.platform === 'win32';
+if (isWindows) {
+  console.log('Express running on Windows');
+  url = 'portfolio-chk.xyz'
+  console.log('Certificate letsEncrypt home test server ' + url)
+  key_ = fs.readFileSync('./localhost-key.pem')
+  cert_= fs.readFileSync('./localhost.pem')
+} else {
+  console.log('Express running on non‑Windows OS');
+}
+
 
 metadata.isEC2().then(function (onEC2) {
 
 
-if (onEC2)
-  port = 5000
-else
-  port = 5000
-
-  console.log("\nRunning on EC2? " + onEC2 + ',  port=' + port + '\n');
+console.log("\nRunning on EC2? " + onEC2 + ',  port=' + port + '\n');
 
 console.log ('\n\n\nip=', process.env.NODE_localIP, port)
 const externalIp = process.env.NODE_localIP // '62.0.90.49'
@@ -74,16 +85,14 @@ const pc_ip = '10.100.102.3'
 // })
 
 
-const ssl = true
-var key_; 
-var cert_;
 
-if (ssl) {
+if (true) {
   var sslServer;
   // if (getLocalIp() == l2_Ip) {
-  if (true) {
-    if (true) {// letsaencrypt
-      var url
+
+
+    if (onEC2) {// letsaencrypt
+
       if (onEC2) {
         url = 'portfolio-chk.com';
         console.log('Certificate letsEncrypt EC2 production ' + url)
@@ -97,18 +106,6 @@ if (ssl) {
         cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
       }
     }
-    else {  // ca  https://www.golinuxcloud.com/create-certificate-authority-root-ca-linux/
-      console.log('certificate local authority')
-        key_ =  fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.key')
-        cert_= fs.readFileSync('/home/eli/react/corsBypass/cert_ca/server.crt')
-    }
-  }
-  else { // certificate local
-    console.log('certificate without authority')
-      key_ = fs.readFileSync(path.join(__dirname, 'cert', 'key.pem'))
-      cert_ = fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
-
-  }
 }
   else {
     console.log('certificate none')
