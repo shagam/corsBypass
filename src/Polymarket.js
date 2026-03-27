@@ -47,8 +47,24 @@ function polymarket (app)  {
           return;
         }
 
+
+        // check response
         const event = data[index]
-        if (req.query.log)
+        if (! event) {
+          const err ="event not found"
+          console.error(getDate(), err);
+          const response = {
+            status: 'fail',
+            message: err
+          }
+          res.send(response)
+          if (req.query.log)
+            console.log (data)
+          return;
+        }
+
+
+        if (req.query.log && event)
           console.log (event)
         // const markets = event.markets
         // console.log('\n\n\n', markets.length)
