@@ -104,7 +104,7 @@ console.log ('AWS_ENV=', process.env.AWS_ENV)
   }
   else if (isEC2) {// letsaencrypt
     url = 'portfolio-chk.com';
-    console.log('Certificate letsEncrypt EC2 production ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
+    console.log('Certificate letsEncrypt EC2 production:  /etc/letsencrypt/live/' + url + '/privkey.pem')
     key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
     cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
   }
