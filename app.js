@@ -85,19 +85,19 @@ console.log ('AWS_ENV=', process.env.AWS_ENV)
   if (isWindows) {
     console.log('\n\nExpress running on Windows');
     url = 'portfolio-chk.xyz'
-    console.log('Certificate letsEncrypt home test server ' + url)
+    console.log('Certificate letsEncrypt home test server ', url, '../localhost-key.pem')
     key_ = fs.readFileSync('../localhost-key.pem')
     cert_= fs.readFileSync('../localhost.pem')
   }
   else if (isEC2) {// letsaencrypt
     url = 'portfolio-chk.com';
-    console.log('Certificate letsEncrypt EC2 production ' + url)
+    console.log('Certificate letsEncrypt EC2 production ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
     key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
     cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
   }
   else {
     url = 'portfolio-chk.xyz'
-    console.log('Certificate letsEncrypt home test server ' + url)
+    console.log('Certificate letsEncrypt home test server ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
     key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
     cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
   }
