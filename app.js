@@ -47,6 +47,19 @@ const {polymarket} = require('./src/Polymarket')
 const app = express()
 const router = express.Router();
 
+
+function ensureFolder(folderPath) {
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
+    console.log ('ensure folder created', folderPath)
+  }
+  else
+    console.log ('ensure folder, already exist', folderPath)
+}
+
+console.log ('\n\n\nnode express server starting...')
+ensureFolder('./txt')
+
 var metadata = require("node-ec2-metadata");
 
 var port = 5000;
