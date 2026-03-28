@@ -47,19 +47,6 @@ const {polymarket} = require('./src/Polymarket')
 const app = express()
 const router = express.Router();
 
-
-function ensureFolder(folderPath) {
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true });
-    console.log ('ensure folder created', folderPath)
-  }
-  else
-    console.log ('ensure folder, already exist', folderPath)
-}
-
-console.log ('\n\n\nnode express server starting...')
-ensureFolder('./txt')
-
 var metadata = require("node-ec2-metadata");
 
 var port = 5000;
@@ -68,51 +55,61 @@ var key_;
 var cert_;
 var url
 
-
 const isWindows = process.platform === 'win32';
+if (isWindows) {
+  console.log('Express running on Windows');
+  url = 'portfolio-chk.xyz'
+  console.log('Certificate letsEncrypt home test server ' + url)
+  key_ = fs.readFileSync('../localhost-key.pem')
+  cert_= fs.readFileSync('../localhost.pem')
+} else {
+  console.log('Express running on non‑Windows OS');
+}
 
 
-console.log ("\n\n\ncheck platform 1", isWindows)
-
-var isEC2 = false
 metadata.isEC2().then(function (onEC2) {
-  isEC2 = onEC2;
-})
 
-console.log("\nRunning on EC2? " + isEC2 + ',  port=' + port + '\n');
 
-// console.log ('\n\n\nlocalIP=', process.env.NODE_localIP, port)
+console.log("\nRunning on EC2? " + onEC2 + ',  port=' + port + '\n');
+
+console.log ('\n\n\nip=', process.env.NODE_localIP, port)
 const externalIp = process.env.NODE_localIP // '62.0.90.49'
 const l2_Ip = '10.100.102.4'
 const pc_ip = '10.100.102.3'
 
 
-console.log ('AWS_ENV=', process.env.AWS_ENV)
+// console.log ('AWS_ENV=', process.env.AWS_ENV)
 
 // app.use('/', (req,res,next) => { 
 //   res.send('hello from ssl server')
 // })
 
-  var sslServer;
 
-  if (isWindows) {
-    console.log('\n\nExpress running on Windows');
-    url = 'portfolio-chk.xyz'
-    console.log('Certificate letsEncrypt home test server ', url, '../localhost-key.pem')
-    key_ = fs.readFileSync('../localhost-key.pem')
-    cert_= fs.readFileSync('../localhost.pem')
-  }
-  else if (isEC2) {// letsaencrypt
-    url = 'portfolio-chk.com';
-    console.log('Certificate letsEncrypt EC2 production:  /etc/letsencrypt/live/' + url + '/privkey.pem')
-    key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
-    cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
-  }
+
+if (true) {
+  var sslServer;
+  // if (getLocalIp() == l2_Ip) {
+
+
+    if (onEC2) {// letsaencrypt
+
+      if (onEC2) {
+        url = 'portfolio-chk.com';
+        console.log('Certificate letsEncrypt EC2 production ' + url)
+        key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
+        cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
+      }
+      else {
+        url = 'portfolio-chk.xyz'
+        console.log('Certificate letsEncrypt home test server ' + url)
+        key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
+        cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
+      }
+    }
+}
   else {
-    url = 'portfolio-chk.xyz'
-    console.log('Certificate letsEncrypt home test server ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
-    key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
-    cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
+    console.log('certificate none')
+    sslServer = app;
   }
 
   console.log ('key', key_)
@@ -304,4 +301,4 @@ process.on('SIGINT', function() {
 })
 
 
-// }); // onEC2
+}); // onEC2
