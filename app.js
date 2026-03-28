@@ -80,13 +80,6 @@ const pc_ip = '10.100.102.3'
 
 // console.log ('AWS_ENV=', process.env.AWS_ENV)
 
-// app.use('/', (req,res,next) => { 
-//   res.send('hello from ssl server')
-// })
-
-
-
-if (true) {
   var sslServer;
   // if (getLocalIp() == l2_Ip) {
 
@@ -95,22 +88,17 @@ if (true) {
 
       if (onEC2) {
         url = 'portfolio-chk.com';
-        console.log('Certificate letsEncrypt EC2 production ' + url)
+        console.log('Certificate letsEncrypt EC2 production ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
         key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
         cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
       }
-      else {
+      else if (! isWindows) {
         url = 'portfolio-chk.xyz'
-        console.log('Certificate letsEncrypt home test server ' + url)
+        console.log('Certificate letsEncrypt home test server ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
         key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
         cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
       }
     }
-}
-  else {
-    console.log('certificate none')
-    sslServer = app;
-  }
 
   console.log ('key', key_)
   console.log ('cert', cert_)
@@ -146,52 +134,9 @@ app.use(
   })
 )
 
-// const stat = app.use('/uploads', express.static('uploads'));
-// app.get('/uploads', (req, res) => {
-//   const imagePath = path.join('/uploads/', req.file.filename); // Adjust path as needed
-//   console.log ('/uploads', 'public', req.file.filename)
-//   res.sendFile(imagePath, (err) => {
-//     if (err) {
-//       console.error('Error sending file:', err, req.file.filename);
-//       res.status(404).send('Image not found');
-//     }
-//   });
-// });
-
-  //  let defaultImage = await fs.readFileSync("public/default.jpg")
-  //   defaultImage = Buffer.from(defaultImage, "base64")
-    
-  //   result.writeHead(200, {
-  //     "Content-Type": "image/jpg",
-  //     "Content-Length": defaultImage.length
-  //   })
-  //   result.end(defaultImage)
-
 
 
 var nowMili = Date.now();
-
-// function getDate() {
-//   const today = new Date();
-//   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-//   var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-//   // var formattedDate = format(date, "yyyy-MMM-dd HH:mm");
-//   return date + " " + time;
-// }
-
-
-// app.get('/', (req, res) => {
-//   // res.send('root')
-//   root(req, res)
-// })
-
-// app.get('/userTest', (req, res) => {
-//   userTest(req, res)
-// })
-
-// app.get('/user', (req, res) => {
-//   user(req, res)
-// })
 
 
 //============================================================================
