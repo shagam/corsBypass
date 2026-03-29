@@ -101,21 +101,21 @@ const pc_ip = '10.100.102.3'
   // if (getLocalIp() == l2_Ip) {
 
 
-    if (onEC2) {// letsaencrypt
 
-      if (onEC2) {
-        url = 'portfolio-chk.com';
-        console.log('Certificate letsEncrypt EC2 production ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
-        key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
-        cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
-      }
-      else if (! isWindows) {
-        url = 'portfolio-chk.xyz'
-        console.log('Certificate letsEncrypt home test server ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
-        key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
-        cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
-      }
+
+    if (onEC2) {
+      url = 'portfolio-chk.com';
+      console.log('Certificate letsEncrypt EC2 production ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
+      key_ =  fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
+      cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
     }
+    else if (! isWindows) {
+      url = 'portfolio-chk.xyz'
+      console.log('Certificate letsEncrypt home test server ', '/etc/letsencrypt/live/' + url + '/privkey.pem')
+      key_ = fs.readFileSync('/etc/letsencrypt/live/' + url + '/privkey.pem')
+      cert_= fs.readFileSync('/etc/letsencrypt/live/' + url + '/fullchain.pem')
+    }
+
 
   console.log ('key', key_)
   console.log ('cert', cert_)
