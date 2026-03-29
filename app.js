@@ -55,6 +55,23 @@ var key_;
 var cert_;
 var url
 
+const os = require('os');
+function getLocalIP() {
+  const interfaces = os.networkInterfaces();
+
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      // Skip internal (127.0.0.1) and non-IPv4
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+}
+
+console.log ('local ip=', getLocalIP())
+
 const isWindows = process.platform === 'win32';
 if (isWindows) {
   console.log('Express running on Windows');
