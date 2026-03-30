@@ -36,6 +36,7 @@ fs.readFile('txt/holdingsArray.txt', 'utf8', (err, data) => {
     }
     console.log (symbols)
   }
+  holdingArrayFlush()
   // for (var i = 0; i < keys.length; i++)
   //   console.log (keys[i])
 });
