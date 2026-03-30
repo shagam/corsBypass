@@ -1,0 +1,1 @@
+{"79.177.160.128":{"openAi":12,"deepSeek":0,"params":{"record":"true","stock":"MSFT","brand":"OpenAI","model":"gpt-5-nano","ip":"79.177.160.128","city":"Tel Aviv","countryName":"IL","countryCode":"undefined","regionName":"Tel Aviv","tokenCount":"6","log":"true"}}}
