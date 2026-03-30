@@ -69,6 +69,12 @@ const TOKEN = process.env.MARKET_DATA;
 
     const endIndex = expirationDayIndex  + count < results.expirationArray.length ? expirationDayIndex  + count - 1 :
      results.expirationArray.length -1 
+    
+     if (!TOKEN) {
+      res.send ('fail, missing tolen. check .env')
+      console.log ('fail,  missing tolen. check .env')
+      return;
+     }
 
     if (endIndex <  expirationDayIndex || expirationDayIndex < 0){
       res.send ('fail, to build expirationGroup   index=' + expirationDayIndex + 'endIndex='+ endIndex)
