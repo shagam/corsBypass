@@ -26,11 +26,20 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
   //     console.log ('\n', keys[i], JSON.stringify (holdingsArray[keys[i]]))
   // else {
     var symbols ="";
-    for (var i = 0; i < keys.length; i++)
+    for (var i = 0; i < keys.length; i++) {
+      if (Date.now() - holdingsArray[keys[i]].updateMili > 500 * 24 * 3600 * 1000) {
+        console.log ('delete  ', keys[i], 'days=', ((Date.now() - holdingsArray[keys[i]].updateMili) / (24 * 3600 * 1000)).toFixed(0))
+        delete holdingsArray[keys[i]]
+        continue;
+      }
+
       if (holdingsArray[keys[i]])
         symbols += keys[i] +' (' + JSON.stringify (holdingsArray[keys[i]]).length + ')  '
       else
         console.log(' holdingsSch mismatch', keys[i])
+    }
+    holdingsSchFlush();
+    console.log ('holdingArray count after purge', Object.keys(holdingsArray).length)
     console.log (symbols)
   // }
   // for (var i = 0; i < keys.length; i++)
@@ -40,8 +49,8 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
 
 var writeCount = 0;
 function holdingsSchFlush() {
-  if (Object.keys(holdingsArray).length === 0) // avoid write of empty
-    return;
+  // if (Object.keys(holdingsArray).length === 0) // avoid write of empty
+  //   return;
   fs.writeFile ('txt/holdingsArraySch.txt', JSON.stringify(holdingsArray), err => {
     if (err) {
       console.log(getDate(), 'txt/holdingsArraySch.txt write fail', err.message)
