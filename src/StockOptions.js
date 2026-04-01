@@ -37,7 +37,7 @@ fs.readFile(FILE_NAME, 'utf8', (err, data) => {
 
 
 function stockOptionArrayFlush() {
-  if (Object.keys(stockOptionArray).length === 0) // avoid write of empty
+  if (true || Object.keys(stockOptionArray).length === 0) // avoid write of empty
     return;
 
   fs.writeFile (FILE_NAME, JSON.stringify(stockOptionArray), err => {
