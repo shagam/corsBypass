@@ -34,7 +34,7 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
   }
   else {
       var symbols = "";
-      console.log ('splits count before purge', Object.keys(priceArray).length)
+      // console.log ('priceArray count before purge', Object.keys(priceArray).length)
       for (var i = 0; i < keys.length; i++) {
         console.log (keys[i], 'age days=' + ((Date.now() - priceArray[keys[i]].updateMili) / (24 * 3600 * 1000)).toFixed(0))
         if (! priceArray[keys[i]].updateMili || Date.now() - priceArray[keys[i]].updateMili > 20 * 24 * 3600 * 1000) {
@@ -44,7 +44,7 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
           symbols += keys[i] + '  '
         }
       }
-      console.log ('splits count after purge', Object.keys(priceArray).length)
+      console.log ('priceArray count after purge', Object.keys(priceArray).length)
       console.log(symbols)
       historicPriceFlush () 
   }
