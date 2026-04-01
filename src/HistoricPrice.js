@@ -36,6 +36,11 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
       var symbols = "";
       // console.log ('priceArray count before purge', Object.keys(priceArray).length)
       for (var i = 0; i < keys.length; i++) {
+        if (! priceArray[keys[i]].updateMili) {
+          console.log (keys[i], 'missing updateMili')
+          delete priceArray[keys[i]]
+          continue
+        }
         console.log (keys[i], 'age days=' + ((Date.now() - priceArray[keys[i]].updateMili) / (24 * 3600 * 1000)).toFixed(0))
         if (! priceArray[keys[i]].updateMili || Date.now() - priceArray[keys[i]].updateMili > 20 * 24 * 3600 * 1000) {
           console.log (keys[i], 'age days=' + ((Date.now() - priceArray[keys[i]].updateMili) / (24 * 3600 * 1000)).toFixed(0), 'delete')
