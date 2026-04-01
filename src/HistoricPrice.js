@@ -34,16 +34,26 @@ fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
   }
   else {
       var symbols = "";
-      for (var i = 0; i < keys.length; i++)
-        symbols += keys[i] + '  '
+      console.log ('splits count before purge', Object.keys(priceArray).length)
+      for (var i = 0; i < keys.length; i++) {
+        console.log (keys[i], 'age days=' + ((Date.now() - priceArray[keys[i]].updateMili) / (24 * 3600 * 1000)).toFixed(0))
+        if (! priceArray[keys[i]].updateMili || Date.now() - priceArray[keys[i]].updateMili > 20 * 24 * 3600 * 1000) {
+          console.log (keys[i], 'age days=' + ((Date.now() - priceArray[keys[i]].updateMili) / (24 * 3600 * 1000)).toFixed(0), 'delete')
+          delete priceArray[keys[i]]
+          continue;     
+          symbols += keys[i] + '  '
+        }
+      }
+      console.log ('splits count after purge', Object.keys(priceArray).length)
       console.log(symbols)
+      historicPriceFlush () 
   }
 });
 
 var writeCount = 0
 function historicPriceFlush () {
-  if (Object.keys(priceArray).length === 0) // avoid write of empty
-    return;
+  // if (Object.keys(priceArray).length === 0) // avoid write of empty
+  //   return;
   fs.writeFile ('txt/priceArray.txt', JSON.stringify (priceArray), err => {
     if (err) {
       console.log (getDate(), 'txt/priceArray.txt write fail', err)
