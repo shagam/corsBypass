@@ -10,6 +10,20 @@ const date = getDate();
 
 var lastWriteMili;
 
+    // if too many remove some
+function removeExtra (stock) {
+    const LIMIT = 5;
+    if (targetArray[stock].length > LIMIT) {
+        // thin too many
+        for (let i = 1; i < LIMIT - 2; i += 3) {
+            console.log ('remove extra ', stock, 'x', '\x1b[36m remove extra \x1b[0m,', i, targetArray[stock][i])
+            console.log (targetArray[stock][i])
+            targetArray[stock].splice(i)
+        }
+    }
+}
+
+
 // read gain from local file once on startup
 fs.readFile('txt/target.txt', 'utf8', (err, data) => {
   if (err) {
@@ -21,10 +35,13 @@ fs.readFile('txt/target.txt', 'utf8', (err, data) => {
   console.log('\n', getDate(), 'txt/target.txt  read count=', keys.length)
 
     var symbols = "";
-    for (var i = 0; i < keys.length; i++)
+    for (var i = 0; i < keys.length; i++) {
     //   console.log (JSON.stringify (target[keys[i]]))
         symbols += keys[i] + ' (' + targetArray[keys[i]].length + ')  '
+        removeExtra (keys[i])
+    }
     console.log(symbols)
+    targetPriceFlush () 
 });
 
 var readCount, writeCounter;
@@ -142,14 +159,7 @@ function targetPrice (app)  {
             }
            
             // if too many remove some
-            const LIMIT = 9;
-            if (targetArray[stock].length > LIMIT) {
-                // thin too many
-                for (let i = 1; i < LIMIT - 2; i += 3) {
-                    console.log (stock, 'x', '\x1b[36m remove extra \x1b[0m,', i, targetArray[stock][i])
-                    targetArray[stock].splice(i)
-                }
-            }
+            removeExtra(stock)
             // print
             // console.log(getDate(), stock, 'list', target[stock].length)
             // for (let i = 0; i < target[stock].length; i++) {
