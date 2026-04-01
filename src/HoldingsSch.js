@@ -39,7 +39,7 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
         console.log(' holdingsSch mismatch', keys[i])
     }
     holdingsSchFlush();
-    console.log ('holdingArray count after purge', Object.keys(holdingsArray).length)
+    console.log ('holdingArraySch count after purge', Object.keys(holdingsArray).length)
     console.log (symbols)
   // }
   // for (var i = 0; i < keys.length; i++)
