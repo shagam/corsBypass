@@ -16,27 +16,41 @@ fs.readFile('txt/splitsArray.txt', 'utf8', (err, data) => {
   }
   splitsArray = JSON.parse(data);
   const keys = Object.keys(splitsArray);
+  console.log (keys.length)
   console.log('\n', getDate(), 'txt/splitArray.txt  read count=', keys.length)
   if (print_textFiles)
     for (var i = 0; i < keys.length; i++)
       console.log ('\n', keys[i], JSON.stringify (splitsArray[keys[i]]))
   else {
     var symbols ="";
-    for (var i = 0; i < keys.length; i++)
+    console.log ('splits count before purge', Object.keys(splitsArray).length)
+    for (var i = 0; i < keys.length; i++) {
+      console.log (keys[i], 'age days=' + ((Date.now() - splitsArray[keys[i]][0].updateMili) / (24 * 3600 * 1000)).toFixed(0))
+      // console.log (keys[i], Date.now(), splitsArray[keys[i]][0].updateMili, )
+      if (! splitsArray[keys[i]][0].updateMili || Date.now() - splitsArray[keys[i]][0].updateMili > 100 * 24 * 3600 * 1000) {
+        console.log (keys[i], 'age days=' + ((Date.now() - splitsArray[keys[i]][0].updateMili) / (24 * 3600 * 1000)).toFixed(0), 'delete')
+        delete splitsArray[keys[i]]
+        continue;
+      }
+
       if (splitsArray[keys[i]])
-      symbols += keys[i] + ' (' + splitsArray[keys[i]].length + ')  ';
+        symbols += keys[i] + ' (' + splitsArray[keys[i]].length + ')  ';
       else 
         console.log ('splitsArray mismatch', keys[i]) 
+    }
+    console.log ('splits count after purge', Object.keys(splitsArray).length)
+    splitArrayFlush()
     console.log (symbols)
   }
+
   // for (var i = 0; i < keys.length; i++)
   //   console.log (keys[i])
 });
 
 var writeCount = 0;
 function splitArrayFlush() {
-  if (Object.keys(splitsArray).length === 0) // avoid write of empty
-    return;
+  // if (Object.keys(splitsArray).length === 0) // avoid write of empty
+  //   return;
 
   fs.writeFile ('txt/splitsArray.txt', JSON.stringify(splitsArray), err => {
     if (err) {
@@ -163,17 +177,18 @@ function splitsGet (app) {
         splits.push(oneSplit);
   
       };
-  
+
       if (splits.length == 1) {
         console.log ('\n', req.query.stock, getDate(), '\x1b[33m no splits\x1b[0m count=', Object.keys(splitsArray).length) 
       }
       else
         if (LOG)
-        console.log ('\n', req.query.stock, getDate(), 'splits:', Object.keys(splitsArray).length, splits)
+        console.log ('\n', req.query.stock, getDate(), 'splits count:', Object.keys(splitsArray).length, splits)
       
       // save local split
       splitsArray [req.query.stock] = splits;
-      // console.dir (splitsArray)
+      // if (LOG)
+      // console.dir (splits)
   
       if (writeCount % 1 === 0)  // write every time
         splitArrayFlush()
