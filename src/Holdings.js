@@ -29,7 +29,7 @@ fs.readFile('txt/holdingsArray.txt', 'utf8', (err, data) => {
     for (var i = 0; i < keys.length; i++){
       if (Date.now() - holdingsArray[keys[i]].updateMili > 3 * 24 * 3600 * 1000) {
         delete holdingsArray[keys[i]]
-        console.log ('delete  ', keys[i], )
+        console.log ('delete  ', keys[i], 'days=', (Date.now() - holdingsArray[keys[i]].updateMili) / (24 * 3600 * 1000).toFixed(0))
         continue;
       }
        symbols += keys[i] +' (' + JSON.stringify (holdingsArray[keys[i]]).length + ')  '
