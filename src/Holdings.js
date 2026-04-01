@@ -34,9 +34,11 @@ fs.readFile('txt/holdingsArray.txt', 'utf8', (err, data) => {
       }
        symbols += keys[i] +' (' + JSON.stringify (holdingsArray[keys[i]]).length + ')  '
     }
+    holdingArrayFlush();
+    console.log ('holdingArray count after purge', Object.keys(holdingsArray).length)
     console.log (symbols)
   }
-  holdingArrayFlush()
+
   // for (var i = 0; i < keys.length; i++)
   //   console.log (keys[i])
 });
@@ -77,8 +79,8 @@ function parse_0 (stocks, percent, text, percentRegex, LOG) {
 
 var writeCount = 0
 function holdingArrayFlush () {
-  if (Object.keys(holdingsArray).length === 0) // avoid write of empty
-    return;
+  // if (Object.keys(holdingsArray).length === 0) // avoid write of empty
+  //   return;
   fs.writeFile ('txt/holdingsArray.txt', JSON.stringify(holdingsArray), err => {
     if (err) {
       console.err(getDate(), 'txt/holdingsArray.txt write fail', err)
