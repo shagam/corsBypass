@@ -11,18 +11,45 @@ var compareStatus;
 
 // read from local file once on startup
 var stockOptionArray = {};    // saved one obj per stock
-
-
-function purgeOld () {
-  const keys = Object.keys (stockOptionArray)
-  for (let i = 0; i < keys.length; i++) {
-    if (Date.now () - stockOptionArray[keys[i]].updateMili > 30 * 60 * 1000) {
-      console.log ('delete old option', keys[i])
-      delete stockOptionArray[keys[i]]
-    }
+fs.readFile(FILE_NAME, 'utf8', (err, data) => {
+  if (err) {
+    console.error (err)
+    return;
   }
-  console.log ('keys after purge old', 'keys=', Object.keys(stockOptionArray).length, Object.keys(stockOptionArray))
+  if (data === undefined)
+    stockOptionArray == {}
+  else
+    stockOptionArray = JSON.parse(data);
+
+  const keys = Object.keys(stockOptionArray);
+  console.log('\n', getDate(), FILE_NAME, '  read count=', keys.length)
+  if (log && false)
+    for (var i = 0; i < keys.length; i++)
+      console.log ('\n', keys[i])// JSON.stringify (stockOptionArray[keys[i]]))
+  else {
+    var symbols ="";
+    for (var i = 0; i < keys.length; i++)
+      symbols += keys[i] + '  ' // +' (' + JSON.stringify (stockOptionArray[keys[i]]).length + ')  '
+    console.log (symbols)
+  }
+});
+
+
+
+function stockOptionArrayFlush() {
+  if (Object.keys(stockOptionArray).length === 0) // avoid write of empty
+    return;
+
+  fs.writeFile (FILE_NAME, JSON.stringify(stockOptionArray), err => {
+    if (err) {
+      console.log (getDate(), FILE_NAME, ' write fail', err)
+    }
+    else
+      console.log ('\n'+getDate(), FILE_NAME , ' write, sym count=', Object.keys(stockOptionArray).length)
+  }) 
 }
+
+
 
 var results = {}
 var reqGlobal;
@@ -112,8 +139,8 @@ const TOKEN = process.env.MARKET_DATA;
       if (reqGlobal.log)
         console.log ('send new results', results)
       results.compareStatus = compareStatus;
-      // purgeOld () 
       stockOptionArray [reqGlobal.stock] = results; //save results
+      stockOptionArrayFlush()
       res.send (results)
 
      })
@@ -205,7 +232,7 @@ function expirationsGet (res) {
         // search expration (days-to-expire)
         var expirationDayIndex = -1;
         const todayDays = new Date().getTime() / 1000 / 3600 / 24
-           console.log ('today=' + todayDays.toFixed(0))
+           console.log ('today=' + todayDays)
         for (let i = 0; i < results.expirationArray.length; i++) {
           const expirationDays = new Date(results.expirationArray[i]).getTime() / 1000 / 3600 / 24
           if (reqGlobal.logExtra)
@@ -315,8 +342,7 @@ function stockOptions (app)  {
     }
     console.log ('\ncompareStatus=', compareStatus)
     expirationsGet (res)
-    // console.log ('keys=', Object.keys(stockOptionArray))
-    purgeOld()
+
   })
 }
 
