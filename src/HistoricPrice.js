@@ -21,8 +21,8 @@ var priceArray = {};   // saved one obj per stock
 
 // read price from local file once on startup
 fs.readFile('txt/priceArray.txt', 'utf8', (err, data) => {
-  if (err) {
-    console.error (err)
+  if (err || data.length === 0) {
+    console.error ('txt/priceArray.txt  read err', err)
     return;
   }
   priceArray = JSON.parse(data);

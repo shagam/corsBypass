@@ -14,7 +14,7 @@ fs.readFile('txt/holdingsArraySch.txt', 'utf8', (err, data) => {
     console.error (err)
     return;
   }
-  if (data === undefined)
+  if (data === undefined || data.length === 0)
     holdingsArray == []
   else
     holdingsArray = JSON.parse(data);
