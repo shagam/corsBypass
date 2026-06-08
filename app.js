@@ -70,8 +70,11 @@ function getLocalIP() {
   return 'localhost';
 }
 
-console.log ('local ip=', getLocalIP())
-
+console.log ('local ip==', getLocalIP())
+if (getLocalIP() === '192.168.7.8') {
+  port = 5001;
+  console.log ('port=' + port)
+}
 const isWindows = process.platform === 'win32';
 if (isWindows) {
   console.log('\nExpress running on Windows');
