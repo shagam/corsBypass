@@ -77,7 +77,27 @@ if (getLocalIP() === '192.168.7.8') {
 else if (getLocalIP() === '192.168.7.6') {
   port = 5002;
 }
-console.log ('port=' + port)
+
+
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // write to file, send to monitoring, etc.
+  process.exit(1); // exit without restart
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection:', reason);
+  process.exit(1);
+});
+
+process.on('SIGTERM', () => {
+  console.log('Received SIGTERM');
+  process.exit(0);
+});
+
+
+console.log ('local ip=', getLocalIP())
 
 const isWindows = process.platform === 'win32';
 if (isWindows) {
