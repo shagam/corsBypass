@@ -109,7 +109,7 @@ const TOKEN = process.env.MARKET_DATA;
       results.premiumArray = result.data
       results.req = reqGlobal // to campare params for similar request
       results.updateMili = Date.now() // avoid too frequent access
-      if (reqGlobal.log)
+      if (reqGlobal.logExtra)
         console.log ('send new results', results)
       results.compareStatus = compareStatus;
       // purgeOld () 
@@ -163,7 +163,7 @@ const TOKEN = process.env.MARKET_DATA;
           // console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
 
           results.strikeNum = i // send back to client
-          if (reqGlobal.log)
+          // if (reqGlobal.log)
             console.log ('found strike=' + arr[i], 'requiredStrike=' + requiredStrike.toFixed(2), 'index=' + i, 'percentAbovePrice=' + reqGlobal.strikeNum)
           break;
         }
@@ -208,8 +208,10 @@ function expirationsGet (res) {
            console.log ('today=' + todayDays.toFixed(0))
         for (let i = 0; i < results.expirationArray.length; i++) {
           const expirationDays = new Date(results.expirationArray[i]).getTime() / 1000 / 3600 / 24
-          if (reqGlobal.logExtra)
-            console.log (i, 'today=' + todayDays.toFixed(2), results.expirationArray[i],  'expirationDays=' + expirationDays)
+          if (reqGlobal.log)
+            console.log (i, 'today=' + todayDays.toFixed(0), results.expirationArray[i], 
+           'expirationDays=' + expirationDays, 'expirationNum=' + reqGlobal.expirationNum,
+            'diff=', (expirationDays - todayDays).toFixed(0))
           if (expirationDays > todayDays + Number(reqGlobal.expirationNum)) {
             expirationDayIndex = i;  // found requre expiration
             break;
