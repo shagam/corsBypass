@@ -207,7 +207,7 @@ function expirationsGet (res) {
         const todayDays = new Date().getTime() / 1000 / 3600 / 24
            console.log ('today=' + todayDays.toFixed(0))
         for (let i = 0; i < results.expirationArray.length; i++) {
-          const expirationDays = new Date(results.expirationArray[i]).getTime() / 1000 / 3600 / 24
+          const expirationDays = (new Date(results.expirationArray[i]).getTime() / 1000 / 3600 / 24 - todayDays).toFixed(0)
           if (reqGlobal.log)
             console.log (i, 'today=' + todayDays.toFixed(0), results.expirationArray[i], 
            'expirationDays=' + expirationDays, 'expirationNum=' + reqGlobal.expirationNum,
