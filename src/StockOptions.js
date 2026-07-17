@@ -73,15 +73,16 @@ const TOKEN = process.env.MARKET_DATA;
       res.send ('fail, requested strike beyond strikeArray')
       return
     }
-    var strikeGroup = results.strikeArray[results.strikeNum];
-    // console.log (results.strikeNum, 'strikeGroup=', strikeGroup) 
+    var strikeGroup = results.strikeArray[results.strikeIndex];
+    if (reqGlobal.log) 
+      console.log ('strikeGroup', results.strikeIndex, 'strikeGroup=', strikeGroup) 
     for (let i = 1; i < reqGlobal.strikeCount; i++) {
-      if (results.strikeNum + i >= results.strikeArray.length)
+      if (results.strikeIndex + i >= results.strikeArray.length)
         break;
-      strikeGroup += ',' + results.strikeArray[results.strikeNum + i]
+      strikeGroup += ',' + results.strikeArray[results.strikeIndex + i]
     }
     if (reqGlobal.log) {
-      console.log ('strikeGroup_len=' + strikeGroup.length, 'strikeGroup=' + strikeGroup, 'strikeNum=' + results.strikeNum) 
+      console.log ('strikeGroup_len=' + strikeGroup.length, 'strikeGroup=' + strikeGroup, 'strikeIndex=' + results.strikeIndex) 
     }
     
     var url = 'https://api.marketdata.app/v1/options/chain/'+ reqGlobal.stock 
@@ -148,7 +149,7 @@ const TOKEN = process.env.MARKET_DATA;
 
       const arr = result.data[expirationsArray[expirationDayIndex]]
       if(reqGlobal.log)
-        console.log ('strike-array', 'date=' + expirationsArray[expirationDayIndex],  arr)
+        console.log ('strike-array', 'date=' + expirationsArray[expirationDayIndex], ' len=' + arr.length, arr)
       results.strikeArray = arr
       //if (reqGlobal.logExtra)
         results.strikeFull = result.data // for debug
@@ -162,7 +163,7 @@ const TOKEN = process.env.MARKET_DATA;
           // if (reqGlobal.log)
           // console.log (reqGlobal.stock, 'search strikeNum', reqGlobal.strikeNum, i, arr[i] > reqGlobal.stockPrice)
 
-          results.strikeNum = i // send back to client
+          results.strikeIndex = i // send back to client
           // if (reqGlobal.log)
             console.log ('found strike=' + arr[i], 'requiredStrike=' + requiredStrike.toFixed(2), 'index=' + i, 'percentAbovePrice=' + reqGlobal.strikeNum)
           break;
