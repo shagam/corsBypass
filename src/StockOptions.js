@@ -323,6 +323,7 @@ function stockOptions (app)  {
       //   savedOption = undefined;
       // }
     }
+    compareStatus  = ''
     console.log ('\ncompareStatus=', compareStatus)
     expirationsGet (res)
     // console.log ('keys=', Object.keys(stockOptionArray))
