@@ -258,6 +258,12 @@ function checkSame (req1, savedOption) {
     compareStatus = 'get fresh. strikeNum diff'
     return false;
   }
+  // prepare to replace strikeNum
+  if (req1.strike != req2.strike) {
+    compareStatus = 'get fresh. strike diff'
+    return false;
+  }
+
   if (req1.strikeCount != req2.strikeCount) {
     compareStatus = 'get fresh. expirationCount diff'
     return false;
