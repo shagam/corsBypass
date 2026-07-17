@@ -74,4 +74,6 @@ dir ~/.pm2/logs/*
 tail  /home/eli/.pm2/logs/corsBypass-out.log
 tail  /home/eli/.pm2/logs/corsBypass-error.log
 sudo node app.js > log 2>&1 &
+git checkout main
+git stash
 
