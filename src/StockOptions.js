@@ -211,8 +211,9 @@ function expirationsGet (res) {
           if (reqGlobal.log)
             console.log (i, 'today=' + todayDays.toFixed(0), results.expirationArray[i], 
            'expirationDays=' + expirationDays, 'expirationNum=' + reqGlobal.expirationNum,
-            'diff=', (expirationDays - todayDays).toFixed(0))
-          if (expirationDays > todayDays + Number(reqGlobal.expirationNum)) {
+            'diff=', expirationDays)
+          if (expirationDays >  Number(reqGlobal.expirationNum)) {
+            console.log(getDate(), 'expirationDayIndex=' + i)
             expirationDayIndex = i;  // found requre expiration
             break;
           }
