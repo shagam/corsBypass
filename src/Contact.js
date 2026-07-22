@@ -4,17 +4,18 @@ const {getDate} = require ('./Utils')
 const fs = require ('fs')
 const nodemailer = require ('nodemailer')
 
+var mailList = [];
 
-// fs.readFile('txt/mailList.txt', 'utf8', (err, data) => {
-//   if (err) {
-//     mailList = [];
-//     console.log(getDate(), ' faile read mailList.txt')
-//   }
-//   if (data)
-//     mailList = JSON.parse(data);
+fs.readFile('txt/mailList.txt', 'utf8', (err, data) => {
+  if (err) {
+    mailList = [];
+    console.log(getDate(), ' faile read mailList.txt')
+  }
+  if (data)
+    mailList = JSON.parse(data);
 
-//   console.log('\n', getDate(), 'txt/mailList.txt  count=', mailList.length)
-// });
+  console.log('\n', getDate(), 'txt/mailList.txt  count=', mailList.length)
+});
 
 
 function contact (app)  {
@@ -100,7 +101,10 @@ function contact (app)  {
         }
         try {
             await transporter.sendMail({ from: process.env.ELI_EMAIL, to: process.env.ELI_EMAIL, 
-                subject: "ShareCompare  contactUs", text: message_stringified });
+                subject: "ShareCompare  contactUs", text: message_stringified,
+                attachments:[ {filename: "request.json", content: message_stringified}]
+             }                
+            );
             console.log ('ShareCompare email msg sent')
             res.send({ success: true });
         } catch (err) {
@@ -145,22 +149,22 @@ function contact (app)  {
         //         console.log('txt/contact.txt write, ')
         // })
 
-        // add email to mailList
-        // if (req.query.mailList) {
-        //     if (! mailList.includes(req.query.email)) {
-        //         mailList.push(req.query.email)
-        //         fs.writeFile ('txt/mailList.txt', JSON.stringify (mailList), err => {
-        //             if (err) {
-        //                 console.log (getDate(), 'txt/mailList.txt write fail', err)
-        //             }
-        //             else
-        //                 console.log (getDate(), 'txt/mailList.txt', mailList )
-        //         })
-        //     }
-        //     else
-        //         console.log ('MailList already in')
-        // }
-        // console.log ('MailList', mailList)
+        //add email to mailList
+        if (req.query.mailList) {
+            if (! mailList.includes(req.query.email)) {
+                mailList.push(req.query.email)
+                fs.writeFile ('txt/mailList.txt', JSON.stringify (mailList), err => {
+                    if (err) {
+                        console.log (getDate(), 'txt/mailList.txt write fail', err)
+                    }
+                    else
+                        console.log (getDate(), 'txt/mailList.txt', mailList )
+                })
+            }
+            else
+                console.log ('MailList already in')
+        }
+        console.log ('MailList', mailList)
         //  main(req.query.name, req.query.email, html)
         //  .catch(e => console.log('send fail', e))
          
