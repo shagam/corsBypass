@@ -136,7 +136,7 @@ function contact (app)  {
             ip: req.query.ip, city: req.query.city, region: req.query.region, country: req.query.country, os: req.query.os,
             text: "       " + req.query.text}
 
-        sendMail (res, JSON.stringify (msg), LOG)
+        sendMail (res, JSON.stringify (msg, null, 2))
 
         if (LOG)
             console.log ('contactObj:', msg)
