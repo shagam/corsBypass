@@ -122,7 +122,7 @@ function contact (app)  {
 
         var lineArrBeutify = '\n\n' 
         for (let i = 0; i < lineArray.length; i++)
-            lineArrBeutify += '\n' + lineArray[i]
+            lineArrBeutify += '\n\n' + lineArray[i]
         return (lineArrBeutify)
     }
 
