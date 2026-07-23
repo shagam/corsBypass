@@ -114,6 +114,17 @@ function contact (app)  {
     }
 
 
+    function splitLines (text) {
+        if (Array.isArray(text)) 
+        return text;
+        const lineArray = text.split('_NL_')
+        // console.log (lineArray)
+
+        var lineArrBeutify = '\n\n' 
+        for (let i = 0; i < lineArray.length; i++)
+            lineArrBeutify += '\n' + lineArray[i]
+        return (lineArrBeutify)
+    }
 
 
 
@@ -134,9 +145,10 @@ function contact (app)  {
         const msg = {date: getDate(), mili: Date.now(), name: req.query.name, email: req.query.email, 
             // ip: req.query.ip,
             ip: req.query.ip, city: req.query.city, region: req.query.region, country: req.query.country, os: req.query.os,
-            text: "       " + req.query.text}
+            // text: "       " + splitLines(req.query.text)
+            }
 
-        sendMail (res, JSON.stringify (msg, null, 2))
+        sendMail (res, JSON.stringify (msg, null, 2) + '\n\ntext' + splitLines(req.query.text))
 
         if (LOG)
             console.log ('contactObj:', msg)
