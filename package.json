@@ -34,7 +34,7 @@
     "netlify-lambda": "^2.0.16",
     "node-ec2-metadata": "^0.0.5",
     "node-fetch": "^3.2.6",
-    "nodemailer": "^6.9.13",
+    "nodemailer": "^6.10.1",
     "openssl": "^2.0.0",
     "os": "^0.1.2",
     "pm2": "^5.3.1",
