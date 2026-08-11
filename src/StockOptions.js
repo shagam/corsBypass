@@ -207,7 +207,16 @@ function expirationsGet (res) {
         // search expration (days-to-expire)
         var expirationDayIndex = -1;
         const todayDays = new Date().getTime() / 1000 / 3600 / 24
-           console.log ('today=' + todayDays.toFixed(0))
+        console.log ('today=' + todayDays.toFixed(0))
+
+        if (reqGlobal.expirationNum == -11) {
+          expirationDayIndex = results.expirationArray.length -1;
+          console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
+        }
+        else if (reqGlobal.expirationNum == -12) {
+          expirationDayIndex = results.expirationArray.length -2;
+          console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
+        } else
         for (let i = 0; i < results.expirationArray.length; i++) {
           const expirationDays = (new Date(results.expirationArray[i]).getTime() / 1000 / 3600 / 24 - todayDays).toFixed(0)
           if (reqGlobal.log)
