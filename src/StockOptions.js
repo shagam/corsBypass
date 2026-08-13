@@ -147,6 +147,14 @@ const TOKEN = process.env.MARKET_DATA;
       if (result.data.s !== 'ok') {
         console.log (reqGlobal.stock, 'strike-price error', result.data.s)
       }
+      if (reqGlobal.expir_last) {
+        expirationDayIndex = results.expirationArray.length -1;
+        console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
+      }
+      else if (reqGlobal.expir_oneBeforeLast) {
+        expirationDayIndex = results.expirationArray.length -2;
+        console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
+      }
 
       const arr = result.data[expirationsArray[expirationDayIndex]]
       if(reqGlobal.log)
@@ -209,11 +217,11 @@ function expirationsGet (res) {
         const todayDays = new Date().getTime() / 1000 / 3600 / 24
         console.log ('today=' + todayDays.toFixed(0))
 
-        if (reqGlobal.expirationNum == -11) {
+        if (reqGlobal.expir_last || reqGlobal.expirationNum == -11) {
           expirationDayIndex = results.expirationArray.length -1;
           console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
         }
-        else if (reqGlobal.expirationNum == -12) {
+        else if (reqGlobal.expir_oneBeforeLast || reqGlobal.expirationNum == -12) {
           expirationDayIndex = results.expirationArray.length -2;
           console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
         } else
