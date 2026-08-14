@@ -262,6 +262,8 @@ function expirationsGet (res) {
 
 
 function checkSame (req1, savedOption) {
+  compareStatus = 'default same'
+    // console.log('checkSame compareStatus5=', compareStatus)
   if (reqGlobal.logExtra)
     console.log (Object.keys(savedOption))
 
@@ -294,6 +296,17 @@ function checkSame (req1, savedOption) {
     return false;
   }
 
+  if (req1.expir_last != req2.expir_last) {
+    compareStatus = 'get fresh. expir_last diff'
+    return false;
+  }
+
+  if (req1.expir_oneBeforeLast!= req2.expir_oneBeforeLast) {
+    compareStatus = 'get fresh. expir_oneBeforeLast diff'
+    return false;
+  }
+
+
   // check for fresh data
   const nowMili = Date.now();
   const diff = (nowMili - savedOption.updateMili) / 1000   // diff in seconds;
@@ -312,7 +325,7 @@ function checkSame (req1, savedOption) {
 function stockOptions (app)  {
 
   app.get('/stockOptions', (req, res) => {
-    console.log ('params', req.query)
+    console.log ('\n\ngetOptions params', getDate(), req.query)
 
     reqGlobal = req.query
 
@@ -321,9 +334,26 @@ function stockOptions (app)  {
 
     var savedOption = stockOptionArray [req.query.stock];
     // console.log (savedOption.premiumArray.underlying[0])
-    if (savedOption && ! reqGlobal.ignoreSaved && savedOption.premiumArray.underlying[0] === req.query.stock && checkSame(reqGlobal, savedOption)) {
+    var checkSameStatus = false // checkSame (reqGlobal, savedOption)
+    // 
+    if (savedOption) {
+      if (reqGlobal.log)
+        console.log ('saved sym=', savedOption.premiumArray.underlying[0])
+              if (savedOption.premiumArray.underlying[0] !== req.query.stock)
+        compareStatus = "stock diff"
+      else
+        checkSameStatus = checkSame(reqGlobal, savedOption)
+      if (reqGlobal.log)
+        console.log ('checkSame=', checkSameStatus, 'text=' + compareStatus)
+    }
+    else {
+      if (reqGlobal.log)
+        console.log ('savedOption  not found')
+    }
 
-       console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,', 'compareStatus=', compareStatus)
+    if (savedOption && checkSameStatus) {
+
+       console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,', 'compareStatus1=', compareStatus)
 
         savedOption.compareStatus = compareStatus;
         if (reqGlobal.logExtra)
@@ -342,7 +372,6 @@ function stockOptions (app)  {
       // }
     }
     compareStatus  = ''
-    console.log ('\ncompareStatus=', compareStatus)
     expirationsGet (res)
     // console.log ('keys=', Object.keys(stockOptionArray))
     purgeOld()
