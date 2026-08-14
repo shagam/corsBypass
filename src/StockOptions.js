@@ -7,7 +7,7 @@ const {getDate} = require ('./Utils')
 const log = true
 const FILE_NAME = 'txt/stockOptionArray.txt'
 const miliInADay = 24 * 3600 * 1000;
-var compareStatus;
+var compareText;
 
 // read from local file once on startup
 var stockOptionArray = {};    // saved one obj per stock
@@ -113,7 +113,7 @@ const TOKEN = process.env.MARKET_DATA;
       results.updateMili = Date.now() // avoid too frequent access
       if (reqGlobal.logExtra)
         console.log ('send new results', results)
-      results.compareStatus = compareStatus;
+      results.compareStatus = compareText;
       // purgeOld () 
       stockOptionArray [reqGlobal.stock] = results; //save results
       res.send (results)
@@ -262,47 +262,47 @@ function expirationsGet (res) {
 
 
 function checkSame (req1, savedOption) {
-  compareStatus = 'default same'
+  compareText = 'default same'
     // console.log('checkSame compareStatus5=', compareStatus)
   if (reqGlobal.logExtra)
     console.log (Object.keys(savedOption))
 
   const req2 = savedOption.req
   if (req1.expirationNum != req2.expirationNum) {
-    compareStatus = 'get fresh. expirationNum diff'
+    compareText = 'get fresh. expirationNum diff'
     return false;
   }
   if (req1.expirationCount != req2.expirationCount) {
-    compareStatus = 'get fresh. cexpirationCount diff'
+    compareText = 'get fresh. cexpirationCount diff'
     return false;
   }
   if (req1.strikeNum != req2.strikeNum) {
-    compareStatus = 'get fresh. strikeNum diff'
+    compareText = 'get fresh. strikeNum diff'
     return false;
   }
   // prepare to replace strikeNum
   if (req1.strike != req2.strike) {
-    compareStatus = 'get fresh. strike diff'
+    compareText = 'get fresh. strike diff'
     return false;
   }
 
   if (req1.strikeCount != req2.strikeCount) {
-    compareStatus = 'get fresh. expirationCount diff'
+    compareText = 'get fresh. expirationCount diff'
     return false;
   }
 
   if (req1.side != req2.side) {
-    compareStatus = 'get fresh. side diff'
+    compareText = 'get fresh. side diff'
     return false;
   }
 
   if (req1.expir_last != req2.expir_last) {
-    compareStatus = 'get fresh. expir_last diff'
+    compareText = 'get fresh. expir_last diff'
     return false;
   }
 
   if (req1.expir_oneBeforeLast!= req2.expir_oneBeforeLast) {
-    compareStatus = 'get fresh. expir_oneBeforeLast diff'
+    compareText = 'get fresh. expir_oneBeforeLast diff'
     return false;
   }
 
@@ -311,11 +311,11 @@ function checkSame (req1, savedOption) {
   const nowMili = Date.now();
   const diff = (nowMili - savedOption.updateMili) / 1000   // diff in seconds;
   if (diff > 600) {  // 10 minutes
-    compareStatus = 'get fresh. too old last request ' + diff + ' seconds ago'
+    compareText = 'get fresh. too old last request ' + diff + ' seconds ago'
     return false;
   }
 
-  compareStatus = 'get saved'
+  compareText = 'get saved'
   return true; // same:  use saved info
 }  
 
@@ -340,11 +340,11 @@ function stockOptions (app)  {
       if (reqGlobal.log)
         console.log ('saved sym=', savedOption.premiumArray.underlying[0])
               if (savedOption.premiumArray.underlying[0] !== req.query.stock)
-        compareStatus = "stock diff"
+        compareText = "stock diff"
       else
         checkSameStatus = checkSame(reqGlobal, savedOption)
       if (reqGlobal.log)
-        console.log ('checkSame=', checkSameStatus, 'text=' + compareStatus)
+        console.log ('checkSame=', checkSameStatus, 'text=' + compareText)
     }
     else {
       if (reqGlobal.log)
@@ -353,9 +353,9 @@ function stockOptions (app)  {
 
     if (savedOption && checkSameStatus) {
 
-       console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,', 'compareStatus1=', compareStatus)
+       console.log (req.query.stock, getDate(), '\x1b[36m Saved stockOption found\x1b[0m,', 'compareStatus1=', compareText)
 
-        savedOption.compareStatus = compareStatus;
+        savedOption.compareStatus = compareText;
         if (reqGlobal.logExtra)
           console.dir (savedOption)
         if (savedOption.length == 1)
@@ -371,7 +371,7 @@ function stockOptions (app)  {
       //   savedOption = undefined;
       // }
     }
-    compareStatus  = ''
+    compareText  = ''
     expirationsGet (res)
     // console.log ('keys=', Object.keys(stockOptionArray))
     purgeOld()
