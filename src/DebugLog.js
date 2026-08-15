@@ -9,10 +9,11 @@ function debugLog(...args) {
         const file = match[1].split(/[\\/]/).pop();
         const lineNumber = match[2];
 
-        console.log(`\ndebugLog [${file}:${lineNumber}]`, ...args);
+        console.log(`[\x1b[36m${file}:${lineNumber}\x1b[0m]`, ...args);
     } else {
         console.log(...args);
     }
 }
 
+//'\x1b[36m Saved stockOption found\x1b[0m,'
 module.exports = {debugLog}
