@@ -1,10 +1,18 @@
-function debugLog (...args) {
-    const stack = new Error().stack ?.split("\n") || [];
+function debugLog(...args) {
+    const stack = new Error().stack;
+    const line = stack.split('\n')[2];
 
-    const caller = stack[2]?.replace(/^at\s+/, "at")
-    .trim() || "unknown";
+    const match = line.match(/\((.*):(\d+):(\d+)\)/) ||
+                  line.match(/at (.*):(\d+):(\d+)/);
 
-    console.log (`debugLog ${caller}`, ...args);
+    if (match) {
+        const file = match[1].split(/[\\/]/).pop();
+        const lineNumber = match[2];
+
+        console.log(`\ndebugLog [${file}:${lineNumber}]`, ...args);
+    } else {
+        console.log(...args);
+    }
 }
 
 module.exports = {debugLog}

@@ -1,7 +1,7 @@
 const fs = require ('fs')
 const axios = require('axios')
 const {getDate} = require ('./Utils')
-
+const {debugLog} = require('./DebugLog')
 
 // Zuberi Moshe
 const log = true
@@ -31,7 +31,8 @@ const TOKEN = process.env.MARKET_DATA;
 
   //** Get option premium for selected expiration and strike */
   function optionPremium (res, expirationDayIndex) {
-    // console.log ('expirationDayIndex', expirationDayIndex)
+    // console.trace ('expirationDayIndex', expirationDayIndex)
+    debugLog ('expirationDayIndex', expirationDayIndex)
 
     //** create expiration group */
     const count = Number(reqGlobal.expirationCount)
