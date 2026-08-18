@@ -331,7 +331,11 @@ function stockOptions (app)  {
     reqGlobal = req.query
     if (reqGlobal.dte) {  //compatible with old 
       reqGlobal.expirationNum = reqGlobal.dte
-      debugLog('getOptions params after copy', req.query)
+      debugLog('getOptions params after copy dte', req.query)
+    }
+    if (reqGlobal.strikePercent) {  //compatible with old 
+      reqGlobal.strikeNum = reqGlobal.strikePercent
+      debugLog('getOptions params after copy strikePercent', req.query)
     }
 
     // search saved stockOption retrieved lately
