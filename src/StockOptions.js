@@ -218,11 +218,11 @@ function expirationsGet (res) {
         const todayDays = new Date().getTime() / 1000 / 3600 / 24
         console.log ('today=' + todayDays.toFixed(0))
 
-        if (reqGlobal.expir_last || reqGlobal.expirationNum == -11) {
+        if (reqGlobal.expir_last) {
           expirationDayIndex = results.expirationArray.length -1;
           console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
         }
-        else if (reqGlobal.expir_oneBeforeLast || reqGlobal.expirationNum == -12) {
+        else if (reqGlobal.expir_oneBeforeLast) {
           expirationDayIndex = results.expirationArray.length -2;
           console.log ("choose Last expiration=", results.expirationArray[expirationDayIndex], 'index=' + expirationDayIndex)
         } else
@@ -329,7 +329,10 @@ function stockOptions (app)  {
     console.log ('\n\ngetOptions params', getDate(), req.query)
 
     reqGlobal = req.query
-
+    if (reqGlobal.dte) {  //compatible with old 
+      reqGlobal.expirationNum = reqGlobal.dte
+      debugLog('getOptions params after copy', req.query)
+    }
 
     // search saved stockOption retrieved lately
 
