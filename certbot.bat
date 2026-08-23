@@ -14,7 +14,9 @@ sudo certbot certonly --manual -d portfolio-chk.xyz --preferred-challenges=dns
 
 #aws ec2 
 # sudo certbot --nginx -d portfolio-chk.com
-# old dinagold.net
+# sudo certbot --nginx -d portfolio-chk.xyz
+
+
 
 sudo certbot --manual --preferred-challenges dns certonly -d dinagold.net 
 #sudo certbot --manual --preferred-challenges dns certonly -d dinagold.org 
