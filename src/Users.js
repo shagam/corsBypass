@@ -258,7 +258,8 @@ function userList (app) {
       obj.region = usersArray[lastIp].region
     if (usersArray[lastIp].country)
       obj.country = usersArray[lastIp].country
-
+    if (usersArray[lastIp].next)
+      obj.next = usersArray[lastIp].next
 
     obj.os = usersArray[lastIp].os
     delete usersArray[lastIp].countryName; // clear old
@@ -278,7 +279,7 @@ function userList (app) {
 
 
 //*  collect ip of users called from gain request */
-function userAccess (sym, ip, city, country, region, os) {
+function userAccess (sym, ip, city, country, region, os, next) {
  
     if (! ip) {
       console.log ('error, missing ip')
@@ -290,6 +291,7 @@ function userAccess (sym, ip, city, country, region, os) {
       usersArray[ip].date = getDate()
       usersArray[ip].os = os;
       usersArray[ip].ip = ip;
+      usersArray[ip].next = next;
       usersArray[ip].count++
     }
     else // new
@@ -304,7 +306,10 @@ function userAccess (sym, ip, city, country, region, os) {
         usersArray[ip].region = region;
     if (region)
       usersArray[ip].region = region;
-
+    if (next) {
+      usersArray[ip].next = next;
+      // console.log ('next', next)
+    }
     delete usersArray[ip].countryName; // clear old
     delete usersArray[ip].regionName;  // clear old
     
